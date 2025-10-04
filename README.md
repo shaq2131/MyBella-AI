@@ -1,2 +1,11 @@
-# MyBella-AI
-AI companion called MyBella I’m launching a new AI product called MyBella a voice-powered AI girlfriend/companion platform that uses ChatGPT + ElevenLabs + Pinecone + Firebase to create real, emotional conversations with lifelike voices, resettable momery and remembers. Can also sense emotions.
+# MyBella • MVP v6 (Vercel-ready, Polished, Voice Cloning)
+Flask app with OpenAI chat, ElevenLabs TTS (base64), **Voice Cloning upload**, Firestore, and Pinecone.
+Runs in demo mode without keys. Add keys in `.env` to enable services.
+
+## Quick Start (local)
+```bash
+python -m venv .venv && source .venv/bin/activate
+pip install -r requirements.txt
+cp .env.example .env
+python mybella/app.py
+# open http://127.0.0.1:5000

@@ -1,0 +1,218 @@
+{% extends 'base.html' %}
+{% block content %}
+<section class="hero gradient-hero py-5">
+  <div class="container py-5">
+    <div class="row align-items-center">
+      <div class="col-lg-6">
+        <h1 class="display-5 fw-bold text-dark">Your AI partner & wellness companion.</h1>
+        <p class="lead text-muted">MyBella blends caring conversation with CBT tools, mood tracking, and voice-ready personas that grow with you over time.</p>
+        <div class="d-flex gap-2">
+          {% if user.is_authenticated %}
+            <a href="{{ url_for('app_main') }}" class="btn btn-primary btn-lg rounded-pill">Open Chat</a>
+          {% else %}
+            <a href="{{ url_for('register') }}" class="btn btn-primary btn-lg rounded-pill">Get Started</a>
+          {% endif %}
+          <a href="#pricing" class="btn btn-outline-primary btn-lg rounded-pill">See Pricing</a>
+        </div>
+        <p class="mt-3 small text-muted">MVP v6 • Demo mode on • 16–17 Wellness Mode (no intimacy) • 18+ Companion Mode</p>
+      </div>
+      <div class="col-lg-6">
+        <div id="personaCarousel" class="carousel slide shadow-sm rounded" data-bs-ride="carousel" data-bs-interval="5000">
+          <div class="carousel-indicators">
+            <button type="button" data-bs-target="#personaCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Isabella"></button>
+            <button type="button" data-bs-target="#personaCarousel" data-bs-slide-to="1" aria-label="Sarai"></button>
+            <button type="button" data-bs-target="#personaCarousel" data-bs-slide-to="2" aria-label="Marie"></button>
+            <button type="button" data-bs-target="#personaCarousel" data-bs-slide-to="3" aria-label="Alex"></button>
+          </div>
+          <div class="carousel-inner rounded">
+            <!-- Isabella -->
+            <div class="carousel-item active">
+              <div class="card border-0">
+                <div class="card-body">
+                  <div class="d-flex align-items-center justify-content-between">
+                    <div>
+                      <div class="badge bg-light text-dark border">Isabella</div>
+                      <h5 class="mt-2 mb-0">Romantic • Warm</h5>
+                      <small class="text-muted">Your caring companion</small>
+                    </div>
+                    <img src="{{ url_for('static', filename='avatars/isabella_small.png') }}" alt="Isabella" class="rounded-circle" width="60" height="60">
+                  </div>
+                  <hr>
+                  <div class="row text-center">
+                    <div class="col"><div class="h4 mb-0">💖</div><small class="text-muted">Empathetic</small></div>
+                    <div class="col"><div class="h4 mb-0">🎯</div><small class="text-muted">Focused</small></div>
+                    <div class="col"><div class="h4 mb-0">🤝</div><small class="text-muted">Supportive</small></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Sarai -->
+            <div class="carousel-item">
+              <div class="card border-0">
+                <div class="card-body">
+                  <div class="d-flex align-items-center justify-content-between">
+                    <div>
+                      <div class="badge bg-light text-dark border">Sarai</div>
+                      <h5 class="mt-2 mb-0">Playful • Flirty</h5>
+                      <small class="text-muted">Your energetic friend</small>
+                    </div>
+                    <img src="{{ url_for('static', filename='avatars/sarai_small.png') }}" alt="Sarai" class="rounded-circle" width="60" height="60">
+                  </div>
+                  <hr>
+                  <div class="row text-center">
+                    <div class="col"><div class="h4 mb-0">✨</div><small class="text-muted">Vibrant</small></div>
+                    <div class="col"><div class="h4 mb-0">🌟</div><small class="text-muted">Spirited</small></div>
+                    <div class="col"><div class="h4 mb-0">🎭</div><small class="text-muted">Expressive</small></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Marie -->
+            <div class="carousel-item">
+              <div class="card border-0">
+                <div class="card-body">
+                  <div class="d-flex align-items-center justify-content-between">
+                    <div>
+                      <div class="badge bg-light text-dark border">Marie</div>
+                      <h5 class="mt-2 mb-0">Mature • Gentle</h5>
+                      <small class="text-muted">Your wise confidante</small>
+                    </div>
+                    <img src="{{ url_for('static', filename='avatars/marie_small.png') }}" alt="Marie" class="rounded-circle" width="60" height="60">
+                  </div>
+                  <hr>
+                  <div class="row text-center">
+                    <div class="col"><div class="h4 mb-0">🌙</div><small class="text-muted">Calming</small></div>
+                    <div class="col"><div class="h4 mb-0">📚</div><small class="text-muted">Wise</small></div>
+                    <div class="col"><div class="h4 mb-0">🫂</div><small class="text-muted">Nurturing</small></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Alex -->
+            <div class="carousel-item">
+              <div class="card border-0">
+                <div class="card-body">
+                  <div class="d-flex align-items-center justify-content-between">
+                    <div>
+                      <div class="badge bg-light text-dark border">Alex</div>
+                      <h5 class="mt-2 mb-0">Supportive • Steady</h5>
+                      <small class="text-muted">Your reliable partner</small>
+                    </div>
+                    <img src="{{ url_for('static', filename='avatars/alex_small.png') }}" alt="Alex" class="rounded-circle" width="60" height="60">
+                  </div>
+                  <hr>
+                  <div class="row text-center">
+                    <div class="col"><div class="h4 mb-0">🛡️</div><small class="text-muted">Protective</small></div>
+                    <div class="col"><div class="h4 mb-0">⚡</div><small class="text-muted">Dynamic</small></div>
+                    <div class="col"><div class="h4 mb-0">🎯</div><small class="text-muted">Focused</small></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <button class="carousel-control-prev" type="button" data-bs-target="#personaCarousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+          </button>
+          <button class="carousel-control-next" type="button" data-bs-target="#personaCarousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="features" class="py-5">
+  <div class="container">
+    <h2 class="mb-4">Features</h2>
+  <div class="row g-4">
+    <div class="col-md-4"><div class="feature p-4 border rounded-3 h-100"><h5>Per-persona Memory</h5><p class="text-muted">Resettable memory per persona with Pinecone ready.</p></div></div>
+    <div class="col-md-4"><div class="feature p-4 border rounded-3 h-100"><h5>CBT & Mood Tools</h5><p class="text-muted">Reframe Puzzle, Memory Match, mood logging, and Emotional Memory Timeline.</p></div></div>
+    <div class="col-md-4"><div class="feature p-4 border rounded-3 h-100"><h5>Secrets Vault</h5><p class="text-muted">PIN-protected vault for private thoughts (demo scaffold).</p></div></div>
+    <div class="col-md-4"><div class="feature p-4 border rounded-3 h-100"><h5>Voice Ready</h5><p class="text-muted">Text/voice toggle; ElevenLabs TTS endpoint.</p></div></div>
+    <div class="col-md-4"><div class="feature p-4 border rounded-3 h-100"><h5>Modes & Safety</h5><p class="text-muted">Wellness (16–17) vs Companion (18+), safety modal, /legal, /hotlines.</p></div></div>
+    <div class="col-md-4"><div class="feature p-4 border rounded-3 h-100"><h5>Monetization</h5><p class="text-muted">Pricing placeholders + Stripe hooks (Phase 2).</p></div></div>
+  </div>
+  </div>
+</section>
+
+<section id="personas" class="py-5 bg-light">
+  <div class="container">
+    <h2 class="mb-4">Personas</h2>
+    <div class="row g-4">
+      {% set personas = [
+        {"name":"Isabella","vibe":"romantic • warm","icon":"💖"},
+        {"name":"Sarai","vibe":"playful • flirty","icon":"✨"},
+        {"name":"Marie","vibe":"mature • gentle","icon":"🌙"},
+        {"name":"Alex","vibe":"supportive • steady","icon":"🛡️"}
+      ] %}
+      {% for p in personas %}
+      <div class="col-md-3">
+        <div class="card h-100 shadow-sm">
+          <div class="card-body d-flex flex-column">
+            <div class="d-flex justify-content-between align-items-center">
+              <h5 class="mb-0">{{ p.name }}</h5>
+              <span class="fs-3">{{ p.icon }}</span>
+            </div>
+            <small class="text-muted mt-1">{{ p.vibe }}</small>
+            <div class="mt-auto pt-3">
+              {% if user.is_authenticated %}
+                <a href="{{ url_for('app_main', persona=p.name.lower()) }}" class="btn btn-outline-primary w-100">Chat with {{ p.name }}</a>
+              {% else %}
+                <a href="{{ url_for('register') }}" class="btn btn-outline-primary w-100">Try {{ p.name }}</a>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<section id="pricing" class="py-5">
+  <div class="container">
+    <h2 class="mb-4">Pricing</h2>
+    <div class="row g-4">
+      <div class="col-md-3"><div class="card h-100 pricing-card"><div class="card-body"><h5>Free</h5><h3 class="fw-bold">$0</h3><ul class="list-unstyled small"><li>10 voice mins / month</li><li>Unlimited text</li><li>Ads → points → minutes</li></ul>{% if user.is_authenticated %}<a href="{{ url_for('app_main') }}" class="btn btn-outline-primary w-100">Start Chatting</a>{% else %}<a href="{{ url_for('register') }}" class="btn btn-outline-primary w-100">Get Started</a>{% endif %}</div></div></div>
+      <div class="col-md-3"><div class="card h-100 pricing-card border-primary"><div class="card-body"><h5>Premium</h5><h3 class="fw-bold">$19.99</h3><ul class="list-unstyled small"><li>100 voice mins / month</li><li>Priority support</li></ul><button class="btn btn-primary w-100" disabled>Stripe Coming Soon</button></div></div></div>
+      <div class="col-md-3"><div class="card h-100 pricing-card"><div class="card-body"><h5>Ultra</h5><h3 class="fw-bold">$39.99</h3><ul class="list-unstyled small"><li>250 voice mins / month</li><li>All Premium features</li></ul><button class="btn btn-primary w-100" disabled>Stripe Coming Soon</button></div></div></div>
+      <div class="col-md-3"><div class="card h-100 pricing-card"><div class="card-body"><h5>Yearly</h5><h3 class="fw-bold">$199</h3><ul class="list-unstyled small"><li>300 mins / month</li><li>+100 bonus mins</li></ul><button class="btn btn-primary w-100" disabled>Stripe Coming Soon</button></div></div></div>
+    </div>
+  </div>
+</section>
+
+<section id="faq" class="py-5 bg-light">
+  <div class="container">
+    <h2 class="mb-4">FAQ</h2>
+    <div class="accordion" id="faqAcc">
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="q1">
+          <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#a1">Is voice supported?</button>
+        </h2>
+        <div id="a1" class="accordion-collapse collapse show" data-bs-parent="#faqAcc">
+          <div class="accordion-body">Voice is scaffolded with ElevenLabs. WhisperTalk™ emotional delivery is a future enhancement.</div>
+        </div>
+      </div>
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="q2">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#a2">How do modes work?</button>
+        </h2>
+        <div id="a2" class="accordion-collapse collapse" data-bs-parent="#faqAcc">
+          <div class="accordion-body">Wellness Mode (16–17) disables intimacy; Companion Mode (18+) enables it. Demo mode is on by default.</div>
+        </div>
+      </div>
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="q3">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#a3">Where’s my data stored?</button>
+        </h2>
+        <div id="a3" class="accordion-collapse collapse" data-bs-parent="#faqAcc">
+          <div class="accordion-body">Firestore holds user docs when configured; Pinecone stores memory vectors per user/persona. Without keys, nothing is persisted.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}
