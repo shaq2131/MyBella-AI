@@ -1,5 +1,136 @@
-flask==3.0.3
-requests==2.32.3
-firebase-admin==6.5.0
-pinecone-client==5.0.1
-python-dotenv==1.0.1
+# MyBella - AI Companion Application
+# Requirements file for all dependencies
+
+# Core Flask Framework
+Flask
+Flask-Login
+Flask-SQLAlchemy
+
+# Real-time Communication
+Flask-SocketIO
+python-socketio
+python-engineio
+
+# Security & Authentication
+Werkzeug
+itsdangerous
+
+# Database
+SQLAlchemy
+Alembic
+
+# HTTP Requests & API Integration
+requests
+urllib3
+
+# AI & Machine Learning
+openai
+
+# Audio Processing (for ElevenLabs integration)
+pydub
+
+# Data Processing
+pandas
+numpy
+
+# Environment Variables
+python-dotenv
+
+# Firebase Integration (Optional)
+firebase-admin
+google-cloud-firestore
+
+# Vector Database (Optional - for conversation memory)
+pinecone-client
+
+# Utility Libraries
+python-dateutil
+pytz
+
+# File Handling
+Pillow
+
+# Development & Testing
+pytest
+pytest-flask
+
+# Production Server (Optional)
+gunicorn
+eventlet
+
+# Monitoring & Logging
+psutil
+
+# Security
+cryptography
+
+# JSON & Data Serialization
+jsonschema
+
+# Async Support
+asyncio
+
+# HTTP Client
+httpx
+
+# Text Processing
+markdown
+
+# Cache (Optional)
+redis
+
+# WebSocket Support
+websockets
+
+# Audio Format Support
+mutagen
+
+# Image Processing
+opencv-python
+
+# Performance Monitoring
+memory-profiler
+
+# Development Tools
+black
+flake8
+isort
+
+# API Documentation (Optional)
+flask-restx
+
+# Environment Detection
+python-multipart
+
+# Base64 Encoding/Decoding
+base64io
+
+# UUID Generation
+uuid
+
+# File Type Detection
+python-magic
+
+# Configuration Management
+configparser
+
+# Time Handling
+arrow
+
+# Regular Expressions
+regex
+
+# String Utilities
+stringcase
+
+# Validation
+marshmallow
+
+# Error Tracking (Optional)
+sentry-sdk
+
+# Rate Limiting
+Flask-Limiter
+
+# CORS Support
+Flask-CORS
