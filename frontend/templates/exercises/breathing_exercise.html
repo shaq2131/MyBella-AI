@@ -1,0 +1,492 @@
+{% extends "base.html" %}
+
+{% block title %}{{ exercise.name }} - MyBella{% endblock %}
+
+{% block styles %}
+<style>
+    body {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+    }
+
+    .breathing-exercise-container {
+        max-width: 700px;
+        margin: 40px auto;
+        padding: 20px;
+    }
+
+    .exercise-card {
+        background: white;
+        border-radius: 30px;
+        padding: 40px;
+        box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+    }
+
+    .exercise-title {
+        text-align: center;
+        font-size: 2rem;
+        color: #2c3e50;
+        margin-bottom: 10px;
+    }
+
+    .exercise-desc {
+        text-align: center;
+        color: #7f8c8d;
+        margin-bottom: 30px;
+        line-height: 1.6;
+    }
+
+    .benefits-section {
+        background: #f8f9fa;
+        padding: 20px;
+        border-radius: 15px;
+        margin-bottom: 30px;
+    }
+
+    .benefits-title {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: #2c3e50;
+        margin-bottom: 10px;
+        text-align: center;
+    }
+
+    .benefits-list {
+        list-style: none;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+        flex-wrap: wrap;
+    }
+
+    .benefits-list li {
+        background: white;
+        padding: 8px 15px;
+        border-radius: 20px;
+        color: #667eea;
+        font-size: 0.9rem;
+        font-weight: 600;
+    }
+
+    .animation-container {
+        text-align: center;
+        margin: 40px 0;
+        position: relative;
+        min-height: 350px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .breathing-circle {
+        width: 200px;
+        height: 200px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        margin: 0 auto 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 1.5rem;
+        font-weight: 700;
+        box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+        transition: all 0.3s ease;
+    }
+
+    .breathing-circle.inhale {
+        animation: inhale-animation var(--inhale-time) ease-in-out;
+    }
+
+    .breathing-circle.hold {
+        animation: hold-animation var(--hold-time) ease-in-out;
+    }
+
+    .breathing-circle.exhale {
+        animation: exhale-animation var(--exhale-time) ease-in-out;
+    }
+
+    @keyframes inhale-animation {
+        0% { transform: scale(1); }
+        100% { transform: scale(1.5); }
+    }
+
+    @keyframes hold-animation {
+        0%, 100% { transform: scale(1.5); opacity: 1; }
+        50% { transform: scale(1.5); opacity: 0.8; }
+    }
+
+    @keyframes exhale-animation {
+        0% { transform: scale(1.5); }
+        100% { transform: scale(1); }
+    }
+
+    .instruction-text {
+        font-size: 2rem;
+        font-weight: 600;
+        color: #2c3e50;
+        margin-bottom: 15px;
+        text-align: center;
+    }
+
+    .countdown-text {
+        font-size: 3rem;
+        font-weight: 700;
+        color: #667eea;
+        margin-bottom: 20px;
+    }
+
+    .cycle-counter {
+        font-size: 1.1rem;
+        color: #7f8c8d;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .control-buttons {
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+        margin-top: 30px;
+    }
+
+    .btn {
+        padding: 15px 35px;
+        border: none;
+        border-radius: 25px;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .btn-start {
+        background: linear-gradient(135deg, #4caf50 0%, #45a049 100%);
+        color: white;
+    }
+
+    .btn-start:hover {
+        transform: scale(1.05);
+        box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4);
+    }
+
+    .btn-stop {
+        background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
+        color: white;
+        display: none;
+    }
+
+    .btn-stop:hover {
+        transform: scale(1.05);
+        box-shadow: 0 6px 20px rgba(238, 90, 111, 0.4);
+    }
+
+    .btn-back {
+        background: white;
+        color: #667eea;
+        border: 2px solid #667eea;
+    }
+
+    .btn-back:hover {
+        background: #667eea;
+        color: white;
+    }
+
+    .completion-section {
+        display: none;
+        text-align: center;
+        padding: 30px;
+    }
+
+    .completion-section.show {
+        display: block;
+    }
+
+    .completion-icon {
+        font-size: 4rem;
+        margin-bottom: 20px;
+    }
+
+    .completion-message {
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: #2c3e50;
+        margin-bottom: 20px;
+    }
+
+    .mood-selector {
+        margin: 30px 0;
+    }
+
+    .mood-label {
+        font-size: 1.1rem;
+        color: #2c3e50;
+        margin-bottom: 15px;
+        font-weight: 600;
+    }
+
+    .mood-options {
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+    }
+
+    .mood-option {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        border: 3px solid #e0e0e0;
+        background: white;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2rem;
+        transition: all 0.3s ease;
+    }
+
+    .mood-option:hover {
+        transform: scale(1.1);
+        border-color: #667eea;
+    }
+
+    .mood-option.selected {
+        border-color: #667eea;
+        background: #f0f4ff;
+        transform: scale(1.15);
+    }
+
+    @media (max-width: 768px) {
+        .exercise-title {
+            font-size: 1.5rem;
+        }
+
+        .breathing-circle {
+            width: 150px;
+            height: 150px;
+            font-size: 1.2rem;
+        }
+
+        .instruction-text {
+            font-size: 1.5rem;
+        }
+
+        .countdown-text {
+            font-size: 2.5rem;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="breathing-exercise-container">
+    <div class="exercise-card">
+        <h1 class="exercise-title">{{ exercise.name }}</h1>
+        <p class="exercise-desc">{{ exercise.description }}</p>
+
+        <div class="benefits-section">
+            <div class="benefits-title">Benefits</div>
+            <ul class="benefits-list">
+                {% for benefit in exercise.benefits %}
+                <li>{{ benefit }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <div id="exerciseArea" class="animation-container">
+            <div id="breathingCircle" class="breathing-circle">Ready</div>
+            <div id="instructionText" class="instruction-text">Click Start to Begin</div>
+            <div id="countdownText" class="countdown-text" style="display: none;"></div>
+            <div id="cycleCounter" class="cycle-counter"></div>
+        </div>
+
+        <div class="control-buttons">
+            <button id="startBtn" class="btn btn-start" onclick="startExercise()">▶ Start</button>
+            <button id="stopBtn" class="btn btn-stop" onclick="stopExercise()"> Stop</button>
+            <a href="{{ url_for('exercises.breathing') }}" class="btn btn-back">← Back</a>
+        </div>
+
+        <!-- Completion Section -->
+        <div id="completionSection" class="completion-section">
+            <div class="completion-icon"></div>
+            <div class="completion-message">Great job! How do you feel now?</div>
+            
+            <div class="mood-selector">
+                <div class="mood-label">Rate your mood after the exercise:</div>
+                <div class="mood-options">
+                    <div class="mood-option" data-mood="1" onclick="selectMood(1)"></div>
+                    <div class="mood-option" data-mood="2" onclick="selectMood(2)"></div>
+                    <div class="mood-option" data-mood="3" onclick="selectMood(3)"></div>
+                    <div class="mood-option" data-mood="4" onclick="selectMood(4)"></div>
+                    <div class="mood-option" data-mood="5" onclick="selectMood(5)"></div>
+                </div>
+            </div>
+
+            <button class="btn btn-start" onclick="saveCompletion()">Save & Continue</button>
+        </div>
+    </div>
+</div>
+
+<script>
+const exercise = {
+    name: "{{ exercise.name }}",
+    inhale: {{ exercise.inhale }},
+    hold: {{ exercise.hold }},
+    exhale: {{ exercise.exhale }},
+    {% if exercise.hold_after is defined %}
+    holdAfter: {{ exercise.hold_after }}
+    {% else %}
+    holdAfter: 0
+    {% endif %}
+};
+
+let isRunning = false;
+let currentCycle = 0;
+let targetCycles = 5;
+let selectedMoodAfter = null;
+let animationInterval = null;
+
+function startExercise() {
+    isRunning = true;
+    currentCycle = 0;
+    document.getElementById('startBtn').style.display = 'none';
+    document.getElementById('stopBtn').style.display = 'inline-block';
+    document.getElementById('completionSection').classList.remove('show');
+    
+    runBreathingCycle();
+}
+
+function stopExercise() {
+    isRunning = false;
+    clearTimeout(animationInterval);
+    document.getElementById('startBtn').style.display = 'inline-block';
+    document.getElementById('stopBtn').style.display = 'none';
+    document.getElementById('breathingCircle').className = 'breathing-circle';
+    document.getElementById('instructionText').textContent = 'Exercise Stopped';
+    document.getElementById('countdownText').style.display = 'none';
+    document.getElementById('cycleCounter').textContent = '';
+}
+
+async function runBreathingCycle() {
+    if (!isRunning) return;
+    
+    currentCycle++;
+    updateCycleCounter();
+    
+    // Inhale
+    await breathingPhase('Breathe In', exercise.inhale, 'inhale');
+    if (!isRunning) return;
+    
+    // Hold
+    if (exercise.hold > 0) {
+        await breathingPhase('Hold', exercise.hold, 'hold');
+        if (!isRunning) return;
+    }
+    
+    // Exhale
+    await breathingPhase('Breathe Out', exercise.exhale, 'exhale');
+    if (!isRunning) return;
+    
+    // Hold after (for box breathing)
+    if (exercise.holdAfter > 0) {
+        await breathingPhase('Hold', exercise.holdAfter, 'hold');
+        if (!isRunning) return;
+    }
+    
+    // Check if we should continue
+    if (currentCycle < targetCycles) {
+        runBreathingCycle();
+    } else {
+        completeExercise();
+    }
+}
+
+function breathingPhase(instruction, duration, phase) {
+    return new Promise((resolve) => {
+        const circle = document.getElementById('breathingCircle');
+        const instructionText = document.getElementById('instructionText');
+        const countdownText = document.getElementById('countdownText');
+        
+        circle.className = `breathing-circle ${phase}`;
+        circle.style.setProperty('--inhale-time', `${exercise.inhale}s`);
+        circle.style.setProperty('--hold-time', `${exercise.hold}s`);
+        circle.style.setProperty('--exhale-time', `${exercise.exhale}s`);
+        
+        instructionText.textContent = instruction;
+        countdownText.style.display = 'block';
+        
+        let remaining = duration;
+        countdownText.textContent = remaining;
+        
+        const countdown = setInterval(() => {
+            remaining--;
+            if (remaining > 0) {
+                countdownText.textContent = remaining;
+            } else {
+                clearInterval(countdown);
+            }
+        }, 1000);
+        
+        animationInterval = setTimeout(() => {
+            clearInterval(countdown);
+            resolve();
+        }, duration * 1000);
+    });
+}
+
+function updateCycleCounter() {
+    document.getElementById('cycleCounter').textContent = `Cycle ${currentCycle} of ${targetCycles}`;
+}
+
+function completeExercise() {
+    isRunning = false;
+    document.getElementById('exerciseArea').style.display = 'none';
+    document.getElementById('completionSection').classList.add('show');
+    document.getElementById('startBtn').style.display = 'none';
+    document.getElementById('stopBtn').style.display = 'none';
+}
+
+function selectMood(mood) {
+    selectedMoodAfter = mood;
+    document.querySelectorAll('.mood-option').forEach(option => {
+        option.classList.remove('selected');
+    });
+    document.querySelector(`.mood-option[data-mood="${mood}"]`).classList.add('selected');
+}
+
+async function saveCompletion() {
+    if (!selectedMoodAfter) {
+        alert('Please rate your mood after the exercise!');
+        return;
+    }
+    
+    try {
+        const response = await fetch('/exercises/api/complete', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                exercise_type: 'breathing',
+                exercise_name: exercise.name,
+                duration_minutes: Math.ceil((currentCycle * (exercise.inhale + exercise.hold + exercise.exhale + exercise.holdAfter)) / 60),
+                mood_after: selectedMoodAfter
+            })
+        });
+        
+        const result = await response.json();
+        
+        if (result.ok) {
+            window.location.href = "{{ url_for('exercises.breathing') }}";
+        } else {
+            alert('Could not save completion. Please try again.');
+        }
+    } catch (error) {
+        console.error('Error saving completion:', error);
+        alert('Could not save completion. Please try again.');
+    }
+}
+</script>
+{% endblock %}

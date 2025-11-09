@@ -1,0 +1,234 @@
+{% extends "base.html" %}
+
+{% block title %}IMMEDIATE HELP - Call Now{% endblock %}
+
+{% block styles %}
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .immediate-container {
+        max-width: 600px;
+        margin: 20px;
+        text-align: center;
+    }
+
+    .urgent-message {
+        background: white;
+        padding: 40px;
+        border-radius: 24px;
+        margin-bottom: 30px;
+        box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+    }
+
+    .urgent-message h1 {
+        font-size: 2.5rem;
+        color: #2c3e50;
+        margin-bottom: 20px;
+    }
+
+    .urgent-message p {
+        font-size: 1.3rem;
+        color: #555;
+        line-height: 1.8;
+        margin-bottom: 15px;
+    }
+
+    .call-buttons {
+        display: grid;
+        gap: 20px;
+        margin-top: 30px;
+    }
+
+    .call-btn {
+        background: #ff3b30;
+        color: white;
+        padding: 40px 30px;
+        border: none;
+        border-radius: 20px;
+        font-size: 2rem;
+        font-weight: 900;
+        cursor: pointer;
+        text-decoration: none;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 15px;
+        transition: all 0.3s ease;
+        box-shadow: 0 8px 30px rgba(255, 59, 48, 0.4);
+        animation: gentle-pulse 2s infinite;
+    }
+
+    @keyframes gentle-pulse {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.05); }
+    }
+
+    .call-btn:hover {
+        transform: scale(1.08) !important;
+        box-shadow: 0 12px 40px rgba(255, 59, 48, 0.6);
+        color: white;
+        text-decoration: none;
+    }
+
+    .call-btn-icon {
+        font-size: 4rem;
+    }
+
+    .call-btn-number {
+        font-size: 3rem;
+        letter-spacing: 3px;
+    }
+
+    .call-btn-desc {
+        font-size: 1.2rem;
+        font-weight: 600;
+        opacity: 0.95;
+    }
+
+    .text-btn {
+        background: #007aff;
+        animation-delay: 0.3s;
+    }
+
+    .emergency-btn {
+        background: #dc3545;
+        animation-delay: 0.6s;
+    }
+
+    .reassurance {
+        background: rgba(255, 255, 255, 0.95);
+        padding: 30px;
+        border-radius: 16px;
+        margin-top: 30px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    }
+
+    .reassurance h2 {
+        color: #2c3e50;
+        font-size: 1.8rem;
+        margin-bottom: 15px;
+    }
+
+    .reassurance p {
+        color: #555;
+        font-size: 1.2rem;
+        line-height: 1.8;
+        margin-bottom: 10px;
+    }
+
+    .safety-tips {
+        background: rgba(255, 243, 205, 0.95);
+        padding: 25px;
+        border-radius: 12px;
+        margin-top: 20px;
+        text-align: left;
+    }
+
+    .safety-tips h3 {
+        color: #856404;
+        margin-bottom: 15px;
+        font-size: 1.4rem;
+    }
+
+    .safety-tips ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .safety-tips li {
+        padding: 10px 0;
+        color: #856404;
+        font-size: 1.1rem;
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .safety-tips li::before {
+        content: "→";
+        font-weight: 900;
+        font-size: 1.3rem;
+        flex-shrink: 0;
+    }
+
+    @media (max-width: 768px) {
+        .urgent-message h1 {
+            font-size: 1.8rem;
+        }
+        
+        .call-btn {
+            padding: 30px 20px;
+        }
+        
+        .call-btn-number {
+            font-size: 2rem;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="immediate-container">
+    <div class="urgent-message">
+        <h1> Get Help Right Now</h1>
+        <p><strong>You don't have to face this alone.</strong></p>
+        <p>Trained crisis counselors are available 24/7 to support you.</p>
+        <p style="font-size: 1.1rem; color: #7f8c8d; margin-top: 20px;">
+            Tap or click any button below to connect immediately:
+        </p>
+    </div>
+
+    <div class="call-buttons">
+        <a href="tel:988" class="call-btn">
+            <div class="call-btn-icon"></div>
+            <div class="call-btn-number">988</div>
+            <div class="call-btn-desc">Suicide & Crisis Lifeline • Call Now</div>
+        </a>
+
+        <a href="sms:741741&body=HOME" class="call-btn text-btn">
+            <div class="call-btn-icon"></div>
+            <div class="call-btn-number">741741</div>
+            <div class="call-btn-desc">Crisis Text Line • Text HOME</div>
+        </a>
+
+        <a href="tel:911" class="call-btn emergency-btn">
+            <div class="call-btn-icon"></div>
+            <div class="call-btn-number">911</div>
+            <div class="call-btn-desc">Emergency Services</div>
+        </a>
+    </div>
+
+    <div class="reassurance">
+        <h2> You Are Not Alone</h2>
+        <p>Crisis moments feel overwhelming, but they pass.</p>
+        <p>Professional help is just a phone call or text away.</p>
+        <p><strong>Your life matters. People care about you.</strong></p>
+
+        <div class="safety-tips">
+            <h3>While You Wait for Help:</h3>
+            <ul>
+                <li>Move to a safe space away from anything that could cause harm</li>
+                <li>If possible, stay with someone or go to a public place</li>
+                <li>Focus on your breathing - slow, deep breaths</li>
+                <li>Remember: These feelings are temporary</li>
+                <li>You deserve support and compassion</li>
+            </ul>
+        </div>
+    </div>
+
+    <div style="margin-top: 30px; color: white; text-align: center;">
+        <a href="{{ url_for('crisis.support') }}" style="color: white; text-decoration: underline; font-size: 1.1rem;">
+            View All Crisis Resources
+        </a>
+    </div>
+</div>
+{% endblock %}

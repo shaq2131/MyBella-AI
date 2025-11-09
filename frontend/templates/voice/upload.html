@@ -1,0 +1,787 @@
+{% extends "base.html" %}
+
+{% block title %}Upload Your Voice - MyBella{% endblock %}
+
+{% block styles %}
+<style>
+    .upload-container {
+        max-width: 1000px;
+        margin: 40px auto;
+        padding: 20px;
+    }
+
+    .upload-header {
+        text-align: center;
+        margin-bottom: 40px;
+    }
+
+    .upload-header h1 {
+        font-size: 2.5rem;
+        color: #2c3e50;
+        margin-bottom: 15px;
+    }
+
+    .upload-header p {
+        font-size: 1.2rem;
+        color: #7f8c8d;
+    }
+
+    .upload-card {
+        background: white;
+        border-radius: 20px;
+        padding: 40px;
+        box-shadow: 0 4px 30px rgba(0,0,0,0.1);
+        margin-bottom: 30px;
+    }
+
+    .upload-methods {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 25px;
+        margin-bottom: 40px;
+    }
+
+    .upload-method {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border-radius: 16px;
+        padding: 30px;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        color: white;
+        border: 3px solid transparent;
+    }
+
+    .upload-method:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+        border-color: white;
+    }
+
+    .upload-method.active {
+        border-color: #ffd700;
+        box-shadow: 0 8px 30px rgba(255, 215, 0, 0.5);
+    }
+
+    .upload-icon {
+        font-size: 4rem;
+        margin-bottom: 15px;
+    }
+
+    .upload-method h3 {
+        color: white;
+        margin-bottom: 10px;
+        font-size: 1.5rem;
+    }
+
+    .upload-method p {
+        color: rgba(255,255,255,0.9);
+        font-size: 0.95rem;
+    }
+
+    .drop-zone {
+        border: 3px dashed #9b59b6;
+        border-radius: 16px;
+        padding: 60px 20px;
+        text-align: center;
+        background: #f8f4fb;
+        transition: all 0.3s ease;
+        cursor: pointer;
+        display: none;
+    }
+
+    .drop-zone.active {
+        display: block;
+    }
+
+    .drop-zone:hover {
+        border-color: #667eea;
+        background: #e8f5e9;
+        transform: scale(1.02);
+    }
+
+    .drop-zone.dragover {
+        border-color: #4caf50;
+        background: #c8e6c9;
+        transform: scale(1.05);
+    }
+
+    .drop-zone-icon {
+        font-size: 5rem;
+        color: #9b59b6;
+        margin-bottom: 20px;
+    }
+
+    .drop-zone h3 {
+        color: #2c3e50;
+        font-size: 1.8rem;
+        margin-bottom: 10px;
+    }
+
+    .drop-zone p {
+        color: #7f8c8d;
+        font-size: 1.1rem;
+        margin-bottom: 20px;
+    }
+
+    .file-input {
+        display: none;
+    }
+
+    .btn-browse {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 12px 30px;
+        border: none;
+        border-radius: 25px;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .btn-browse:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+    }
+
+    .recording-interface {
+        display: none;
+        text-align: center;
+        padding: 40px;
+    }
+
+    .recording-interface.active {
+        display: block;
+    }
+
+    .record-button {
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
+        border: none;
+        color: white;
+        font-size: 3rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 8px 30px rgba(238, 90, 111, 0.4);
+        margin: 20px auto;
+        display: block;
+    }
+
+    .record-button:hover {
+        transform: scale(1.1);
+        box-shadow: 0 12px 40px rgba(238, 90, 111, 0.6);
+    }
+
+    .record-button.recording {
+        animation: pulse 1.5s infinite;
+        background: #ff3b30;
+    }
+
+    @keyframes pulse {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.1); }
+    }
+
+    .recording-status {
+        font-size: 1.3rem;
+        color: #2c3e50;
+        margin: 20px 0;
+        font-weight: 600;
+    }
+
+    .recording-timer {
+        font-size: 2rem;
+        color: #ff3b30;
+        font-weight: 700;
+        font-family: monospace;
+    }
+
+    .persona-selector {
+        margin: 30px 0;
+    }
+
+    .persona-selector h3 {
+        color: #2c3e50;
+        margin-bottom: 20px;
+        font-size: 1.5rem;
+    }
+
+    .persona-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        gap: 20px;
+    }
+
+    .persona-option {
+        padding: 20px;
+        border: 3px solid #e0e0e0;
+        border-radius: 16px;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        background: white;
+    }
+
+    .persona-option:hover {
+        border-color: #9b59b6;
+        transform: translateY(-3px);
+        box-shadow: 0 4px 15px rgba(155, 89, 182, 0.2);
+    }
+
+    .persona-option.selected {
+        border-color: #667eea;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+    }
+
+    .persona-avatar {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        margin: 0 auto 10px;
+        overflow: hidden;
+    }
+
+    .persona-avatar img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .persona-name {
+        font-weight: 600;
+        font-size: 1rem;
+    }
+
+    .voice-name-input {
+        width: 100%;
+        padding: 15px;
+        border: 2px solid #e0e0e0;
+        border-radius: 12px;
+        font-size: 1rem;
+        margin-bottom: 20px;
+        transition: all 0.3s ease;
+    }
+
+    .voice-name-input:focus {
+        outline: none;
+        border-color: #667eea;
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+
+    .upload-button {
+        background: linear-gradient(135deg, #4caf50 0%, #45a049 100%);
+        color: white;
+        padding: 15px 50px;
+        border: none;
+        border-radius: 30px;
+        font-size: 1.2rem;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 20px rgba(76, 175, 80, 0.4);
+        display: block;
+        margin: 30px auto 0;
+    }
+
+    .upload-button:hover:not(:disabled) {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 25px rgba(76, 175, 80, 0.6);
+    }
+
+    .upload-button:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+
+    .progress-container {
+        display: none;
+        margin: 30px 0;
+    }
+
+    .progress-container.active {
+        display: block;
+    }
+
+    .progress-bar {
+        width: 100%;
+        height: 30px;
+        background: #e0e0e0;
+        border-radius: 15px;
+        overflow: hidden;
+        position: relative;
+    }
+
+    .progress-fill {
+        height: 100%;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        width: 0%;
+        transition: width 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-weight: 600;
+    }
+
+    .success-message {
+        display: none;
+        background: linear-gradient(135deg, #4caf50 0%, #45a049 100%);
+        color: white;
+        padding: 25px;
+        border-radius: 16px;
+        text-align: center;
+        margin: 30px 0;
+        animation: slideIn 0.5s ease;
+    }
+
+    .success-message.active {
+        display: block;
+    }
+
+    @keyframes slideIn {
+        from {
+            opacity: 0;
+            transform: translateY(-20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .success-message h3 {
+        color: white;
+        font-size: 1.8rem;
+        margin-bottom: 10px;
+    }
+
+    .error-message {
+        background: #ff3b30;
+        color: white;
+        padding: 15px;
+        border-radius: 8px;
+        margin: 20px 0;
+        display: none;
+    }
+
+    .error-message.active {
+        display: block;
+    }
+
+    .file-info {
+        display: none;
+        background: #e8f5e9;
+        padding: 20px;
+        border-radius: 12px;
+        margin: 20px 0;
+        border-left: 5px solid #4caf50;
+    }
+
+    .file-info.active {
+        display: block;
+    }
+
+    .file-info h4 {
+        color: #2c3e50;
+        margin-bottom: 10px;
+    }
+
+    .file-info p {
+        color: #555;
+        margin: 5px 0;
+    }
+
+    .audio-preview {
+        margin: 20px 0;
+        display: none;
+    }
+
+    .audio-preview.active {
+        display: block;
+    }
+
+    .audio-preview audio {
+        width: 100%;
+        margin-top: 10px;
+    }
+
+    @media (max-width: 768px) {
+        .upload-header h1 {
+            font-size: 1.8rem;
+        }
+        
+        .upload-methods {
+            grid-template-columns: 1fr;
+        }
+        
+        .persona-grid {
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="upload-container">
+    <div class="upload-header">
+        <h1> Upload Your Voice</h1>
+        <p>Clone your voice and personalize your AI personas</p>
+    </div>
+
+    <div class="upload-card">
+        <!-- Upload Method Selection -->
+        <div class="upload-methods">
+            <div class="upload-method active" id="uploadMethodFile" onclick="selectUploadMethod('file')">
+                <div class="upload-icon"></div>
+                <h3>Upload Audio File</h3>
+                <p>Upload an existing audio recording (MP3, WAV, M4A)</p>
+            </div>
+
+            <div class="upload-method" id="uploadMethodRecord" onclick="selectUploadMethod('record')">
+                <div class="upload-icon"></div>
+                <h3>Record Now</h3>
+                <p>Record your voice directly from your microphone</p>
+            </div>
+        </div>
+
+        <!-- Error Message -->
+        <div class="error-message" id="errorMessage"></div>
+
+        <!-- File Upload Interface -->
+        <div class="drop-zone active" id="dropZone">
+            <div class="drop-zone-icon"></div>
+            <h3>Drag & Drop Your Audio File</h3>
+            <p>or click to browse</p>
+            <input type="file" id="fileInput" class="file-input" accept=".mp3,.wav,.m4a,audio/*">
+            <button class="btn-browse" onclick="document.getElementById('fileInput').click()">
+                Browse Files
+            </button>
+        </div>
+
+        <!-- Recording Interface -->
+        <div class="recording-interface" id="recordingInterface">
+            <h3 style="color: #2c3e50; margin-bottom: 20px;"> Record Your Voice</h3>
+            <p style="color: #7f8c8d; margin-bottom: 30px;">Speak clearly for at least 10 seconds</p>
+            
+            <button class="record-button" id="recordButton" onclick="toggleRecording()">
+                
+            </button>
+            
+            <div class="recording-status" id="recordingStatus">Click to start recording</div>
+            <div class="recording-timer" id="recordingTimer">00:00</div>
+        </div>
+
+        <!-- File Info -->
+        <div class="file-info" id="fileInfo">
+            <h4> File Selected</h4>
+            <p id="fileName"></p>
+            <p id="fileSize"></p>
+        </div>
+
+        <!-- Audio Preview -->
+        <div class="audio-preview" id="audioPreview">
+            <h4 style="color: #2c3e50;"> Preview Your Audio</h4>
+            <audio controls id="audioPlayer"></audio>
+        </div>
+
+        <!-- Voice Name Input -->
+        <div style="margin-top: 30px;">
+            <h3 style="color: #2c3e50; margin-bottom: 15px;">Voice Name (Optional)</h3>
+            <input 
+                type="text" 
+                class="voice-name-input" 
+                id="voiceName" 
+                placeholder="My Custom Voice"
+                maxlength="60"
+            >
+        </div>
+
+        <!-- Persona Selector -->
+        <div class="persona-selector">
+            <h3>Assign to Persona</h3>
+            <div class="persona-grid">
+                {% for persona in personas %}
+                <div class="persona-option" data-persona="{{ persona.name }}" onclick="selectPersona('{{ persona.name }}')">
+                    <div class="persona-avatar">
+                        {% if persona.avatar %}
+                        <img src="{{ url_for('static', filename='uploads/persona_pics/' + persona.avatar) }}" alt="{{ persona.name }}">
+                        {% else %}
+                        <div style="width: 100%; height: 100%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center; color: white; font-size: 2rem; font-weight: 700;">
+                            {{ persona.name[0] }}
+                        </div>
+                        {% endif %}
+                    </div>
+                    <div class="persona-name">{{ persona.name }}</div>
+                    {% if voice_assignments.get(persona.name.lower()) %}
+                    <div style="margin-top: 5px; font-size: 0.8rem; color: #4caf50;"> Has voice</div>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Progress Bar -->
+        <div class="progress-container" id="progressContainer">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill">0%</div>
+            </div>
+        </div>
+
+        <!-- Success Message -->
+        <div class="success-message" id="successMessage">
+            <h3> Voice Uploaded Successfully!</h3>
+            <p>Your voice has been cloned and assigned to <span id="successPersona"></span></p>
+            <p style="margin-top: 15px;">
+                <a href="{{ url_for('voice.manage') }}" style="color: white; text-decoration: underline;">Manage Your Voices</a> | 
+                <a href="{{ url_for('user_views.dashboard') }}" style="color: white; text-decoration: underline;">Back to Dashboard</a>
+            </p>
+        </div>
+
+        <!-- Upload Button -->
+        <button class="upload-button" id="uploadButton" onclick="uploadVoice()" disabled>
+             Upload & Clone Voice
+        </button>
+    </div>
+</div>
+
+<script>
+let selectedFile = null;
+let selectedPersona = null;
+let uploadMethod = 'file';
+let mediaRecorder = null;
+let audioChunks = [];
+let recordingStartTime = null;
+let timerInterval = null;
+
+// Upload method selection
+function selectUploadMethod(method) {
+    uploadMethod = method;
+    
+    document.querySelectorAll('.upload-method').forEach(el => el.classList.remove('active'));
+    document.getElementById('uploadMethod' + (method === 'file' ? 'File' : 'Record')).classList.add('active');
+    
+    document.getElementById('dropZone').classList.toggle('active', method === 'file');
+    document.getElementById('recordingInterface').classList.toggle('active', method === 'record');
+    
+    // Reset
+    selectedFile = null;
+    document.getElementById('fileInfo').classList.remove('active');
+    document.getElementById('audioPreview').classList.remove('active');
+    updateUploadButton();
+}
+
+// Drag and drop
+const dropZone = document.getElementById('dropZone');
+
+dropZone.addEventListener('click', () => {
+    document.getElementById('fileInput').click();
+});
+
+dropZone.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    dropZone.classList.add('dragover');
+});
+
+dropZone.addEventListener('dragleave', () => {
+    dropZone.classList.remove('dragover');
+});
+
+dropZone.addEventListener('drop', (e) => {
+    e.preventDefault();
+    dropZone.classList.remove('dragover');
+    
+    const files = e.dataTransfer.files;
+    if (files.length > 0) {
+        handleFile(files[0]);
+    }
+});
+
+document.getElementById('fileInput').addEventListener('change', (e) => {
+    if (e.target.files.length > 0) {
+        handleFile(e.target.files[0]);
+    }
+});
+
+function handleFile(file) {
+    // Validate file type
+    const validTypes = ['audio/mpeg', 'audio/wav', 'audio/x-wav', 'audio/mp4', 'audio/x-m4a'];
+    if (!validTypes.includes(file.type) && !file.name.match(/\.(mp3|wav|m4a)$/i)) {
+        showError('Please upload an audio file (MP3, WAV, or M4A)');
+        return;
+    }
+    
+    selectedFile = file;
+    
+    // Show file info
+    document.getElementById('fileName').textContent = 'Name: ' + file.name;
+    document.getElementById('fileSize').textContent = 'Size: ' + (file.size / 1024 / 1024).toFixed(2) + ' MB';
+    document.getElementById('fileInfo').classList.add('active');
+    
+    // Show audio preview
+    const reader = new FileReader();
+    reader.onload = (e) => {
+        const audioPlayer = document.getElementById('audioPlayer');
+        audioPlayer.src = e.target.result;
+        document.getElementById('audioPreview').classList.add('active');
+    };
+    reader.readAsDataURL(file);
+    
+    updateUploadButton();
+    hideError();
+}
+
+// Recording
+async function toggleRecording() {
+    const recordButton = document.getElementById('recordButton');
+    const recordingStatus = document.getElementById('recordingStatus');
+    
+    if (!mediaRecorder || mediaRecorder.state === 'inactive') {
+        // Start recording
+        try {
+            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            mediaRecorder = new MediaRecorder(stream);
+            audioChunks = [];
+            
+            mediaRecorder.ondataavailable = (e) => {
+                audioChunks.push(e.data);
+            };
+            
+            mediaRecorder.onstop = () => {
+                const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+                selectedFile = new File([audioBlob], 'recorded-voice.wav', { type: 'audio/wav' });
+                
+                // Show preview
+                const audioPlayer = document.getElementById('audioPlayer');
+                audioPlayer.src = URL.createObjectURL(audioBlob);
+                document.getElementById('audioPreview').classList.add('active');
+                
+                // Show file info
+                document.getElementById('fileName').textContent = 'Name: recorded-voice.wav';
+                document.getElementById('fileSize').textContent = 'Size: ' + (audioBlob.size / 1024 / 1024).toFixed(2) + ' MB';
+                document.getElementById('fileInfo').classList.add('active');
+                
+                updateUploadButton();
+            };
+            
+            mediaRecorder.start();
+            recordButton.classList.add('recording');
+            recordButton.textContent = '';
+            recordingStatus.textContent = 'Recording in progress...';
+            
+            // Start timer
+            recordingStartTime = Date.now();
+            timerInterval = setInterval(updateTimer, 100);
+            
+        } catch (err) {
+            showError('Could not access microphone: ' + err.message);
+        }
+    } else {
+        // Stop recording
+        mediaRecorder.stop();
+        mediaRecorder.stream.getTracks().forEach(track => track.stop());
+        recordButton.classList.remove('recording');
+        recordButton.textContent = '';
+        recordingStatus.textContent = 'Recording complete!';
+        
+        clearInterval(timerInterval);
+    }
+}
+
+function updateTimer() {
+    const elapsed = Math.floor((Date.now() - recordingStartTime) / 1000);
+    const minutes = Math.floor(elapsed / 60).toString().padStart(2, '0');
+    const seconds = (elapsed % 60).toString().padStart(2, '0');
+    document.getElementById('recordingTimer').textContent = `${minutes}:${seconds}`;
+}
+
+// Persona selection
+function selectPersona(personaName) {
+    selectedPersona = personaName;
+    
+    document.querySelectorAll('.persona-option').forEach(el => el.classList.remove('selected'));
+    document.querySelector(`[data-persona="${personaName}"]`).classList.add('selected');
+    
+    updateUploadButton();
+}
+
+function updateUploadButton() {
+    const uploadButton = document.getElementById('uploadButton');
+    uploadButton.disabled = !(selectedFile && selectedPersona);
+}
+
+// Upload voice
+async function uploadVoice() {
+    if (!selectedFile || !selectedPersona) return;
+    
+    const uploadButton = document.getElementById('uploadButton');
+    uploadButton.disabled = true;
+    uploadButton.textContent = ' Uploading...';
+    
+    const formData = new FormData();
+    formData.append('file', selectedFile);
+    formData.append('persona', selectedPersona);
+    
+    const voiceName = document.getElementById('voiceName').value.trim();
+    if (voiceName) {
+        formData.append('voice_name', voiceName);
+    } else {
+        formData.append('voice_name', selectedPersona + ' Voice');
+    }
+    
+    // Show progress
+    document.getElementById('progressContainer').classList.add('active');
+    
+    try {
+        const response = await fetch('/api/voice-upload', {
+            method: 'POST',
+            body: formData
+        });
+        
+        const result = await response.json();
+        
+        if (result.ok) {
+            // Success
+            document.getElementById('progressFill').style.width = '100%';
+            document.getElementById('progressFill').textContent = '100%';
+            
+            setTimeout(() => {
+                document.getElementById('successPersona').textContent = selectedPersona;
+                document.getElementById('successMessage').classList.add('active');
+                document.getElementById('progressContainer').classList.remove('active');
+                
+                // Reset form
+                selectedFile = null;
+                selectedPersona = null;
+                document.getElementById('fileInfo').classList.remove('active');
+                document.getElementById('audioPreview').classList.remove('active');
+                document.querySelectorAll('.persona-option').forEach(el => el.classList.remove('selected'));
+                document.getElementById('voiceName').value = '';
+                
+            }, 500);
+        } else {
+            throw new Error(result.error || 'Upload failed');
+        }
+        
+    } catch (error) {
+        showError('Upload failed: ' + error.message);
+        document.getElementById('progressContainer').classList.remove('active');
+        uploadButton.disabled = false;
+        uploadButton.textContent = ' Upload & Clone Voice';
+    }
+}
+
+function showError(message) {
+    const errorDiv = document.getElementById('errorMessage');
+    errorDiv.textContent = message;
+    errorDiv.classList.add('active');
+}
+
+function hideError() {
+    document.getElementById('errorMessage').classList.remove('active');
+}
+</script>
+{% endblock %}

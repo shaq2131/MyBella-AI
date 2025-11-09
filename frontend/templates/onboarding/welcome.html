@@ -1,0 +1,158 @@
+{% extends "base.html" %}
+
+{% block title %}Welcome to MyBella{% endblock %}
+
+{% block extra_css %}
+<style>
+.onboarding-container {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    padding: var(--spacing-xl);
+}
+
+.welcome-card {
+    background: white;
+    border-radius: var(--radius-2xl);
+    padding: var(--spacing-3xl);
+    max-width: 600px;
+    text-align: center;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+}
+
+.welcome-icon {
+    font-size: 80px;
+    margin-bottom: var(--spacing-lg);
+    animation: bounce 2s ease-in-out infinite;
+}
+
+@keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+.welcome-title {
+    font-size: var(--font-size-3xl);
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: var(--spacing-md);
+}
+
+.welcome-subtitle {
+    font-size: var(--font-size-lg);
+    color: var(--text-secondary);
+    margin-bottom: var(--spacing-2xl);
+    line-height: 1.6;
+}
+
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: var(--spacing-lg);
+    margin: var(--spacing-2xl) 0;
+    text-align: left;
+}
+
+.feature-item {
+    padding: var(--spacing-md);
+    background: var(--background-color);
+    border-radius: var(--radius-lg);
+}
+
+.feature-icon {
+    font-size: 32px;
+    margin-bottom: var(--spacing-sm);
+}
+
+.feature-title {
+    font-weight: 600;
+    margin-bottom: var(--spacing-xs);
+}
+
+.feature-desc {
+    font-size: var(--font-size-sm);
+    color: var(--text-secondary);
+}
+
+.btn-start {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: var(--spacing-md) var(--spacing-2xl);
+    border-radius: var(--radius-full);
+    font-size: var(--font-size-lg);
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.2s;
+    box-shadow: 0 4px 20px rgba(102, 126, 234, 0.4);
+}
+
+.btn-start:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 30px rgba(102, 126, 234, 0.6);
+}
+
+.skip-link {
+    display: block;
+    margin-top: var(--spacing-lg);
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: var(--font-size-sm);
+}
+
+.skip-link:hover {
+    color: var(--primary-color);
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="onboarding-container">
+    <div class="welcome-card">
+        <div class="welcome-icon"></div>
+        
+        <h1 class="welcome-title">Welcome to MyBella!</h1>
+        
+        <p class="welcome-subtitle">
+            Your personal AI wellness companion is here to support your mental health journey. 
+            Let's take a moment to personalize your experience.
+        </p>
+        
+        <div class="features-grid">
+            <div class="feature-item">
+                <div class="feature-icon"></div>
+                <div class="feature-title">AI Chat Support</div>
+                <div class="feature-desc">24/7 empathetic conversations</div>
+            </div>
+            
+            <div class="feature-item">
+                <div class="feature-icon"></div>
+                <div class="feature-title">Mood Tracking</div>
+                <div class="feature-desc">Understand your emotional patterns</div>
+            </div>
+            
+            <div class="feature-item">
+                <div class="feature-icon"></div>
+                <div class="feature-title">Wellness Tools</div>
+                <div class="feature-desc">Meditation & mindfulness</div>
+            </div>
+            
+            <div class="feature-item">
+                <div class="feature-icon"></div>
+                <div class="feature-title">Goal Setting</div>
+                <div class="feature-desc">Track your progress</div>
+            </div>
+        </div>
+        
+        <button class="btn-start" onclick="window.location.href='{{ url_for('onboarding.personality') }}'">
+            Let's Get Started →
+        </button>
+        
+        <a href="{{ url_for('user_views.dashboard') }}" class="skip-link">
+            Skip for now
+        </a>
+    </div>
+</div>
+{% endblock %}

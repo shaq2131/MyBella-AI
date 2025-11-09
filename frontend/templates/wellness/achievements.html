@@ -1,0 +1,384 @@
+{% extends "base.html" %}
+
+{% block title %}Achievements - MyBella{% endblock %}
+
+{% block content %}
+<div class="achievements-container">
+    <div class="achievements-header">
+            <h1>Achievements</h1>
+        <p class="subtitle">Track your wellness journey progress</p>
+        
+        <div class="stats-overview">
+            <div class="stat-card">
+                    <div class="stat-icon">PTS</div>
+                <div class="stat-value" id="total-points">0</div>
+                <div class="stat-label">Total Points</div>
+            </div>
+            <div class="stat-card">
+                    <div class="stat-icon">BDG</div>
+                <div class="stat-value" id="unlocked-badges">0</div>
+                <div class="stat-label">Badges Unlocked</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">STR</div>
+                <div class="stat-value" id="current-streak">0</div>
+                <div class="stat-label">Day Streak</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="filter-tabs">
+        <button class="filter-btn active" data-filter="all">All</button>
+        <button class="filter-btn" data-filter="unlocked">Unlocked</button>
+        <button class="filter-btn" data-filter="locked">Locked</button>
+        <button class="filter-btn" data-filter="games">Games</button>
+        <button class="filter-btn" data-filter="wellness">Wellness</button>
+    </div>
+
+    <div id="achievements-grid" class="achievements-grid">
+        <div class="loading">Loading achievements...</div>
+    </div>
+</div>
+
+<style>
+.achievements-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+.achievements-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.achievements-header h1 {
+    font-size: 2.5rem;
+    color: var(--primary-color, #6C63FF);
+    margin-bottom: 0.5rem;
+}
+
+.subtitle {
+    color: #666;
+    font-size: 1.1rem;
+    margin-bottom: 2rem;
+}
+
+.stats-overview {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    margin-top: 2rem;
+}
+
+.stat-card {
+    background: white;
+    border-radius: 15px;
+    padding: 2rem;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    text-align: center;
+    transition: transform 0.3s;
+}
+
+.stat-card:hover {
+    transform: translateY(-4px);
+}
+
+.stat-icon {
+    font-size: 3rem;
+    margin-bottom: 0.5rem;
+}
+
+.stat-value {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: var(--primary-color, #6C63FF);
+    margin-bottom: 0.5rem;
+}
+
+.stat-label {
+    font-size: 1rem;
+    color: #666;
+}
+
+.filter-tabs {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+}
+
+.filter-btn {
+    padding: 0.8rem 1.5rem;
+    background: white;
+    border: 2px solid #e0e0e0;
+    border-radius: 20px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.filter-btn:hover {
+    border-color: var(--primary-color, #6C63FF);
+}
+
+.filter-btn.active {
+    background: var(--primary-color, #6C63FF);
+    color: white;
+    border-color: var(--primary-color, #6C63FF);
+}
+
+.achievements-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+}
+
+.achievement-card {
+    background: white;
+    border-radius: 15px;
+    padding: 2rem;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    position: relative;
+    transition: all 0.3s;
+}
+
+.achievement-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+}
+
+.achievement-card.locked {
+    opacity: 0.6;
+    background: #f8f9fa;
+}
+
+.achievement-tier {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    padding: 0.4rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.tier-bronze {
+    background: #cd7f32;
+    color: white;
+}
+
+.tier-silver {
+    background: #c0c0c0;
+    color: #333;
+}
+
+.tier-gold {
+    background: #ffd700;
+    color: #333;
+}
+
+.tier-platinum {
+    background: linear-gradient(135deg, #e5e4e2 0%, #c9c9c9 100%);
+    color: #333;
+}
+
+.achievement-icon {
+    font-size: 4rem;
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+.achievement-icon.locked {
+    filter: grayscale(100%);
+    opacity: 0.5;
+}
+
+.achievement-name {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 0.5rem;
+    text-align: center;
+}
+
+.achievement-description {
+    color: #666;
+    line-height: 1.6;
+    margin-bottom: 1rem;
+    text-align: center;
+    font-size: 0.95rem;
+}
+
+.achievement-progress {
+    margin-top: 1rem;
+}
+
+.progress-text {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+    color: #666;
+}
+
+.progress-bar {
+    width: 100%;
+    height: 8px;
+    background: #e0e0e0;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--primary-color, #6C63FF) 0%, #764ba2 100%);
+    border-radius: 4px;
+    transition: width 0.3s;
+}
+
+.achievement-reward {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 1rem;
+    padding: 0.8rem;
+    background: #f0edff;
+    border-radius: 8px;
+    font-weight: 600;
+    color: var(--primary-color, #6C63FF);
+}
+
+.achievement-date {
+    text-align: center;
+    font-size: 0.85rem;
+    color: #999;
+    margin-top: 1rem;
+    font-style: italic;
+}
+
+.loading {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 3rem;
+    color: #999;
+}
+
+.lock-icon {
+    text-align: center;
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+    opacity: 0.5;
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const achievementsGrid = document.getElementById('achievements-grid');
+    let allAchievements = [];
+    let currentFilter = 'all';
+
+    // Filter buttons
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            currentFilter = this.dataset.filter;
+            renderAchievements();
+        });
+    });
+
+    // Load achievements
+    async function loadAchievements() {
+        try {
+            const response = await fetch('/wellness/games/achievements');
+            if (!response.ok) throw new Error('Failed to load achievements');
+
+            const data = await response.json();
+            allAchievements = data.achievements;
+            
+            updateStats(data.stats);
+            renderAchievements();
+        } catch (error) {
+            console.error('Error loading achievements:', error);
+            achievementsGrid.innerHTML = '<div class="loading">Failed to load achievements.</div>';
+        }
+    }
+
+    function updateStats(stats) {
+        document.getElementById('total-points').textContent = stats.total_points || 0;
+        document.getElementById('unlocked-badges').textContent = stats.unlocked_count || 0;
+        document.getElementById('current-streak').textContent = stats.current_streak || 0;
+    }
+
+    function renderAchievements() {
+        const filtered = allAchievements.filter(achievement => {
+            if (currentFilter === 'all') return true;
+            if (currentFilter === 'unlocked') return achievement.is_unlocked;
+            if (currentFilter === 'locked') return !achievement.is_unlocked;
+            return achievement.category === currentFilter;
+        });
+
+        if (filtered.length === 0) {
+            achievementsGrid.innerHTML = '<div class="loading">No achievements found.</div>';
+            return;
+        }
+
+        achievementsGrid.innerHTML = '';
+        filtered.forEach(achievement => {
+            const card = createAchievementCard(achievement);
+            achievementsGrid.appendChild(card);
+        });
+    }
+
+    function createAchievementCard(achievement) {
+        const div = document.createElement('div');
+        div.className = `achievement-card ${achievement.is_unlocked ? '' : 'locked'}`;
+
+        const progress = (achievement.current_count / achievement.required_count) * 100;
+        const progressBar = achievement.is_unlocked ? '' : `
+            <div class="achievement-progress">
+                <div class="progress-text">
+                    <span>Progress</span>
+                    <span>${achievement.current_count}/${achievement.required_count}</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: ${progress}%"></div>
+                </div>
+            </div>
+        `;
+
+        const unlockedDate = achievement.is_unlocked && achievement.unlocked_at 
+            ? `<div class="achievement-date">Unlocked ${new Date(achievement.unlocked_at).toLocaleDateString()}</div>`
+            : '';
+
+    const lockIcon = achievement.is_unlocked ? '' : '<div class="lock-icon">Locked</div>';
+    const badgeSymbol = ((achievement.badge_name || '').charAt(0) || '?').toUpperCase();
+
+        div.innerHTML = `
+            <div class="achievement-tier tier-${achievement.badge_tier}">${achievement.badge_tier}</div>
+            ${lockIcon}
+            <div class="achievement-icon ${achievement.is_unlocked ? '' : 'locked'}">
+                ${badgeSymbol}
+            </div>
+            <div class="achievement-name">${achievement.badge_name}</div>
+            <div class="achievement-description">${achievement.badge_description}</div>
+            ${progressBar}
+            <div class="achievement-reward">
+                <span>Points</span>
+                <span>${achievement.points_awarded}</span>
+            </div>
+            ${unlockedDate}
+        `;
+
+        return div;
+    }
+
+    // Initial load
+    loadAchievements();
+});
+</script>
+{% endblock %}

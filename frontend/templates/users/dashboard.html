@@ -1,0 +1,1033 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - MyBella{% endblock %}
+
+{% block extra_css %}
+<style>
+.dashboard-page {
+    padding: var(--spacing-2xl) 0 var(--spacing-3xl);
+    background: linear-gradient(180deg, rgba(247, 248, 255, 0.7) 0%, transparent 220px);
+}
+
+.dashboard-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 2.1fr) minmax(0, 1fr);
+    gap: var(--spacing-2xl);
+    align-items: start;
+}
+
+.dashboard-main,
+.dashboard-aside {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-2xl);
+}
+
+.section-card {
+    background: var(--surface-color);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-xl);
+    padding: var(--spacing-2xl);
+    box-shadow: var(--shadow-md);
+    position: relative;
+    overflow: hidden;
+}
+
+.icon-sprite {
+    position: absolute;
+    width: 0;
+    height: 0;
+    overflow: hidden;
+    pointer-events: none;
+}
+
+.icon {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+.tool-icon {
+    width: 52px;
+    height: 52px;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--primary-light);
+    color: var(--primary-color);
+}
+
+.tool-icon svg {
+    width: 28px;
+    height: 28px;
+    display: block;
+}
+
+.welcome-card {
+    background: linear-gradient(125deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+    color: white;
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xl);
+}
+
+.welcome-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: var(--spacing-xl);
+}
+
+.welcome-meta {
+    max-width: 520px;
+}
+
+.welcome-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.35rem 0.85rem;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.18);
+    font-size: var(--font-size-xs);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.welcome-title {
+    font-size: clamp(2rem, 4vw, 2.8rem);
+    font-weight: 700;
+    margin: var(--spacing-md) 0 var(--spacing-sm);
+}
+
+.welcome-subtitle {
+    font-size: var(--font-size-lg);
+    color: rgba(255, 255, 255, 0.85);
+    margin: 0;
+}
+
+.welcome-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-md);
+}
+
+.welcome-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.85rem 1.4rem;
+    border-radius: var(--radius-lg);
+    border: none;
+    text-decoration: none;
+    font-weight: 600;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.welcome-btn.primary {
+    background: white;
+    color: var(--primary-color);
+    box-shadow: 0 20px 30px rgba(15, 118, 219, 0.15);
+}
+
+.welcome-btn.ghost {
+    background: rgba(255, 255, 255, 0.12);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+}
+
+.welcome-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 18px 28px rgba(15, 118, 219, 0.2);
+}
+
+.welcome-avatar {
+    width: 96px;
+    height: 96px;
+    border-radius: 50%;
+    border: 5px solid rgba(255, 255, 255, 0.3);
+    overflow: hidden;
+    flex-shrink: 0;
+    position: relative;
+}
+
+.welcome-avatar::after {
+    content: "";
+    position: absolute;
+    inset: -8px;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    opacity: 0.4;
+}
+
+.welcome-highlight {
+    display: flex;
+    gap: var(--spacing-lg);
+    flex-wrap: wrap;
+    margin-top: var(--spacing-md);
+}
+
+.welcome-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.65rem 1.15rem;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.12);
+    font-size: var(--font-size-sm);
+}
+
+.welcome-pill .icon {
+    width: 16px;
+    height: 16px;
+}
+
+.section-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-xl);
+}
+
+.section-heading p {
+    margin: 0;
+    color: var(--text-muted);
+    max-width: 360px;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: var(--spacing-lg);
+}
+
+.stat-card {
+    background: linear-gradient(160deg, rgba(245, 247, 255, 0.5) 0%, rgba(255, 255, 255, 0.95) 100%);
+    border: 1px solid rgba(15, 118, 219, 0.08);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-xl) var(--spacing-lg);
+    position: relative;
+    overflow: hidden;
+}
+
+.stat-card::after {
+    content: "";
+    position: absolute;
+    right: -20px;
+    top: -40px;
+    width: 120px;
+    height: 120px;
+    background: rgba(15, 118, 219, 0.08);
+    border-radius: 50%;
+    z-index: 0;
+}
+
+.stat-card > * {
+    position: relative;
+    z-index: 1;
+}
+
+.stat-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: var(--spacing-md);
+    background: rgba(15, 118, 219, 0.12);
+    color: var(--primary-color);
+}
+
+.stat-icon svg {
+    width: 24px;
+    height: 24px;
+}
+
+.stat-value {
+    font-size: clamp(1.65rem, 3vw, 2.25rem);
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 0 0 var(--spacing-xs);
+}
+
+.stat-label {
+    font-size: var(--font-size-sm);
+    color: var(--text-secondary);
+    margin-bottom: var(--spacing-sm);
+}
+
+.stat-meta {
+    font-size: var(--font-size-xs);
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+}
+
+.tool-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: var(--spacing-lg);
+}
+
+.tool-card {
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-lg);
+    background: var(--surface-color);
+    text-decoration: none;
+    color: inherit;
+    display: grid;
+    gap: var(--spacing-md);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border 0.2s ease;
+}
+
+.tool-card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(15, 118, 219, 0.25);
+    box-shadow: 0 18px 32px rgba(15, 118, 219, 0.12);
+}
+
+.tool-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: var(--font-size-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+}
+
+.tool-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin: 0;
+    color: var(--text-primary);
+}
+
+.tool-description {
+    color: var(--text-secondary);
+    font-size: var(--font-size-sm);
+    line-height: 1.6;
+    margin: 0;
+}
+
+.persona-panel .persona-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+    gap: var(--spacing-md);
+}
+
+.persona-card {
+    border: 1px solid rgba(15, 118, 219, 0.12);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-lg);
+    background: rgba(246, 249, 255, 0.65);
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.persona-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 28px rgba(15, 118, 219, 0.15);
+}
+
+.persona-info {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+}
+
+.persona-avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 14px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--primary-light);
+    color: var(--primary-color);
+    font-weight: 700;
+    font-size: 1.2rem;
+}
+
+.persona-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+
+.persona-name {
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.persona-tone {
+    font-size: var(--font-size-xs);
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+}
+
+.persona-last-chat {
+    font-size: var(--font-size-xs);
+    color: var(--text-secondary);
+}
+
+.persona-actions {
+    margin-top: auto;
+    display: flex;
+    gap: var(--spacing-sm);
+}
+
+.persona-actions a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.55rem 0.9rem;
+    border-radius: var(--radius-md);
+    font-size: var(--font-size-xs);
+    text-decoration: none;
+    font-weight: 600;
+    border: 1px solid rgba(15, 118, 219, 0.15);
+    color: var(--primary-color);
+    background: white;
+    transition: background 0.2s ease;
+}
+
+.persona-actions a:hover {
+    background: var(--primary-light);
+}
+
+.voice-card {
+    background: linear-gradient(140deg, rgba(46, 197, 206, 0.12) 0%, rgba(15, 118, 219, 0.08) 100%);
+    border: 1px solid rgba(15, 118, 219, 0.12);
+}
+
+.voice-minutes {
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+    margin: var(--spacing-lg) 0;
+}
+
+.voice-value {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--primary-color);
+}
+
+.voice-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.75rem 1.2rem;
+    background: var(--primary-color);
+    color: white;
+    border-radius: var(--radius-lg);
+    text-decoration: none;
+    font-weight: 600;
+    box-shadow: 0 18px 32px rgba(15, 118, 219, 0.2);
+    transition: transform 0.2s ease;
+}
+
+.voice-btn:hover {
+    transform: translateY(-3px);
+}
+
+.voice-btn svg {
+    width: 20px;
+    height: 20px;
+}
+
+.support-card {
+    background: linear-gradient(120deg, #ff6b6b 0%, #f06595 100%);
+    color: white;
+    border: none;
+}
+
+.support-card h3 {
+    margin: 0 0 var(--spacing-sm);
+    font-size: 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+}
+
+.support-card h3 svg {
+    width: 22px;
+    height: 22px;
+}
+
+.support-card p {
+    margin: 0 0 var(--spacing-md);
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.support-actions {
+    display: flex;
+    gap: var(--spacing-sm);
+    flex-wrap: wrap;
+}
+
+.support-actions a {
+    padding: 0.7rem 1.4rem;
+    border-radius: 999px;
+    text-decoration: none;
+    font-weight: 600;
+    border: none;
+}
+
+.support-actions a.primary {
+    background: white;
+    color: #f06595;
+}
+
+.support-actions a.secondary {
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+}
+
+.activity-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-lg);
+    margin: 0;
+    padding: 0;
+}
+
+.activity-item {
+    display: flex;
+    gap: var(--spacing-md);
+    align-items: center;
+}
+
+.activity-avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    overflow: hidden;
+    background: var(--primary-light);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    color: var(--primary-color);
+    flex-shrink: 0;
+}
+
+.activity-content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+
+.activity-text {
+    font-weight: 500;
+    color: var(--text-primary);
+}
+
+.activity-time {
+    font-size: var(--font-size-xs);
+    color: var(--text-muted);
+}
+
+.empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--spacing-md);
+    padding: var(--spacing-2xl) var(--spacing-xl);
+    border: 1px dashed var(--border-color);
+    border-radius: var(--radius-lg);
+    background: rgba(246, 249, 255, 0.6);
+}
+
+.empty-state-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(15, 118, 219, 0.12);
+    color: var(--primary-color);
+}
+
+.empty-state-icon svg {
+    width: 24px;
+    height: 24px;
+}
+
+.empty-state p {
+    margin: 0;
+    color: var(--text-secondary);
+}
+
+.empty-state a {
+    color: var(--primary-color);
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.section-link {
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    color: var(--primary-color);
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.section-link:hover {
+    text-decoration: underline;
+}
+
+@media (max-width: 1200px) {
+    .dashboard-layout {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .section-card {
+        padding: var(--spacing-xl) var(--spacing-lg);
+    }
+    
+    .welcome-top {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .welcome-actions {
+        width: 100%;
+    }
+    
+    .welcome-btn,
+    .support-actions a {
+        flex: 1;
+        justify-content: center;
+    }
+}
+
+@media (max-width: 520px) {
+    .tool-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .persona-panel .persona-grid {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="dashboard-page">
+    <div class="container">
+        <svg class="icon-sprite" aria-hidden="true" focusable="false">
+            <symbol id="icon-chat" viewBox="0 0 24 24">
+                <path d="M5 5.5h14a1.5 1.5 0 0 1 1.5 1.5v6.5a1.5 1.5 0 0 1-1.5 1.5h-4.4L12 18.6l-2.6-3.6H7a1.5 1.5 0 0 1-1.5-1.5V7A1.5 1.5 0 0 1 5 5.5z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+                <path d="M8.6 9.3h6.8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+                <path d="M8.6 12h4.4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+            </symbol>
+            <symbol id="icon-clock" viewBox="0 0 24 24">
+                <circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+                <path d="M12 7.5v4.8l3 1.8" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+            </symbol>
+            <symbol id="icon-microphone" viewBox="0 0 24 24">
+                <path d="M12 15a3 3 0 0 0 3-3V8.5a3 3 0 0 0-6 0V12a3 3 0 0 0 3 3z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+                <path d="M6.5 11.5V12a5.5 5.5 0 0 0 11 0v-.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+                <path d="M12 18.6v2.2" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+                <path d="M9.4 21.2h5.2" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+            </symbol>
+            <symbol id="icon-meditate" viewBox="0 0 24 24">
+                <circle cx="12" cy="8.5" r="2.4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+                <path d="M8.5 15.1c1.1-.7 2.3-1.2 3.5-1.2s2.4.4 3.5 1.2" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+                <path d="M7 18.7c1.3-1.8 3.1-2.8 5-2.8s3.7 1 5 2.8" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+                <path d="M9.5 21c1-.8 2-.9 2.5-.9s1.5.1 2.5.9" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+            </symbol>
+            <symbol id="icon-smile" viewBox="0 0 24 24">
+                <circle cx="12" cy="12" r="7" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+                <circle cx="9.4" cy="10.3" r="0.9" fill="currentColor" />
+                <circle cx="14.6" cy="10.3" r="0.9" fill="currentColor" />
+                <path d="M9.3 13.5c.7 1.3 1.8 2.1 2.7 2.1s2-.8 2.7-2.1" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+            </symbol>
+            <symbol id="icon-book" viewBox="0 0 24 24">
+                <path d="M5.5 6.5A2.5 2.5 0 0 1 8 4H12v14H8a2.5 2.5 0 0 0-2.5 2.5V6.5z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" />
+                <path d="M18.5 6.5A2.5 2.5 0 0 0 16 4h-4v14h4a2.5 2.5 0 0 1 2.5 2.5V6.5z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" />
+                <line x1="12" y1="7" x2="12" y2="17.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+            </symbol>
+            <symbol id="icon-chart" viewBox="0 0 24 24">
+                <path d="M5 18.5V10" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+                <path d="M10 18.5V6.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+                <path d="M15 18.5V11" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+                <path d="M19 18.5v-4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+            </symbol>
+            <symbol id="icon-trophy" viewBox="0 0 24 24">
+                <path d="M8 4h8v3.5a4 4 0 0 1-4 4 4 4 0 0 1-4-4z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" />
+                <path d="M5 6a3 3 0 0 0 3 3" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+                <path d="M19 6a3 3 0 0 1-3 3" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+                <path d="M10 17c0-1.4 1-2 2-2s2 .6 2 2" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+                <path d="M9 21h6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+            </symbol>
+            <symbol id="icon-moon" viewBox="0 0 24 24">
+                <path d="M14.8 4.5a7.5 7.5 0 1 0 4.7 9.7 5.5 5.5 0 0 1-5.1-9.7z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+            </symbol>
+            <symbol id="icon-leaf" viewBox="0 0 24 24">
+                <path d="M5.5 16.5c2.8-7 9.7-9.5 13-8.8 0 4.5-2.4 9-6.7 11.3" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+                <path d="M9.5 14.5l2.8 2.8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+            </symbol>
+            <symbol id="icon-companions" viewBox="0 0 24 24">
+                <circle cx="9" cy="10" r="2.6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+                <circle cx="16" cy="10.8" r="2.2" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+                <path d="M4.8 19c0-2.3 1.8-4.1 4.1-4.1h2.2c2.3 0 4.1 1.8 4.1 4.1" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+                <path d="M12.5 17.6c.7-1 1.7-1.6 2.8-1.6 1.8 0 3.2 1.4 3.2 3" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+            </symbol>
+            <symbol id="icon-lifebuoy" viewBox="0 0 24 24">
+                <circle cx="12" cy="12" r="8" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+                <circle cx="12" cy="12" r="3.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+                <path d="M12 4v2.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+                <path d="M20 12h-2.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+                <path d="M12 20v-2.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+                <path d="M4 12h2.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+            </symbol>
+        </svg>
+        <div class="dashboard-layout">
+            <div class="dashboard-main">
+                <section class="section-card welcome-card" data-animate="fade-up">
+                    <div class="welcome-top">
+                        <div class="welcome-meta">
+                            <span class="welcome-chip">Steady steps forward</span>
+                            <h1 class="welcome-title">Welcome back, {{ current_user.name }}!</h1>
+                            <p class="welcome-subtitle">Pick up where you left off or choose a new focus for today. Bella remembers your journey and keeps every insight close.</p>
+                            <div class="welcome-highlight">
+                                <span class="welcome-pill">
+                                    <svg class="icon" aria-hidden="true" focusable="false"><use href="#icon-chat"></use></svg>
+                                    <span>{{ stats.total_messages or 0 }} conversations logged</span>
+                                </span>
+                                <span class="welcome-pill">
+                                    <svg class="icon" aria-hidden="true" focusable="false"><use href="#icon-clock"></use></svg>
+                                    <span>{% if stats.last_activity %}Last chat {{ stats.last_activity.strftime('%b %d - %I:%M %p') }}{% else %}Be the first to say hi{% endif %}</span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="welcome-avatar">
+                            {% if current_user.profile_picture %}
+                                <img src="{{ url_for('static', filename='uploads/profile_pics/' + current_user.profile_picture) }}" alt="{{ current_user.name }}" style="width: 100%; height: 100%; object-fit: cover;">
+                            {% else %}
+                                <div class="avatar avatar-xl" style="background: rgba(255, 255, 255, 0.2); color: white; font-size: 2rem; display: flex; align-items: center; justify-content: center; width: 100%; height: 100%;">
+                                    {{ current_user.name[0].upper() }}
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="welcome-actions">
+                        <a href="{{ url_for('user_views.chat_modern') }}" class="welcome-btn primary">Continue chatting</a>
+                        <a href="{{ url_for('mood.checkin') }}" class="welcome-btn ghost">Log mood check-in</a>
+                    </div>
+                </section>
+
+                <section class="section-card" data-animate="fade-up" data-animate-delay="100">
+                    <div class="section-heading">
+                        <div>
+                            <h2>Daily snapshot</h2>
+                            <p>Your week at a glance. These insights refresh every time Bella learns something new.</p>
+                        </div>
+                        <a class="section-link" href="{{ url_for('analytics.dashboard') }}">View detailed analytics &rarr;</a>
+                    </div>
+                    <div class="stats-grid">
+                        <article class="stat-card" data-animate="fade-up" data-animate-delay="150">
+                            <div class="stat-icon">
+                                <svg class="icon" aria-hidden="true" focusable="false"><use href="#icon-chat"></use></svg>
+                            </div>
+                            <h3 class="stat-value">{{ stats.total_messages or 0 }}</h3>
+                            <p class="stat-label">Total conversations</p>
+                            <div class="stat-meta">{{ stats.recent_activity or 0 }} this week</div>
+                        </article>
+
+                        <article class="stat-card" data-animate="fade-up" data-animate-delay="200">
+                            <div class="stat-icon">
+                                <svg class="icon" aria-hidden="true" focusable="false"><use href="#icon-microphone"></use></svg>
+                            </div>
+                            <h3 class="stat-value">{{ stats.voice_minutes_remaining or 100 }}</h3>
+                            <p class="stat-label">Voice minutes remaining</p>
+                            <div class="stat-meta">Add more in Voice Studio anytime</div>
+                        </article>
+
+                        <article class="stat-card" data-animate="fade-up" data-animate-delay="250">
+                            <div class="stat-icon">
+                                <svg class="icon" aria-hidden="true" focusable="false"><use href="#icon-meditate"></use></svg>
+                            </div>
+                            <h3 class="stat-value">{{ stats.chat_sessions or 0 }}</h3>
+                            <p class="stat-label">Guided sessions completed</p>
+                            <div class="stat-meta">Includes exercises, reflections, and journal prompts</div>
+                        </article>
+
+                        <article class="stat-card" data-animate="fade-up" data-animate-delay="300">
+                            <div class="stat-icon">
+                                <svg class="icon" aria-hidden="true" focusable="false"><use href="#icon-moon"></use></svg>
+                            </div>
+                            <h3 class="stat-value">{{ stats.user_messages or 0 }}</h3>
+                            <p class="stat-label">Personal reflections shared</p>
+                            <div class="stat-meta">Bella stores them safely for future insights</div>
+                        </article>
+                    </div>
+                </section>
+
+                <section class="section-card" data-animate="fade-up" data-animate-delay="150">
+                    <div class="section-heading">
+                        <div>
+                            <h2>Jump back in</h2>
+                            <p>Choose a focus for today. Every space is crafted to support mood, clarity, and gentle progress.</p>
+                        </div>
+                    </div>
+                    <div class="tool-grid">
+                        <a href="{{ url_for('user_views.chat_modern') }}" class="tool-card" data-animate="fade-up" data-animate-delay="200">
+                            <span class="tool-tag">Conversation</span>
+                            <div class="tool-icon">
+                                <svg class="icon" aria-hidden="true" focusable="false"><use href="#icon-chat"></use></svg>
+                            </div>
+                            <h3 class="tool-title">Open modern chat</h3>
+                            <p class="tool-description">Switch personas, explore coaching modes, and continue your latest thread without losing context.</p>
+                        </a>
+
+                        <a href="{{ url_for('mood.checkin') }}" class="tool-card" data-animate="fade-up" data-animate-delay="230">
+                            <span class="tool-tag">Wellness</span>
+                            <div class="tool-icon">
+                                <svg class="icon" aria-hidden="true" focusable="false"><use href="#icon-smile"></use></svg>
+                            </div>
+                            <h3 class="tool-title">Mood check-in</h3>
+                            <p class="tool-description">Map today's feelings in under a minute and receive a gentle prompt tailored to your state.</p>
+                        </a>
+
+                        <a href="{{ url_for('exercises.index') }}" class="tool-card" data-animate="fade-up" data-animate-delay="260">
+                            <span class="tool-tag">Practice</span>
+                            <div class="tool-icon">
+                                <svg class="icon" aria-hidden="true" focusable="false"><use href="#icon-meditate"></use></svg>
+                            </div>
+                            <h3 class="tool-title">Guided exercises</h3>
+                            <p class="tool-description">Breathing, CBT, journaling, and grounding sequences curated for calm, clarity, or focus.</p>
+                        </a>
+
+                        <a href="{{ url_for('memory.history') }}" class="tool-card" data-animate="fade-up" data-animate-delay="290">
+                            <span class="tool-tag">Memory</span>
+                            <div class="tool-icon">
+                                <svg class="icon" aria-hidden="true" focusable="false"><use href="#icon-book"></use></svg>
+                            </div>
+                            <h3 class="tool-title">Conversation history</h3>
+                            <p class="tool-description">Search your timeline, revisit insights, and see what each persona remembers for you.</p>
+                        </a>
+
+                        <a href="{{ url_for('analytics.dashboard') }}" class="tool-card" data-animate="fade-up" data-animate-delay="320">
+                            <span class="tool-tag">Insights</span>
+                            <div class="tool-icon">
+                                <svg class="icon" aria-hidden="true" focusable="false"><use href="#icon-chart"></use></svg>
+                            </div>
+                            <h3 class="tool-title">Progress analytics</h3>
+                            <p class="tool-description">Track streaks, mood trends, and milestone moments across your full Bella journey.</p>
+                        </a>
+
+                        <a href="{{ url_for('achievements.dashboard') }}" class="tool-card" data-animate="fade-up" data-animate-delay="350">
+                            <span class="tool-tag">Motivation</span>
+                            <div class="tool-icon">
+                                <svg class="icon" aria-hidden="true" focusable="false"><use href="#icon-trophy"></use></svg>
+                            </div>
+                            <h3 class="tool-title">Achievements & rituals</h3>
+                            <p class="tool-description">Celebrate progress, refresh your rituals, and unlock gentle challenges when you're ready.</p>
+                        </a>
+                    </div>
+                </section>
+
+                <section class="section-card" data-animate="fade-up" data-animate-delay="180">
+                    <div class="section-heading">
+                        <div>
+                            <h2>Recent moments</h2>
+                            <p>Snapshots from the last few check-ins and conversations. Bella highlights what matters most.</p>
+                        </div>
+                        <a class="section-link" href="{{ url_for('user_views.chat_history') }}">View full history &rarr;</a>
+                    </div>
+
+                    {% if recent_messages %}
+                        <ul class="activity-list">
+                            {% for message in recent_messages[:5] %}
+                            <li class="activity-item" data-animate="fade-up" data-animate-delay="{{ 200 + loop.index0 * 40 }}">
+                                <div class="activity-avatar">
+                                    {% if message.persona and message.persona.avatar %}
+                                        <img src="{{ url_for('static', filename='uploads/persona_pics/' + message.persona.avatar) }}" alt="{{ message.persona.name }}" style="width: 100%; height: 100%; object-fit: cover;">
+                                    {% else %}
+                                        {{ message.persona.name[0] if message.persona else 'AI' }}
+                                    {% endif %}
+                                </div>
+                                <div class="activity-content">
+                                    <div class="activity-text">{{ message.persona.name if message.persona else 'Bella' }} {{ 'shared a reflection' if message.role == 'assistant' else 'heard from you' }}</div>
+                                    <div class="activity-time">{{ message.created_at.strftime('%b %d, %Y - %I:%M %p') if message.created_at else 'Just now' }}</div>
+                                </div>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        <div class="empty-state" data-animate="fade-up" data-animate-delay="220">
+                            <div class="empty-state-icon">
+                                <svg class="icon" aria-hidden="true" focusable="false"><use href="#icon-leaf"></use></svg>
+                            </div>
+                            <p>Your dashboard is ready for the first story you share. Start with a check-in or open a chat.</p>
+                            <a href="{{ url_for('user_views.chat_modern') }}">Start your first conversation &rarr;</a>
+                        </div>
+                    {% endif %}
+                </section>
+            </div>
+
+            <aside class="dashboard-aside">
+                <section class="section-card persona-panel" data-animate="fade-up" data-animate-delay="120">
+                    <div class="section-heading">
+                        <div>
+                            <h3>My companions</h3>
+                            <p>Switch tones in a tap. Bella keeps every persona aligned with your preferences.</p>
+                        </div>
+                        <a class="section-link" href="{{ url_for('user_views.chat') }}">Switch persona &rarr;</a>
+                    </div>
+
+                    <div class="persona-grid">
+                        {% set persona_tracker = namespace(seen=[]) %}
+                        {% if recent_messages %}
+                            {% for message in recent_messages %}
+                                {% if message.persona and message.persona.name not in persona_tracker.seen and persona_tracker.seen|length < 4 %}
+                                    {% set _ = persona_tracker.seen.append(message.persona.name) %}
+                                    <article class="persona-card" data-animate="fade-up" data-animate-delay="{{ 180 + persona_tracker.seen|length * 40 }}">
+                                        <div class="persona-info">
+                                            <div class="persona-avatar">
+                                                {% if message.persona.avatar %}
+                                                    <img src="{{ url_for('static', filename='uploads/persona_pics/' + message.persona.avatar) }}" alt="{{ message.persona.name }}" style="width: 100%; height: 100%; object-fit: cover;">
+                                                {% else %}
+                                                    {{ message.persona.name[0] }}
+                                                {% endif %}
+                                            </div>
+                                            <div class="persona-meta">
+                                                <span class="persona-name">{{ message.persona.name }}</span>
+                                                <span class="persona-tone">{{ message.persona.archetype if message.persona.archetype else 'AI Companion' }}</span>
+                                                <span class="persona-last-chat">Last heard {{ message.created_at.strftime('%b %d - %I:%M %p') if message.created_at else 'recently' }}</span>
+                                            </div>
+                                        </div>
+                                        <div class="persona-actions">
+                                            <a href="{{ url_for('user_views.chat_modern', persona=message.persona.name) }}">Continue</a>
+                                            <a href="{{ url_for('user_views.chat', persona=message.persona.name) }}">Classic view</a>
+                                        </div>
+                                    </article>
+                                {% endif %}
+                            {% endfor %}
+                        {% endif %}
+
+                        {% if persona_tracker.seen|length == 0 %}
+                            <div class="empty-state" data-animate="fade-up" data-animate-delay="220">
+                                <div class="empty-state-icon">
+                                    <svg class="icon" aria-hidden="true" focusable="false"><use href="#icon-companions"></use></svg>
+                                </div>
+                                <p>Select a companion to unlock tailored tone, memory, and rituals.</p>
+                                <a href="{{ url_for('user_views.chat') }}">Browse personas &rarr;</a>
+                            </div>
+                        {% endif %}
+                    </div>
+                </section>
+
+                <section class="section-card voice-card" data-animate="fade-up" data-animate-delay="160">
+                    <h3>Voice studio</h3>
+                    <p>Blend lifelike speech with your preferred persona. Upload samples or adjust tone on the fly.</p>
+                    <div class="voice-minutes">
+                        <span class="voice-value">{{ stats.voice_minutes_remaining or 100 }}</span>
+                        <span>minutes remaining</span>
+                    </div>
+                    <a class="voice-btn" href="{{ url_for('voice.upload') }}">
+                        <svg class="icon" aria-hidden="true" focusable="false"><use href="#icon-microphone"></use></svg>
+                        <span>Open Voice Studio</span>
+                    </a>
+                </section>
+
+                <section class="section-card support-card" data-animate="fade-up" data-animate-delay="200">
+                    <h3>
+                        <svg class="icon" aria-hidden="true" focusable="false"><use href="#icon-lifebuoy"></use></svg>
+                        <span>Need support right now?</span>
+                    </h3>
+                    <p>Free, confidential crisis help is available 24/7. If you're in immediate danger, contact local emergency services.</p>
+                    <div class="support-actions">
+                        <a class="primary" href="{{ url_for('crisis.immediate_help') }}">Connect now</a>
+                        <a class="secondary" href="{{ url_for('crisis.support') }}">View resources</a>
+                    </div>
+                </section>
+            </aside>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const animatedItems = document.querySelectorAll('[data-animate]');
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const delay = entry.target.getAttribute('data-animate-delay') || 0;
+                entry.target.style.transitionDelay = `${delay}ms`;
+                entry.target.classList.add('animate-in');
+                observer.unobserve(entry.target);
+            }
+        });
+    }, {
+        threshold: 0.2
+    });
+
+    animatedItems.forEach(item => {
+        item.classList.add('pre-animate');
+        observer.observe(item);
+    });
+});
+
+// Subtle keyframe-style classes injected once for reusability
+const styleTag = document.createElement('style');
+styleTag.innerHTML = `
+    .pre-animate {
+        opacity: 0;
+        transform: translateY(18px);
+        transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    .animate-in {
+        opacity: 1 !important;
+        transform: translateY(0) !important;
+    }
+`;
+document.head.appendChild(styleTag);
+
+// Socket.IO live updates (if connected)
+if (typeof socket !== 'undefined') {
+    socket.on('new_message', function () {
+        const totalMessages = document.querySelector('.stat-card .stat-value');
+        if (totalMessages) {
+            const value = parseInt(totalMessages.textContent, 10) || 0;
+            totalMessages.textContent = value + 1;
+            totalMessages.style.transform = 'scale(1.08)';
+            setTimeout(() => totalMessages.style.transform = 'scale(1)', 180);
+        }
+    });
+
+    socket.on('minutes_update', function (data) {
+        const minuteDisplays = document.querySelectorAll('.voice-value, .stat-card .stat-value');
+        minuteDisplays.forEach(el => {
+            if (el.parentElement?.classList.contains('voice-minutes')) {
+                el.textContent = data.minutes_remaining;
+            }
+        });
+    });
+}
+</script>
+{% endblock %}

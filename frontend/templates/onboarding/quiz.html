@@ -1,0 +1,739 @@
+{% extends "base.html" %}
+
+{% block title %}Welcome to MyBella - Onboarding{% endblock %}
+
+{% block content %}
+<div class="onboarding-container">
+    <!-- Progress Bar -->
+    <div class="onboarding-progress">
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+        </div>
+        <div class="progress-text">
+            <span id="progressStep">1</span> of 5
+        </div>
+    </div>
+
+    <!-- Onboarding Steps -->
+    <div class="onboarding-content">
+        
+        <!-- Step 1: Primary Goal -->
+        <div class="onboarding-step active" id="step1">
+            <div class="step-icon">Goal</div>
+            <h2>What brings you to MyBella?</h2>
+            <p class="step-description">This helps us personalize your experience</p>
+            
+            <div class="option-grid">
+                <button class="option-card" data-value="companionship">
+                    <div class="option-icon">Chat</div>
+                    <div class="option-title">Companionship</div>
+                    <div class="option-desc">Someone to talk to</div>
+                </button>
+                
+                <button class="option-card" data-value="mental_health">
+                    <div class="option-icon">Calm</div>
+                    <div class="option-title">Mental Wellness</div>
+                    <div class="option-desc">Support & CBT exercises</div>
+                </button>
+                
+                <button class="option-card" data-value="productivity">
+                    <div class="option-icon">Focus</div>
+                    <div class="option-title">Productivity</div>
+                    <div class="option-desc">Goals & accountability</div>
+                </button>
+                
+                <button class="option-card" data-value="creativity">
+                    <div class="option-icon">Create</div>
+                    <div class="option-title">Creativity</div>
+                    <div class="option-desc">Brainstorm & explore ideas</div>
+                </button>
+            </div>
+        </div>
+
+        <!-- Step 2: Current Mood -->
+        <div class="onboarding-step" id="step2">
+            <div class="step-icon">Mood</div>
+            <h2>How are you feeling right now?</h2>
+            <p class="step-description">Be honest - there's no wrong answer</p>
+            
+            <div class="mood-slider-container">
+                <input type="range" min="1" max="10" value="5" 
+                       class="mood-slider" id="moodSlider">
+                <div class="mood-labels">
+                    <span>Low</span>
+                    <span id="moodLabel">Okay</span>
+                    <span>Great</span>
+                </div>
+            </div>
+            
+            <div class="mood-descriptions">
+                <div class="mood-quick-select">
+                    <button class="mood-tag" data-mood="3" data-label="stressed">Stressed</button>
+                    <button class="mood-tag" data-mood="7" data-label="happy">Happy</button>
+                    <button class="mood-tag" data-mood="4" data-label="anxious">Anxious</button>
+                    <button class="mood-tag" data-mood="8" data-label="motivated">Motivated</button>
+                    <button class="mood-tag" data-mood="5" data-label="neutral">Neutral</button>
+                </div>
+            </div>
+            
+            <button class="btn btn-primary" onclick="nextStep()">Continue</button>
+        </div>
+
+        <!-- Step 3: Preferred Tone -->
+        <div class="onboarding-step" id="step3">
+            <div class="step-icon">Tone</div>
+            <h2>How should your AI companion talk to you?</h2>
+            <p class="step-description">Choose the style that feels right</p>
+            
+            <div class="tone-options">
+                <div class="tone-card" data-tone="friendly">
+                    <div class="tone-icon">Warm</div>
+                    <div class="tone-title">Friendly & Warm</div>
+                    <div class="tone-example">"Hey! I'm so glad you're here. Let's chat!"</div>
+                </div>
+                
+                <div class="tone-card" data-tone="professional">
+                    <div class="tone-icon">Formal</div>
+                    <div class="tone-title">Professional & Clear</div>
+                    <div class="tone-example">"Hello. I'm here to assist you today."</div>
+                </div>
+                
+                <div class="tone-card" data-tone="casual">
+                    <div class="tone-icon">Casual</div>
+                    <div class="tone-title">Casual & Relaxed</div>
+                    <div class="tone-example">"Hey there! What's up?"</div>
+                </div>
+                
+                <div class="tone-card" data-tone="supportive">
+                    <div class="tone-icon">Support</div>
+                    <div class="tone-title">Supportive & Empathetic</div>
+                    <div class="tone-example">"I'm here for you. Take all the time you need."</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 4: Check-in Preferences -->
+        <div class="onboarding-step" id="step4">
+            <div class="step-icon">Check-ins</div>
+            <h2>When would you like daily check-ins?</h2>
+            <p class="step-description">Optional reminders to track your mood</p>
+            
+            <div class="checkin-options">
+                <label class="checkin-card">
+                    <input type="radio" name="checkin" value="morning">
+                    <div class="checkin-content">
+                        <div class="checkin-icon">AM</div>
+                        <div class="checkin-title">Morning</div>
+                        <div class="checkin-time">Start your day right</div>
+                    </div>
+                </label>
+                
+                <label class="checkin-card">
+                    <input type="radio" name="checkin" value="evening">
+                    <div class="checkin-content">
+                        <div class="checkin-icon">PM</div>
+                        <div class="checkin-title">Evening</div>
+                        <div class="checkin-time">Reflect on your day</div>
+                    </div>
+                </label>
+                
+                <label class="checkin-card">
+                    <input type="radio" name="checkin" value="both">
+                    <div class="checkin-content">
+                        <div class="checkin-icon">AM+PM</div>
+                        <div class="checkin-title">Both</div>
+                        <div class="checkin-time">Morning & evening</div>
+                    </div>
+                </label>
+                
+                <label class="checkin-card">
+                    <input type="radio" name="checkin" value="none" checked>
+                    <div class="checkin-content">
+                        <div class="checkin-icon">Off</div>
+                        <div class="checkin-title">No reminders</div>
+                        <div class="checkin-time">I'll check in when ready</div>
+                    </div>
+                </label>
+            </div>
+            
+            <button class="btn btn-primary" onclick="nextStep()">Continue</button>
+        </div>
+
+        <!-- Step 5: Choose Persona -->
+        <div class="onboarding-step" id="step5">
+            <div class="step-icon">Persona</div>
+            <h2>Choose your AI companion</h2>
+            <p class="step-description">You can always switch later</p>
+            
+            <div class="persona-grid">
+                {% for persona in personas %}
+                <div class="persona-onboard-card" data-persona-id="{{ persona.id }}">
+                    <div class="persona-avatar-large">
+                        {% if persona.profile_picture %}
+                            <img src="{{ url_for('static', filename='uploads/persona_pics/' + persona.profile_picture) }}" 
+                                 alt="{{ persona.name }}">
+                        {% else %}
+                            <div class="avatar-placeholder">{{ persona.name[0] }}</div>
+                        {% endif %}
+                    </div>
+                    <div class="persona-name">{{ persona.name }}</div>
+                    <div class="persona-description">{{ persona.description }}</div>
+                    <div class="persona-traits">{{ persona.personality_traits }}</div>
+                </div>
+                {% endfor %}
+            </div>
+            
+            <button class="btn btn-primary btn-complete" onclick="completeOnboarding()">
+                Start Chatting
+            </button>
+        </div>
+
+    </div>
+</div>
+
+<style>
+.onboarding-container {
+    min-height: 100vh;
+    background: linear-gradient(135deg, var(--primary-light) 0%, var(--background-color) 100%);
+    display: flex;
+    flex-direction: column;
+    padding: 2rem;
+}
+
+.onboarding-progress {
+    max-width: 600px;
+    margin: 0 auto 3rem;
+    width: 100%;
+}
+
+.progress-bar {
+    height: 8px;
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 0.5rem;
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--primary), var(--secondary));
+    transition: width 0.3s ease;
+    border-radius: 10px;
+}
+
+.progress-text {
+    text-align: center;
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+.onboarding-content {
+    max-width: 800px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+.onboarding-step {
+    display: none;
+    animation: fadeIn 0.5s ease;
+}
+
+.onboarding-step.active {
+    display: block;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.step-icon {
+    font-size: 4rem;
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+.onboarding-step h2 {
+    text-align: center;
+    color: var(--text-primary);
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+}
+
+.step-description {
+    text-align: center;
+    color: var(--text-secondary);
+    font-size: 1.125rem;
+    margin-bottom: 3rem;
+}
+
+/* Step 1: Option Grid */
+.option-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.option-card {
+    background: var(--surface-color);
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: 2rem 1.5rem;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.option-card:hover {
+    border-color: var(--primary);
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.option-card.selected {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
+}
+
+.option-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.option-title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.option-desc {
+    font-size: 0.875rem;
+    opacity: 0.8;
+}
+
+/* Step 2: Mood Slider */
+.mood-slider-container {
+    background: var(--surface-color);
+    padding: 3rem 2rem;
+    border-radius: var(--radius-lg);
+    margin-bottom: 2rem;
+}
+
+.mood-slider {
+    width: 100%;
+    height: 8px;
+    border-radius: 5px;
+    background: linear-gradient(90deg, #ff6b6b, #ffd93d, #6bcf7f);
+    outline: none;
+    -webkit-appearance: none;
+    appearance: none;
+}
+
+.mood-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: white;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.mood-slider::-moz-range-thumb {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: white;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    border: none;
+}
+
+.mood-labels {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 1rem;
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+}
+
+#moodLabel {
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+.mood-quick-select {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    justify-content: center;
+    margin-bottom: 2rem;
+}
+
+.mood-tag {
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    border: 1px solid var(--border-color);
+    background: var(--background-color);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 0.875rem;
+}
+
+.mood-tag:hover {
+    border-color: var(--primary);
+    background: var(--primary-light);
+}
+
+.mood-tag.selected {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
+}
+
+/* Step 3: Tone Cards */
+.tone-options {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.tone-card {
+    background: var(--surface-color);
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.tone-card:hover {
+    border-color: var(--primary);
+    transform: translateY(-3px);
+}
+
+.tone-card.selected {
+    background: var(--primary-light);
+    border-color: var(--primary);
+}
+
+.tone-icon {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+.tone-title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+    color: var(--text-primary);
+}
+
+.tone-example {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    font-style: italic;
+    padding: 0.75rem;
+    background: var(--background-color);
+    border-radius: var(--radius-md);
+}
+
+/* Step 4: Check-in Options */
+.checkin-options {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.checkin-card {
+    cursor: pointer;
+}
+
+.checkin-card input[type="radio"] {
+    display: none;
+}
+
+.checkin-content {
+    background: var(--surface-color);
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.checkin-card input:checked + .checkin-content {
+    background: var(--primary-light);
+    border-color: var(--primary);
+}
+
+.checkin-content:hover {
+    border-color: var(--primary);
+    transform: translateY(-3px);
+}
+
+.checkin-icon {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+}
+
+.checkin-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 0.25rem;
+}
+
+.checkin-time {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+}
+
+/* Step 5: Persona Grid */
+.persona-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.persona-onboard-card {
+    background: var(--surface-color);
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.persona-onboard-card:hover {
+    border-color: var(--primary);
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.persona-onboard-card.selected {
+    background: var(--primary-light);
+    border-color: var(--primary);
+}
+
+.persona-avatar-large {
+    width: 100px;
+    height: 100px;
+    margin: 0 auto 1rem;
+    border-radius: 50%;
+    overflow: hidden;
+}
+
+.persona-avatar-large img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.avatar-placeholder {
+    width: 100%;
+    height: 100%;
+    background: var(--primary);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5rem;
+    font-weight: 600;
+}
+
+.persona-name {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+}
+
+.persona-description {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    margin-bottom: 0.5rem;
+}
+
+.persona-traits {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+}
+
+/* Buttons */
+.btn {
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
+    display: block;
+    padding: 1rem 2rem;
+    font-size: 1.125rem;
+}
+
+.btn-complete {
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    font-weight: 600;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    .onboarding-container {
+        padding: 1rem;
+    }
+    
+    .onboarding-step h2 {
+        font-size: 1.5rem;
+    }
+    
+    .option-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .tone-options {
+        grid-template-columns: 1fr;
+    }
+    
+    .checkin-options {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .persona-grid {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
+
+<script>
+let currentStep = 1;
+const totalSteps = 5;
+
+const onboardingData = {
+    primary_goal: null,
+    secondary_goals: [],
+    initial_mood: 5,
+    mood_description: 'neutral',
+    preferred_tone: null,
+    personality_preference: null,
+    preferred_check_in_time: 'none',
+    selected_persona_id: null
+};
+
+// Step 1: Goal Selection
+document.querySelectorAll('#step1 .option-card').forEach(card => {
+    card.addEventListener('click', function() {
+        document.querySelectorAll('#step1 .option-card').forEach(c => c.classList.remove('selected'));
+        this.classList.add('selected');
+        onboardingData.primary_goal = this.dataset.value;
+        setTimeout(() => nextStep(), 500);
+    });
+});
+
+// Step 2: Mood Slider
+const moodSlider = document.getElementById('moodSlider');
+const moodLabel = document.getElementById('moodLabel');
+
+const moodLabels = {
+    1: 'Very Low', 2: 'Low', 3: 'A bit down', 4: 'Below average', 5: 'Okay',
+    6: 'Pretty good', 7: 'Good', 8: 'Great', 9: 'Excellent', 10: 'Amazing!'
+};
+
+moodSlider.addEventListener('input', function() {
+    const value = parseInt(this.value);
+    onboardingData.initial_mood = value;
+    moodLabel.textContent = moodLabels[value];
+});
+
+document.querySelectorAll('.mood-tag').forEach(tag => {
+    tag.addEventListener('click', function() {
+        document.querySelectorAll('.mood-tag').forEach(t => t.classList.remove('selected'));
+        this.classList.add('selected');
+        const moodValue = parseInt(this.dataset.mood);
+        moodSlider.value = moodValue;
+        onboardingData.initial_mood = moodValue;
+        onboardingData.mood_description = this.dataset.label;
+        moodLabel.textContent = moodLabels[moodValue];
+    });
+});
+
+// Step 3: Tone Selection
+document.querySelectorAll('.tone-card').forEach(card => {
+    card.addEventListener('click', function() {
+        document.querySelectorAll('.tone-card').forEach(c => c.classList.remove('selected'));
+        this.classList.add('selected');
+        onboardingData.preferred_tone = this.dataset.tone;
+        setTimeout(() => nextStep(), 500);
+    });
+});
+
+// Step 4: Check-in (handled by radio buttons)
+document.querySelectorAll('input[name="checkin"]').forEach(radio => {
+    radio.addEventListener('change', function() {
+        onboardingData.preferred_check_in_time = this.value;
+    });
+});
+
+// Step 5: Persona Selection
+document.querySelectorAll('.persona-onboard-card').forEach(card => {
+    card.addEventListener('click', function() {
+        document.querySelectorAll('.persona-onboard-card').forEach(c => c.classList.remove('selected'));
+        this.classList.add('selected');
+        onboardingData.selected_persona_id = parseInt(this.dataset.personaId);
+    });
+});
+
+function nextStep() {
+    if (currentStep < totalSteps) {
+        document.getElementById(`step${currentStep}`).classList.remove('active');
+        currentStep++;
+        document.getElementById(`step${currentStep}`).classList.add('active');
+        updateProgress();
+    }
+}
+
+function updateProgress() {
+    const progress = (currentStep / totalSteps) * 100;
+    document.getElementById('progressFill').style.width = `${progress}%`;
+    document.getElementById('progressStep').textContent = currentStep;
+}
+
+async function completeOnboarding() {
+    if (!onboardingData.selected_persona_id) {
+        alert('Please select an AI companion to continue');
+        return;
+    }
+    
+    try {
+        const response = await fetch('/api/onboarding/complete', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(onboardingData)
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+            // Redirect to chat with selected persona
+            window.location.href = `/chat?persona=${onboardingData.selected_persona_id}&welcome=true`;
+        } else {
+            alert('Failed to complete onboarding: ' + (data.error || 'Unknown error'));
+        }
+    } catch (error) {
+        console.error('Error completing onboarding:', error);
+        alert('Failed to complete onboarding. Please try again.');
+    }
+}
+
+// Initialize progress
+updateProgress();
+</script>
+{% endblock %}

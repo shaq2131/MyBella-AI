@@ -1,0 +1,614 @@
+{% extends "base.html" %}
+
+{% block title %}Daily Check-In - MyBella{% endblock %}
+
+{% block content %}
+<div class="checkin-container">
+    <div class="checkin-header">
+        <h1 id="checkin-title"> Morning Check-In</h1>
+        <p id="checkin-subtitle" class="subtitle">Start your day with intention</p>
+    </div>
+
+    <div class="checkin-selector">
+        <button id="morning-tab" class="tab-btn active" data-type="morning">
+            <span class="tab-icon"></span>
+            <span>Morning</span>
+        </button>
+        <button id="evening-tab" class="tab-btn" data-type="evening">
+            <span class="tab-icon"></span>
+            <span>Evening</span>
+        </button>
+    </div>
+
+    <div class="checkin-content">
+        <!-- Morning Check-In -->
+        <div id="morning-checkin" class="checkin-form">
+            <div class="form-card">
+                <div class="form-section">
+                    <h3> How did you sleep?</h3>
+                    <div class="mood-scale" id="sleep-quality"></div>
+                </div>
+
+                <div class="form-section">
+                    <h3> How are you feeling this morning?</h3>
+                    <div class="mood-scale" id="morning-mood"></div>
+                </div>
+
+                <div class="form-section">
+                    <h3> What's your intention for today?</h3>
+                    <textarea 
+                        id="morning-intention" 
+                        class="form-textarea" 
+                        placeholder="I intend to..." 
+                        rows="3"
+                    ></textarea>
+                </div>
+
+                <div class="form-section">
+                    <h3> Choose an affirmation (or write your own)</h3>
+                    <div class="affirmation-suggestions" id="affirmation-suggestions"></div>
+                    <textarea 
+                        id="morning-affirmation" 
+                        class="form-textarea" 
+                        placeholder="Your affirmation for today..." 
+                        rows="2"
+                    ></textarea>
+                </div>
+
+                <div class="persona-section">
+                    <h3> Get morning encouragement from:</h3>
+                    <div class="persona-selector" id="morning-persona"></div>
+                </div>
+
+                <button id="submit-morning-btn" class="btn-primary btn-large">Complete Morning Check-In</button>
+            </div>
+        </div>
+
+        <!-- Evening Check-In -->
+        <div id="evening-checkin" class="checkin-form" style="display: none;">
+            <div class="form-card">
+                <div class="form-section">
+                    <h3> How are you feeling this evening?</h3>
+                    <div class="mood-scale" id="evening-mood"></div>
+                </div>
+
+                <div class="form-section">
+                    <h3> What are you grateful for today?</h3>
+                    <textarea 
+                        id="gratitude-items" 
+                        class="form-textarea" 
+                        placeholder="List 3 things you're grateful for...&#10;1. &#10;2. &#10;3. " 
+                        rows="5"
+                    ></textarea>
+                </div>
+
+                <div class="form-section">
+                    <h3> What did you accomplish today?</h3>
+                    <textarea 
+                        id="accomplishments" 
+                        class="form-textarea" 
+                        placeholder="Big or small, every accomplishment counts..." 
+                        rows="4"
+                    ></textarea>
+                </div>
+
+                <div class="form-section">
+                    <h3> What challenges did you face?</h3>
+                    <textarea 
+                        id="challenges-faced" 
+                        class="form-textarea" 
+                        placeholder="And how did you handle them?" 
+                        rows="4"
+                    ></textarea>
+                </div>
+
+                <div class="form-section">
+                    <h3> How can you prepare for tomorrow?</h3>
+                    <textarea 
+                        id="tomorrow-prep" 
+                        class="form-textarea" 
+                        placeholder="What can you do tonight to set yourself up for success?" 
+                        rows="3"
+                    ></textarea>
+                </div>
+
+                <div class="persona-section">
+                    <h3> Get evening reflection from:</h3>
+                    <div class="persona-selector" id="evening-persona"></div>
+                </div>
+
+                <button id="submit-evening-btn" class="btn-primary btn-large">Complete Evening Check-In</button>
+            </div>
+        </div>
+
+        <!-- Response Screen -->
+        <div id="response-screen" class="response-screen" style="display: none;">
+            <div class="response-card">
+                <div class="persona-avatar" id="response-avatar"></div>
+                <h2 id="response-title"></h2>
+                <div class="ai-message" id="ai-message"></div>
+                <div class="button-group">
+                    <button id="another-checkin-btn" class="btn-primary">Another Check-In</button>
+                    <button id="view-history-btn" class="btn-secondary">View History</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.checkin-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+.checkin-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.checkin-header h1 {
+    font-size: 2.5rem;
+    color: var(--primary-color, #6C63FF);
+    margin-bottom: 0.5rem;
+}
+
+.subtitle {
+    color: #666;
+    font-size: 1.1rem;
+}
+
+.checkin-selector {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-bottom: 2rem;
+}
+
+.tab-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 1rem 2rem;
+    background: white;
+    border: 2px solid #e0e0e0;
+    border-radius: 12px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.tab-btn:hover {
+    border-color: var(--primary-color, #6C63FF);
+}
+
+.tab-btn.active {
+    background: var(--primary-color, #6C63FF);
+    color: white;
+    border-color: var(--primary-color, #6C63FF);
+}
+
+.tab-icon {
+    font-size: 1.5rem;
+}
+
+.form-card {
+    background: white;
+    border-radius: 15px;
+    padding: 2rem;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.form-section {
+    margin-bottom: 2rem;
+}
+
+.form-section h3 {
+    color: #333;
+    margin-bottom: 1rem;
+    font-size: 1.2rem;
+}
+
+.mood-scale {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.mood-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1rem;
+    background: #f8f9fa;
+    border: 2px solid #e0e0e0;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s;
+    min-width: 70px;
+}
+
+.mood-btn:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.mood-btn.selected {
+    border-color: var(--primary-color, #6C63FF);
+    background: #f0edff;
+}
+
+.mood-emoji {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+}
+
+.mood-label {
+    font-size: 0.8rem;
+    color: #666;
+    text-align: center;
+}
+
+.form-textarea {
+    width: 100%;
+    padding: 1rem;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-family: inherit;
+    resize: vertical;
+    transition: border-color 0.3s;
+}
+
+.form-textarea:focus {
+    outline: none;
+    border-color: var(--primary-color, #6C63FF);
+}
+
+.affirmation-suggestions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+    margin-bottom: 1rem;
+}
+
+.affirmation-option {
+    padding: 1rem;
+    background: #f8f9fa;
+    border: 2px solid transparent;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.affirmation-option:hover {
+    background: #e9ecef;
+}
+
+.affirmation-option.selected {
+    border-color: var(--primary-color, #6C63FF);
+    background: #f0edff;
+}
+
+.persona-section {
+    margin-top: 2rem;
+}
+
+.persona-selector {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1rem;
+}
+
+.persona-option {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1rem;
+    background: #f8f9fa;
+    border: 2px solid #e0e0e0;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.persona-option:hover {
+    transform: translateY(-4px);
+}
+
+.persona-option.selected {
+    border-color: var(--primary-color, #6C63FF);
+    background: #f0edff;
+}
+
+.persona-avatar-img {
+    font-size: 3rem;
+    margin-bottom: 0.5rem;
+}
+
+.persona-name {
+    font-weight: 600;
+    color: #333;
+}
+
+.btn-large {
+    width: 100%;
+    padding: 1.2rem 2rem;
+    font-size: 1.1rem;
+}
+
+.btn-primary {
+    background: var(--primary-color, #6C63FF);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.btn-primary:hover {
+    background: #5a52d5;
+    transform: translateY(-2px);
+}
+
+.btn-secondary {
+    background: #e0e0e0;
+    color: #333;
+    border: none;
+    border-radius: 8px;
+    padding: 1rem 2rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.btn-secondary:hover {
+    background: #d0d0d0;
+}
+
+.response-card {
+    background: white;
+    border-radius: 15px;
+    padding: 3rem;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    text-align: center;
+}
+
+.response-card .persona-avatar {
+    font-size: 5rem;
+    margin-bottom: 1rem;
+}
+
+.response-card h2 {
+    color: var(--primary-color, #6C63FF);
+    margin-bottom: 2rem;
+}
+
+.ai-message {
+    background: #f8f9fa;
+    padding: 2rem;
+    border-radius: 12px;
+    line-height: 1.8;
+    margin-bottom: 2rem;
+    text-align: left;
+}
+
+.button-group {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const morningTab = document.getElementById('morning-tab');
+    const eveningTab = document.getElementById('evening-tab');
+    const morningCheckin = document.getElementById('morning-checkin');
+    const eveningCheckin = document.getElementById('evening-checkin');
+    const responseScreen = document.getElementById('response-screen');
+    
+    const moodScales = [
+        { value: 1, emoji: '', label: 'Terrible' },
+        { value: 3, emoji: '', label: 'Bad' },
+        { value: 5, emoji: '', label: 'Okay' },
+        { value: 7, emoji: '', label: 'Good' },
+        { value: 9, emoji: '', label: 'Great' }
+    ];
+
+    const affirmations = [
+        "I am capable of handling whatever comes my way today.",
+        "I choose to focus on what I can control.",
+        "I deserve peace, joy, and success.",
+        "Every small step forward is progress.",
+        "I am enough, exactly as I am."
+    ];
+
+    const personas = [
+        { name: 'Isabella', emoji: '', role: 'Supportive Friend' },
+        { name: 'Maya', emoji: '', role: 'Wellness Coach' },
+        { name: 'Alex', emoji: '', role: 'Motivator' }
+    ];
+
+    // Initialize mood scales
+    ['sleep-quality', 'morning-mood', 'evening-mood'].forEach(id => {
+        const container = document.getElementById(id);
+        moodScales.forEach(mood => {
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            btn.className = 'mood-btn';
+            btn.innerHTML = `
+                <span class="mood-emoji">${mood.emoji}</span>
+                <span class="mood-label">${mood.label}</span>
+            `;
+            btn.dataset.value = mood.value;
+            btn.addEventListener('click', function() {
+                container.querySelectorAll('.mood-btn').forEach(b => b.classList.remove('selected'));
+                this.classList.add('selected');
+            });
+            container.appendChild(btn);
+        });
+    });
+
+    // Initialize affirmations
+    const affirmationContainer = document.getElementById('affirmation-suggestions');
+    affirmations.forEach(text => {
+        const div = document.createElement('div');
+        div.className = 'affirmation-option';
+        div.textContent = text;
+        div.addEventListener('click', function() {
+            affirmationContainer.querySelectorAll('.affirmation-option').forEach(a => a.classList.remove('selected'));
+            this.classList.add('selected');
+            document.getElementById('morning-affirmation').value = text;
+        });
+        affirmationContainer.appendChild(div);
+    });
+
+    // Initialize personas
+    ['morning-persona', 'evening-persona'].forEach(id => {
+        const container = document.getElementById(id);
+        personas.forEach(persona => {
+            const div = document.createElement('div');
+            div.className = 'persona-option';
+            div.innerHTML = `
+                <div class="persona-avatar-img">${persona.emoji}</div>
+                <div class="persona-name">${persona.name}</div>
+            `;
+            div.dataset.persona = persona.name;
+            div.addEventListener('click', function() {
+                container.querySelectorAll('.persona-option').forEach(p => p.classList.remove('selected'));
+                this.classList.add('selected');
+            });
+            container.appendChild(div);
+        });
+        // Select first persona by default
+        container.querySelector('.persona-option').classList.add('selected');
+    });
+
+    // Tab switching
+    morningTab.addEventListener('click', function() {
+        showCheckin('morning');
+    });
+
+    eveningTab.addEventListener('click', function() {
+        showCheckin('evening');
+    });
+
+    function showCheckin(type) {
+        morningTab.classList.toggle('active', type === 'morning');
+        eveningTab.classList.toggle('active', type === 'evening');
+        morningCheckin.style.display = type === 'morning' ? 'block' : 'none';
+        eveningCheckin.style.display = type === 'evening' ? 'block' : 'none';
+        
+        const title = type === 'morning' ? ' Morning Check-In' : ' Evening Check-In';
+        const subtitle = type === 'morning' ? 'Start your day with intention' : 'Reflect and prepare for rest';
+        document.getElementById('checkin-title').textContent = title;
+        document.getElementById('checkin-subtitle').textContent = subtitle;
+    }
+
+    // Submit morning check-in
+    document.getElementById('submit-morning-btn').addEventListener('click', async function() {
+        const sleepQuality = document.querySelector('#sleep-quality .mood-btn.selected')?.dataset.value;
+        const morningMood = document.querySelector('#morning-mood .mood-btn.selected')?.dataset.value;
+        const intention = document.getElementById('morning-intention').value.trim();
+        const affirmation = document.getElementById('morning-affirmation').value.trim();
+        const persona = document.querySelector('#morning-persona .persona-option.selected')?.dataset.persona;
+
+        if (!sleepQuality || !morningMood || !intention || !affirmation) {
+            alert('Please complete all fields.');
+            return;
+        }
+
+        try {
+            const response = await fetch('/wellness/games/checkin/morning', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    sleep_quality: parseInt(sleepQuality),
+                    morning_mood: parseInt(morningMood),
+                    morning_intention: intention,
+                    morning_affirmation: affirmation,
+                    persona_used: persona || 'Isabella'
+                })
+            });
+
+            if (!response.ok) throw new Error('Failed to submit check-in');
+
+            const result = await response.json();
+            showResponse(result, persona || 'Isabella', 'morning');
+        } catch (error) {
+            console.error('Error submitting check-in:', error);
+            alert('Failed to submit check-in. Please try again.');
+        }
+    });
+
+    // Submit evening check-in
+    document.getElementById('submit-evening-btn').addEventListener('click', async function() {
+        const eveningMood = document.querySelector('#evening-mood .mood-btn.selected')?.dataset.value;
+        const gratitude = document.getElementById('gratitude-items').value.trim();
+        const accomplishments = document.getElementById('accomplishments').value.trim();
+        const challenges = document.getElementById('challenges-faced').value.trim();
+        const tomorrowPrep = document.getElementById('tomorrow-prep').value.trim();
+        const persona = document.querySelector('#evening-persona .persona-option.selected')?.dataset.persona;
+
+        if (!eveningMood || !gratitude) {
+            alert('Please complete mood and gratitude fields at minimum.');
+            return;
+        }
+
+        try {
+            const response = await fetch('/wellness/games/checkin/evening', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    evening_mood: parseInt(eveningMood),
+                    gratitude_items: gratitude,
+                    accomplishments: accomplishments,
+                    challenges_faced: challenges,
+                    tomorrow_preparation: tomorrowPrep,
+                    persona_used: persona || 'Isabella'
+                })
+            });
+
+            if (!response.ok) throw new Error('Failed to submit check-in');
+
+            const result = await response.json();
+            showResponse(result, persona || 'Isabella', 'evening');
+        } catch (error) {
+            console.error('Error submitting check-in:', error);
+            alert('Failed to submit check-in. Please try again.');
+        }
+    });
+
+    function showResponse(result, persona, type) {
+        const personaEmoji = personas.find(p => p.name === persona)?.emoji || '';
+        document.getElementById('response-avatar').textContent = personaEmoji;
+        document.getElementById('response-title').textContent = type === 'morning' 
+            ? `Have a wonderful day! ` 
+            : `Great work reflecting today! `;
+        document.getElementById('ai-message').textContent = result.ai_message;
+        
+        morningCheckin.style.display = 'none';
+        eveningCheckin.style.display = 'none';
+        responseScreen.style.display = 'block';
+    }
+
+    document.getElementById('another-checkin-btn').addEventListener('click', function() {
+        responseScreen.style.display = 'none';
+        showCheckin('morning');
+        // Reset forms
+        document.querySelectorAll('.mood-btn').forEach(btn => btn.classList.remove('selected'));
+        document.querySelectorAll('textarea').forEach(ta => ta.value = '');
+        document.querySelectorAll('.affirmation-option').forEach(a => a.classList.remove('selected'));
+    });
+
+    document.getElementById('view-history-btn').addEventListener('click', function() {
+        window.location.href = '/wellness/history';
+    });
+});
+</script>
+{% endblock %}

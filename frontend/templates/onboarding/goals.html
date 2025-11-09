@@ -1,0 +1,326 @@
+{% extends "base.html" %}
+
+{% block title %}Set Your Wellness Goals{% endblock %}
+
+{% block extra_css %}
+<style>
+.onboarding-container {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    padding: var(--spacing-xl);
+}
+
+.onboarding-card {
+    background: white;
+    border-radius: var(--radius-2xl);
+    padding: var(--spacing-3xl);
+    max-width: 700px;
+    width: 100%;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+}
+
+.progress-bar {
+    height: 4px;
+    background: var(--border-color);
+    border-radius: var(--radius-full);
+    margin-bottom: var(--spacing-2xl);
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+    width: 66%;
+    transition: width 0.3s;
+}
+
+.onboarding-title {
+    font-size: var(--font-size-2xl);
+    font-weight: 700;
+    margin-bottom: var(--spacing-md);
+}
+
+.onboarding-subtitle {
+    color: var(--text-secondary);
+    margin-bottom: var(--spacing-2xl);
+}
+
+.goal-options {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-2xl);
+}
+
+.goal-card {
+    padding: var(--spacing-lg);
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: center;
+}
+
+.goal-card:hover {
+    border-color: var(--primary-color);
+    transform: translateY(-2px);
+}
+
+.goal-card.selected {
+    border-color: var(--primary-color);
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+}
+
+.goal-icon {
+    font-size: 40px;
+    margin-bottom: var(--spacing-sm);
+}
+
+.goal-title {
+    font-weight: 600;
+    margin-bottom: var(--spacing-xs);
+}
+
+.goal-desc {
+    font-size: var(--font-size-sm);
+    color: var(--text-secondary);
+}
+
+.btn-container {
+    display: flex;
+    gap: var(--spacing-md);
+    margin-top: var(--spacing-2xl);
+}
+
+.btn {
+    padding: var(--spacing-md) var(--spacing-xl);
+    border-radius: var(--radius-lg);
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    flex: 1;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 20px rgba(102, 126, 234, 0.4);
+}
+
+.btn-secondary {
+    background: white;
+    border: 2px solid var(--border-color);
+    color: var(--text-primary);
+}
+
+.btn-secondary:hover {
+    border-color: var(--primary-color);
+}
+
+.loading-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.7);
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+}
+
+.loading-content {
+    background: white;
+    padding: var(--spacing-2xl);
+    border-radius: var(--radius-xl);
+    text-align: center;
+}
+
+.spinner {
+    border: 4px solid var(--border-color);
+    border-top: 4px solid var(--primary-color);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+    margin: 0 auto var(--spacing-md);
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="onboarding-container">
+    <div class="onboarding-card">
+        <div class="progress-bar">
+            <div class="progress-fill" style="width: 66%;"></div>
+        </div>
+        
+        <h2 class="onboarding-title">Set your wellness goals</h2>
+        <p class="onboarding-subtitle">
+            Choose the areas you'd like to focus on. You can always adjust these later.
+        </p>
+        
+        <form id="goalsForm">
+            <div class="goal-options">
+                <div class="goal-card" data-goal="stress">
+                    <div class="goal-icon"></div>
+                    <div class="goal-title">Reduce Stress</div>
+                    <div class="goal-desc">Manage anxiety & relax</div>
+                </div>
+                
+                <div class="goal-card" data-goal="mood">
+                    <div class="goal-icon"></div>
+                    <div class="goal-title">Improve Mood</div>
+                    <div class="goal-desc">Feel more positive</div>
+                </div>
+                
+                <div class="goal-card" data-goal="sleep">
+                    <div class="goal-icon"></div>
+                    <div class="goal-title">Better Sleep</div>
+                    <div class="goal-desc">Sleep quality & routine</div>
+                </div>
+                
+                <div class="goal-card" data-goal="relationships">
+                    <div class="goal-icon"></div>
+                    <div class="goal-title">Relationships</div>
+                    <div class="goal-desc">Social connections</div>
+                </div>
+                
+                <div class="goal-card" data-goal="confidence">
+                    <div class="goal-icon"></div>
+                    <div class="goal-title">Build Confidence</div>
+                    <div class="goal-desc">Self-esteem & worth</div>
+                </div>
+                
+                <div class="goal-card" data-goal="mindfulness">
+                    <div class="goal-icon"></div>
+                    <div class="goal-title">Mindfulness</div>
+                    <div class="goal-desc">Stay present & aware</div>
+                </div>
+            </div>
+            
+            <div class="btn-container">
+                <a href="{{ url_for('onboarding.mood') }}" class="btn btn-secondary">Back</a>
+                <button type="submit" class="btn btn-primary">Complete Setup</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="loading-overlay" id="loadingOverlay">
+    <div class="loading-content">
+        <div class="spinner"></div>
+        <h3>Setting up your personalized experience...</h3>
+        <p>This will only take a moment!</p>
+    </div>
+</div>
+
+<script>
+let selectedGoals = [];
+
+// Handle goal selection
+document.querySelectorAll('.goal-card').forEach(card => {
+    card.addEventListener('click', function() {
+        const goal = this.dataset.goal;
+        
+        if (this.classList.contains('selected')) {
+            this.classList.remove('selected');
+            selectedGoals = selectedGoals.filter(g => g !== goal);
+        } else {
+            this.classList.add('selected');
+            selectedGoals.push(goal);
+        }
+    });
+});
+
+// Handle form submission
+document.getElementById('goalsForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    if (selectedGoals.length === 0) {
+        alert('Please select at least one goal to continue.');
+        return;
+    }
+    
+    // Show loading overlay
+    document.getElementById('loadingOverlay').style.display = 'flex';
+    
+    // Get data from sessionStorage
+    const personalityType = sessionStorage.getItem('personality_type') || 'balanced';
+    const communicationStyle = sessionStorage.getItem('communication_style') || 'friendly';
+    const preferredPersona = sessionStorage.getItem('preferred_persona') || null;
+    const baselineMood = parseInt(sessionStorage.getItem('baseline_mood') || '0');
+    
+    // Prepare goals data
+    const goalsData = selectedGoals.map(goal => ({
+        type: goal,
+        title: getTitleForGoal(goal),
+        description: `Work on ${goal} improvement`,
+        target: 1
+    }));
+    
+    // Send to server
+    try {
+        const response = await fetch('{{ url_for("onboarding.complete") }}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                personality_type: personalityType,
+                communication_style: communicationStyle,
+                preferred_persona: preferredPersona,
+                baseline_mood: baselineMood,
+                goals: goalsData
+            })
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+            // Clear sessionStorage
+            sessionStorage.removeItem('personality_type');
+            sessionStorage.removeItem('communication_style');
+            sessionStorage.removeItem('preferred_persona');
+            sessionStorage.removeItem('baseline_mood');
+            
+            // Redirect to dashboard
+            window.location.href = result.redirect;
+        } else {
+            alert('An error occurred. Please try again.');
+            document.getElementById('loadingOverlay').style.display = 'none';
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        alert('An error occurred. Please try again.');
+        document.getElementById('loadingOverlay').style.display = 'none';
+    }
+});
+
+function getTitleForGoal(goal) {
+    const titles = {
+        'stress': 'Reduce Stress & Anxiety',
+        'mood': 'Improve My Mood',
+        'sleep': 'Better Sleep Quality',
+        'relationships': 'Improve Relationships',
+        'confidence': 'Build Self-Confidence',
+        'mindfulness': 'Practice Mindfulness'
+    };
+    return titles[goal] || goal;
+}
+</script>
+{% endblock %}

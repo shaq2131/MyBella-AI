@@ -1,0 +1,936 @@
+{% extends "base.html" %}
+
+{% block title %}CBT Therapy • MyBella{% endblock %}
+
+{% block extra_css %}
+<style>
+.cbt-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: var(--spacing-lg);
+}
+
+.cbt-header {
+    text-align: center;
+    margin-bottom: var(--spacing-xl);
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: var(--spacing-xl);
+    border-radius: var(--radius-lg);
+}
+
+.cbt-header h1 {
+    margin: 0 0 var(--spacing-sm) 0;
+    font-size: 2.5rem;
+    font-weight: 700;
+}
+
+.cbt-subtitle {
+    font-size: 1.2rem;
+    opacity: 0.9;
+    margin: 0;
+}
+
+.cbt-nav {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: var(--spacing-lg);
+    margin-bottom: var(--spacing-xl);
+}
+
+.nav-card {
+    background: var(--surface-color);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-lg);
+    border: 2px solid var(--border-color);
+    text-decoration: none;
+    color: var(--text-primary);
+    transition: all 0.3s ease;
+    cursor: pointer;
+    text-align: center;
+}
+
+.nav-card:hover {
+    border-color: var(--primary);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+}
+
+.nav-card.active {
+    border-color: var(--primary);
+    background: var(--primary-light);
+}
+
+.nav-icon {
+    font-size: 3rem;
+    margin-bottom: var(--spacing-md);
+    display: block;
+}
+
+.nav-title {
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin: 0 0 var(--spacing-sm) 0;
+}
+
+.nav-description {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    margin: 0;
+}
+
+.session-container {
+    background: var(--surface-color);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-xl);
+    border: 1px solid var(--border-color);
+    margin-bottom: var(--spacing-xl);
+}
+
+.thought-record-form {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.form-section {
+    margin-bottom: var(--spacing-xl);
+    padding: var(--spacing-lg);
+    background: var(--background-color);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-light);
+}
+
+.section-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: var(--spacing-lg);
+    color: var(--primary);
+}
+
+.section-icon {
+    font-size: 1.5rem;
+    margin-right: var(--spacing-md);
+}
+
+.section-title {
+    margin: 0;
+    font-size: 1.4rem;
+    font-weight: 600;
+}
+
+.form-group {
+    margin-bottom: var(--spacing-lg);
+}
+
+.form-label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: var(--spacing-sm);
+    color: var(--text-primary);
+}
+
+.form-input,
+.form-textarea,
+.form-select {
+    width: 100%;
+    padding: var(--spacing-md);
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius-md);
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+    background: var(--surface-color);
+    color: var(--text-primary);
+}
+
+.form-input:focus,
+.form-textarea:focus,
+.form-select:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px var(--primary-light);
+}
+
+.form-textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+
+.mood-scale {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: var(--spacing-md) 0;
+    padding: var(--spacing-md);
+    background: var(--surface-color);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-color);
+}
+
+.mood-option {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+    padding: var(--spacing-sm);
+    border-radius: var(--radius-sm);
+    transition: all 0.3s ease;
+    flex: 1;
+    text-align: center;
+}
+
+.mood-option:hover {
+    background: var(--primary-light);
+}
+
+.mood-option input[type="radio"] {
+    margin-bottom: var(--spacing-xs);
+    transform: scale(1.2);
+}
+
+.mood-emoji {
+    font-size: 1.5rem;
+    margin-bottom: var(--spacing-xs);
+}
+
+.mood-label {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+}
+
+.evidence-section {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--spacing-lg);
+}
+
+.evidence-column {
+    background: var(--surface-color);
+    padding: var(--spacing-lg);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-color);
+}
+
+.evidence-for {
+    border-left: 4px solid #e74c3c;
+}
+
+.evidence-against {
+    border-left: 4px solid #27ae60;
+}
+
+.evidence-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.evidence-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--spacing-sm);
+    margin-bottom: var(--spacing-sm);
+    background: var(--background-color);
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border-light);
+}
+
+.evidence-text {
+    flex: 1;
+    font-size: 0.9rem;
+}
+
+.remove-evidence {
+    background: none;
+    border: none;
+    color: var(--error);
+    cursor: pointer;
+    padding: var(--spacing-xs);
+}
+
+.add-evidence-btn {
+    width: 100%;
+    padding: var(--spacing-sm);
+    background: var(--primary-light);
+    border: 2px dashed var(--primary);
+    border-radius: var(--radius-md);
+    color: var(--primary);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.add-evidence-btn:hover {
+    background: var(--primary);
+    color: white;
+}
+
+.coping-strategies {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: var(--spacing-md);
+    margin-top: var(--spacing-md);
+}
+
+.strategy-card {
+    background: var(--surface-color);
+    padding: var(--spacing-md);
+    border-radius: var(--radius-md);
+    border: 2px solid var(--border-color);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: center;
+}
+
+.strategy-card:hover,
+.strategy-card.selected {
+    border-color: var(--primary);
+    background: var(--primary-light);
+}
+
+.strategy-icon {
+    font-size: 2rem;
+    margin-bottom: var(--spacing-sm);
+}
+
+.strategy-name {
+    font-weight: 600;
+    margin: 0 0 var(--spacing-xs) 0;
+}
+
+.strategy-description {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    margin: 0;
+}
+
+.session-progress {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--spacing-xl);
+    padding: var(--spacing-lg);
+    background: var(--surface-color);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border-color);
+}
+
+.progress-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1;
+    position: relative;
+}
+
+.progress-step:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    top: 20px;
+    right: -50%;
+    width: 100%;
+    height: 2px;
+    background: var(--border-color);
+    z-index: 1;
+}
+
+.progress-step.completed::after {
+    background: var(--primary);
+}
+
+.step-circle {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--border-color);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    margin-bottom: var(--spacing-sm);
+    position: relative;
+    z-index: 2;
+}
+
+.step-circle.completed {
+    background: var(--primary);
+}
+
+.step-circle.current {
+    background: var(--accent);
+    animation: pulse 2s infinite;
+}
+
+.step-label {
+    font-size: 0.8rem;
+    text-align: center;
+    color: var(--text-secondary);
+}
+
+.action-buttons {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--spacing-md);
+    margin-top: var(--spacing-xl);
+}
+
+.btn-secondary {
+    background: var(--surface-color);
+    color: var(--text-primary);
+    border: 2px solid var(--border-color);
+}
+
+.btn-secondary:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+}
+
+.session-summary {
+    background: linear-gradient(135deg, #e8f5e8, #f0f8ff);
+    padding: var(--spacing-xl);
+    border-radius: var(--radius-lg);
+    margin-top: var(--spacing-xl);
+    border: 1px solid #d4edda;
+}
+
+.summary-title {
+    color: #155724;
+    text-align: center;
+    margin-bottom: var(--spacing-lg);
+}
+
+.summary-content {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: var(--spacing-lg);
+}
+
+.summary-card {
+    background: white;
+    padding: var(--spacing-lg);
+    border-radius: var(--radius-md);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.summary-card h4 {
+    color: var(--primary);
+    margin: 0 0 var(--spacing-md) 0;
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+}
+
+@media (max-width: 768px) {
+    .cbt-container {
+        padding: var(--spacing-md);
+    }
+    
+    .cbt-header h1 {
+        font-size: 2rem;
+    }
+    
+    .evidence-section {
+        grid-template-columns: 1fr;
+    }
+    
+    .mood-scale {
+        flex-wrap: wrap;
+    }
+    
+    .action-buttons {
+        flex-direction: column;
+    }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="cbt-container">
+    <!-- Header -->
+    <div class="cbt-header">
+        <h1> Cognitive Behavioral Therapy</h1>
+        <p class="cbt-subtitle">Transform negative thoughts into positive actions</p>
+    </div>
+
+    <!-- Navigation Cards -->
+    <div class="cbt-nav">
+        <a href="#thought-record" class="nav-card active" id="thought-record-nav">
+            <span class="nav-icon"></span>
+            <h3 class="nav-title">Thought Record</h3>
+            <p class="nav-description">Identify and challenge negative thought patterns</p>
+        </a>
+        
+        <a href="#mood-tracking" class="nav-card" id="mood-tracking-nav">
+            <span class="nav-icon"></span>
+            <h3 class="nav-title">Mood Check-in</h3>
+            <p class="nav-description">Track your emotional state and triggers</p>
+        </a>
+        
+        <a href="#coping-strategies" class="nav-card" id="coping-nav">
+            <span class="nav-icon"></span>
+            <h3 class="nav-title">Coping Toolkit</h3>
+            <p class="nav-description">Learn and practice healthy coping mechanisms</p>
+        </a>
+        
+        <a href="#progress" class="nav-card" id="progress-nav">
+            <span class="nav-icon"></span>
+            <h3 class="nav-title">Progress Review</h3>
+            <p class="nav-description">View your therapy journey and improvements</p>
+        </a>
+    </div>
+
+    <!-- Session Progress -->
+    <div class="session-progress">
+        <div class="progress-step completed">
+            <div class="step-circle completed">1</div>
+            <div class="step-label">Situation</div>
+        </div>
+        <div class="progress-step current">
+            <div class="step-circle current">2</div>
+            <div class="step-label">Thoughts</div>
+        </div>
+        <div class="progress-step">
+            <div class="step-circle">3</div>
+            <div class="step-label">Evidence</div>
+        </div>
+        <div class="progress-step">
+            <div class="step-circle">4</div>
+            <div class="step-label">Reframe</div>
+        </div>
+        <div class="progress-step">
+            <div class="step-circle">5</div>
+            <div class="step-label">Action</div>
+        </div>
+    </div>
+
+    <!-- Main Session Container -->
+    <div class="session-container">
+        <form id="cbt-session-form" class="thought-record-form">
+            <!-- Step 1: Situation -->
+            <div class="form-section" id="step-situation">
+                <div class="section-header">
+                    <span class="section-icon"></span>
+                    <h3 class="section-title">1. Describe the Situation</h3>
+                </div>
+                
+                <div class="form-group">
+                    <label for="situation" class="form-label">
+                        What happened? Describe the specific situation that triggered negative thoughts or emotions.
+                    </label>
+                    <textarea id="situation" name="situation" class="form-textarea" 
+                              placeholder="Be specific about what happened, when, where, and who was involved..."></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="situation-mood" class="form-label">How did you feel in this moment?</label>
+                    <div class="mood-scale">
+                        <div class="mood-option">
+                            <input type="radio" name="initial-mood" value="1" id="mood-1">
+                            <span class="mood-emoji"></span>
+                            <label for="mood-1" class="mood-label">Very Bad</label>
+                        </div>
+                        <div class="mood-option">
+                            <input type="radio" name="initial-mood" value="3" id="mood-3">
+                            <span class="mood-emoji"></span>
+                            <label for="mood-3" class="mood-label">Bad</label>
+                        </div>
+                        <div class="mood-option">
+                            <input type="radio" name="initial-mood" value="5" id="mood-5">
+                            <span class="mood-emoji"></span>
+                            <label for="mood-5" class="mood-label">Neutral</label>
+                        </div>
+                        <div class="mood-option">
+                            <input type="radio" name="initial-mood" value="7" id="mood-7">
+                            <span class="mood-emoji"></span>
+                            <label for="mood-7" class="mood-label">Good</label>
+                        </div>
+                        <div class="mood-option">
+                            <input type="radio" name="initial-mood" value="10" id="mood-10">
+                            <span class="mood-emoji"></span>
+                            <label for="mood-10" class="mood-label">Great</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 2: Automatic Thoughts -->
+            <div class="form-section" id="step-thoughts" style="display: none;">
+                <div class="section-header">
+                    <span class="section-icon"></span>
+                    <h3 class="section-title">2. Identify Automatic Thoughts</h3>
+                </div>
+                
+                <div class="form-group">
+                    <label for="automatic-thoughts" class="form-label">
+                        What thoughts went through your mind? What did you tell yourself?
+                    </label>
+                    <textarea id="automatic-thoughts" name="automatic-thoughts" class="form-textarea" 
+                              placeholder="Write down your immediate thoughts and self-talk during this situation..."></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="emotion-intensity" class="form-label">How intense were these thoughts? (1-10)</label>
+                    <input type="range" id="emotion-intensity" name="emotion-intensity" min="1" max="10" value="5" 
+                           oninput="document.getElementById('intensity-value').textContent = this.value">
+                    <div style="text-align: center; margin-top: var(--spacing-sm);">
+                        <span id="intensity-value">5</span>/10
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="thought-patterns" class="form-label">Select any thinking patterns you notice:</label>
+                    <div class="coping-strategies">
+                        <div class="strategy-card" onclick="toggleSelection(this)" data-pattern="catastrophizing">
+                            <div class="strategy-icon"></div>
+                            <div class="strategy-name">Catastrophizing</div>
+                            <div class="strategy-description">Expecting the worst</div>
+                        </div>
+                        <div class="strategy-card" onclick="toggleSelection(this)" data-pattern="all-or-nothing">
+                            <div class="strategy-icon"></div>
+                            <div class="strategy-name">All-or-Nothing</div>
+                            <div class="strategy-description">Black and white thinking</div>
+                        </div>
+                        <div class="strategy-card" onclick="toggleSelection(this)" data-pattern="mind-reading">
+                            <div class="strategy-icon"></div>
+                            <div class="strategy-name">Mind Reading</div>
+                            <div class="strategy-description">Assuming others' thoughts</div>
+                        </div>
+                        <div class="strategy-card" onclick="toggleSelection(this)" data-pattern="personalization">
+                            <div class="strategy-icon"></div>
+                            <div class="strategy-name">Personalization</div>
+                            <div class="strategy-description">Blaming yourself</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 3: Evidence -->
+            <div class="form-section" id="step-evidence" style="display: none;">
+                <div class="section-header">
+                    <span class="section-icon"></span>
+                    <h3 class="section-title">3. Examine the Evidence</h3>
+                </div>
+                
+                <div class="evidence-section">
+                    <div class="evidence-column evidence-for">
+                        <h4>Evidence FOR this thought</h4>
+                        <ul class="evidence-list" id="evidence-for-list">
+                            <!-- Evidence items will be added here -->
+                        </ul>
+                        <input type="text" id="evidence-for-input" placeholder="Add evidence that supports this thought..." 
+                               onkeypress="handleEvidenceAdd(event, 'for')">
+                        <button type="button" class="add-evidence-btn" onclick="addEvidence('for')">+ Add Evidence</button>
+                    </div>
+                    
+                    <div class="evidence-column evidence-against">
+                        <h4>Evidence AGAINST this thought</h4>
+                        <ul class="evidence-list" id="evidence-against-list">
+                            <!-- Evidence items will be added here -->
+                        </ul>
+                        <input type="text" id="evidence-against-input" placeholder="Add evidence that contradicts this thought..." 
+                               onkeypress="handleEvidenceAdd(event, 'against')">
+                        <button type="button" class="add-evidence-btn" onclick="addEvidence('against')">+ Add Evidence</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 4: Balanced Thought -->
+            <div class="form-section" id="step-reframe" style="display: none;">
+                <div class="section-header">
+                    <span class="section-icon"></span>
+                    <h3 class="section-title">4. Create a Balanced Thought</h3>
+                </div>
+                
+                <div class="form-group">
+                    <label for="balanced-thought" class="form-label">
+                        Based on the evidence, what would be a more balanced, realistic thought?
+                    </label>
+                    <textarea id="balanced-thought" name="balanced-thought" class="form-textarea" 
+                              placeholder="Write a more balanced perspective considering all the evidence..."></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="new-mood" class="form-label">How do you feel after creating this balanced thought?</label>
+                    <div class="mood-scale">
+                        <div class="mood-option">
+                            <input type="radio" name="new-mood" value="1" id="new-mood-1">
+                            <span class="mood-emoji"></span>
+                            <label for="new-mood-1" class="mood-label">Very Bad</label>
+                        </div>
+                        <div class="mood-option">
+                            <input type="radio" name="new-mood" value="3" id="new-mood-3">
+                            <span class="mood-emoji"></span>
+                            <label for="new-mood-3" class="mood-label">Bad</label>
+                        </div>
+                        <div class="mood-option">
+                            <input type="radio" name="new-mood" value="5" id="new-mood-5">
+                            <span class="mood-emoji"></span>
+                            <label for="new-mood-5" class="mood-label">Neutral</label>
+                        </div>
+                        <div class="mood-option">
+                            <input type="radio" name="new-mood" value="7" id="new-mood-7">
+                            <span class="mood-emoji"></span>
+                            <label for="new-mood-7" class="mood-label">Good</label>
+                        </div>
+                        <div class="mood-option">
+                            <input type="radio" name="new-mood" value="10" id="new-mood-10">
+                            <span class="mood-emoji"></span>
+                            <label for="new-mood-10" class="mood-label">Great</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 5: Action Plan -->
+            <div class="form-section" id="step-action" style="display: none;">
+                <div class="section-header">
+                    <span class="section-icon"></span>
+                    <h3 class="section-title">5. Create an Action Plan</h3>
+                </div>
+                
+                <div class="form-group">
+                    <label for="action-plan" class="form-label">
+                        What concrete steps can you take if this situation happens again?
+                    </label>
+                    <textarea id="action-plan" name="action-plan" class="form-textarea" 
+                              placeholder="List specific actions or coping strategies you can use..."></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Select coping strategies to practice:</label>
+                    <div class="coping-strategies">
+                        <div class="strategy-card" onclick="toggleSelection(this)" data-strategy="deep-breathing">
+                            <div class="strategy-icon"></div>
+                            <div class="strategy-name">Deep Breathing</div>
+                            <div class="strategy-description">4-7-8 breathing technique</div>
+                        </div>
+                        <div class="strategy-card" onclick="toggleSelection(this)" data-strategy="grounding">
+                            <div class="strategy-icon"></div>
+                            <div class="strategy-name">5-4-3-2-1 Grounding</div>
+                            <div class="strategy-description">Sensory awareness</div>
+                        </div>
+                        <div class="strategy-card" onclick="toggleSelection(this)" data-strategy="self-talk">
+                            <div class="strategy-icon"></div>
+                            <div class="strategy-name">Positive Self-Talk</div>
+                            <div class="strategy-description">Encouraging mantras</div>
+                        </div>
+                        <div class="strategy-card" onclick="toggleSelection(this)" data-strategy="mindfulness">
+                            <div class="strategy-icon"></div>
+                            <div class="strategy-name">Mindfulness</div>
+                            <div class="strategy-description">Present moment awareness</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="action-buttons">
+                <button type="button" id="prev-btn" class="btn btn-secondary" onclick="previousStep()" style="display: none;">
+                    ← Previous Step
+                </button>
+                <button type="button" id="next-btn" class="btn btn-primary" onclick="nextStep()">
+                    Next Step →
+                </button>
+                <button type="submit" id="complete-btn" class="btn btn-primary" style="display: none;">
+                    Complete Session
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Session Summary (shown after completion) -->
+    <div id="session-summary" class="session-summary" style="display: none;">
+        <h2 class="summary-title"> CBT Session Complete!</h2>
+        <div class="summary-content">
+            <div class="summary-card">
+                <h4> Key Insight</h4>
+                <p id="summary-insight">Your balanced thought shows improved perspective on the situation.</p>
+            </div>
+            <div class="summary-card">
+                <h4> Mood Improvement</h4>
+                <p id="summary-mood">Mood increased from <span id="mood-before">5</span> to <span id="mood-after">7</span></p>
+            </div>
+            <div class="summary-card">
+                <h4> Next Steps</h4>
+                <p id="summary-actions">Practice your selected coping strategies when similar situations arise.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+let currentStep = 1;
+const totalSteps = 5;
+let selectedPatterns = [];
+let selectedStrategies = [];
+
+function nextStep() {
+    if (currentStep < totalSteps) {
+        // Hide current step
+        document.getElementById(`step-${getStepName(currentStep)}`).style.display = 'none';
+        
+        // Update progress
+        document.querySelector(`.progress-step:nth-child(${currentStep}) .step-circle`).classList.remove('current');
+        document.querySelector(`.progress-step:nth-child(${currentStep}) .step-circle`).classList.add('completed');
+        
+        currentStep++;
+        
+        // Show next step
+        document.getElementById(`step-${getStepName(currentStep)}`).style.display = 'block';
+        document.querySelector(`.progress-step:nth-child(${currentStep}) .step-circle`).classList.add('current');
+        
+        // Update buttons
+        updateButtons();
+    }
+}
+
+function previousStep() {
+    if (currentStep > 1) {
+        // Hide current step
+        document.getElementById(`step-${getStepName(currentStep)}`).style.display = 'none';
+        document.querySelector(`.progress-step:nth-child(${currentStep}) .step-circle`).classList.remove('current');
+        
+        currentStep--;
+        
+        // Show previous step
+        document.getElementById(`step-${getStepName(currentStep)}`).style.display = 'block';
+        document.querySelector(`.progress-step:nth-child(${currentStep}) .step-circle`).classList.add('current');
+        document.querySelector(`.progress-step:nth-child(${currentStep}) .step-circle`).classList.remove('completed');
+        
+        // Update buttons
+        updateButtons();
+    }
+}
+
+function getStepName(step) {
+    const steps = ['situation', 'thoughts', 'evidence', 'reframe', 'action'];
+    return steps[step - 1];
+}
+
+function updateButtons() {
+    const prevBtn = document.getElementById('prev-btn');
+    const nextBtn = document.getElementById('next-btn');
+    const completeBtn = document.getElementById('complete-btn');
+    
+    prevBtn.style.display = currentStep > 1 ? 'block' : 'none';
+    
+    if (currentStep === totalSteps) {
+        nextBtn.style.display = 'none';
+        completeBtn.style.display = 'block';
+    } else {
+        nextBtn.style.display = 'block';
+        completeBtn.style.display = 'none';
+    }
+}
+
+function toggleSelection(element) {
+    element.classList.toggle('selected');
+    
+    if (element.dataset.pattern) {
+        const pattern = element.dataset.pattern;
+        if (selectedPatterns.includes(pattern)) {
+            selectedPatterns = selectedPatterns.filter(p => p !== pattern);
+        } else {
+            selectedPatterns.push(pattern);
+        }
+    }
+    
+    if (element.dataset.strategy) {
+        const strategy = element.dataset.strategy;
+        if (selectedStrategies.includes(strategy)) {
+            selectedStrategies = selectedStrategies.filter(s => s !== strategy);
+        } else {
+            selectedStrategies.push(strategy);
+        }
+    }
+}
+
+function addEvidence(type) {
+    const input = document.getElementById(`evidence-${type}-input`);
+    const list = document.getElementById(`evidence-${type}-list`);
+    
+    if (input.value.trim()) {
+        const li = document.createElement('li');
+        li.className = 'evidence-item';
+        li.innerHTML = `
+            <span class="evidence-text">${input.value}</span>
+            <button type="button" class="remove-evidence" onclick="removeEvidence(this)">×</button>
+        `;
+        list.appendChild(li);
+        input.value = '';
+    }
+}
+
+function removeEvidence(button) {
+    button.parentElement.remove();
+}
+
+function handleEvidenceAdd(event, type) {
+    if (event.key === 'Enter') {
+        event.preventDefault();
+        addEvidence(type);
+    }
+}
+
+// Form submission
+document.getElementById('cbt-session-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    // Collect all form data
+    const formData = {
+        situation: document.getElementById('situation').value,
+        initial_mood: document.querySelector('input[name="initial-mood"]:checked')?.value,
+        automatic_thoughts: document.getElementById('automatic-thoughts').value,
+        emotion_intensity: document.getElementById('emotion-intensity').value,
+        thought_patterns: selectedPatterns,
+        evidence_for: Array.from(document.querySelectorAll('#evidence-for-list .evidence-text')).map(el => el.textContent),
+        evidence_against: Array.from(document.querySelectorAll('#evidence-against-list .evidence-text')).map(el => el.textContent),
+        balanced_thought: document.getElementById('balanced-thought').value,
+        new_mood: document.querySelector('input[name="new-mood"]:checked')?.value,
+        action_plan: document.getElementById('action-plan').value,
+        coping_strategies: selectedStrategies
+    };
+    
+    // Submit to backend
+    fetch('{{ url_for("wellness.create_cbt_session") }}', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            showSessionSummary(formData);
+        } else {
+            alert('Error saving session: ' + data.error);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Failed to save session');
+    });
+});
+
+function showSessionSummary(data) {
+    // Hide form and show summary
+    document.querySelector('.session-container').style.display = 'none';
+    document.getElementById('session-summary').style.display = 'block';
+    
+    // Update summary content
+    document.getElementById('mood-before').textContent = data.initial_mood || '5';
+    document.getElementById('mood-after').textContent = data.new_mood || '7';
+    
+    // Scroll to summary
+    document.getElementById('session-summary').scrollIntoView({ behavior: 'smooth' });
+}
+
+// Initialize
+document.addEventListener('DOMContentLoaded', function() {
+    updateButtons();
+});
+</script>
+{% endblock %}

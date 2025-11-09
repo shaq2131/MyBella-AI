@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+
+{% block title %}Choose Your Companion{% endblock %}
+
+{% block extra_css %}
+<style>
+.onboarding-container{min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);padding:var(--spacing-xl)}
+.onboarding-card{background:#fff;border-radius:var(--radius-2xl);padding:var(--spacing-3xl);max-width:900px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.3)}
+.progress-bar{height:4px;background:var(--border-color);border-radius:999px;margin-bottom:var(--spacing-2xl);overflow:hidden}
+.progress-fill{height:100%;background:linear-gradient(90deg,#667eea 0%,#764ba2 100%);width:50%;transition:width .3s}
+.persona-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:var(--spacing-lg)}
+.persona-card{border:2px solid var(--border-color);border-radius:var(--radius-xl);padding:var(--spacing-xl);text-align:center;cursor:pointer;transition:all .2s;background:white}
+.persona-card:hover{transform:translateY(-2px);border-color:var(--primary-color)}
+.persona-card.selected{border-color:var(--primary-color);background:linear-gradient(135deg,rgba(102,126,234,.08),rgba(118,75,162,.08))}
+.persona-avatar{width:72px;height:72px;border-radius:50%;background:var(--background-color);margin:0 auto var(--spacing-md);display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--primary)}
+.persona-name{font-weight:700;margin-bottom:var(--spacing-xs)}
+.persona-desc{color:var(--text-secondary);font-size:var(--font-size-sm)}
+.btn-container{display:flex;gap:var(--spacing-md);margin-top:var(--spacing-2xl)}
+.btn{padding:var(--spacing-md) var(--spacing-xl);border-radius:var(--radius-lg);font-weight:600;cursor:pointer;transition:all .2s;flex:1}
+.btn-primary{background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:#fff;border:none}
+.btn-secondary{background:#fff;border:2px solid var(--border-color);color:var(--text-primary)}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="onboarding-container">
+  <div class="onboarding-card">
+    <div class="progress-bar"><div class="progress-fill" style="width:50%"></div></div>
+    <h2 class="onboarding-title">Choose your preferred companion</h2>
+    <p class="onboarding-subtitle">You can change this anytime in Settings.</p>
+
+    <div class="persona-grid" id="personaGrid">
+      <div class="persona-card" data-persona="Isabella">
+        <div class="persona-avatar">I</div>
+        <div class="persona-name">Isabella</div>
+        <div class="persona-desc">Warm, empathetic, great listener</div>
+      </div>
+      <div class="persona-card" data-persona="Alex">
+        <div class="persona-avatar">A</div>
+        <div class="persona-name">Alex</div>
+        <div class="persona-desc">Supportive, balanced, practical</div>
+      </div>
+      <div class="persona-card" data-persona="Maya">
+        <div class="persona-avatar">M</div>
+        <div class="persona-name">Maya</div>
+        <div class="persona-desc">Uplifting, energetic, encouraging</div>
+      </div>
+    </div>
+
+    <div class="btn-container">
+  <a href="{{ url_for('onboarding.personality') }}" class="btn btn-secondary">Back</a>
+  <button id="nextBtn" class="btn btn-primary" disabled>Next</button>
+    </div>
+  </div>
+</div>
+
+<script>
+let selectedPersona = null;
+const cards = document.querySelectorAll('.persona-card');
+cards.forEach(card => {
+  card.addEventListener('click', () => {
+    cards.forEach(c => c.classList.remove('selected'));
+    card.classList.add('selected');
+    selectedPersona = card.dataset.persona;
+    document.getElementById('nextBtn').disabled = false;
+  });
+});
+
+document.getElementById('nextBtn').addEventListener('click', () => {
+  if (!selectedPersona) return;
+  sessionStorage.setItem('preferred_persona', selectedPersona);
+  window.location.href = '{{ url_for("onboarding.mood") }}';
+});
+</script>
+{% endblock %}

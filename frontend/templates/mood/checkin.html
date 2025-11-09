@@ -1,0 +1,448 @@
+{% extends "base.html" %}
+
+{% block title %}Daily Mood Check-In - MyBella{% endblock %}
+
+{% block styles %}
+<style>
+    .mood-container {
+        max-width: 800px;
+        margin: 40px auto;
+        padding: 20px;
+    }
+
+    .mood-card {
+        background: white;
+        border-radius: 16px;
+        padding: 40px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    }
+
+    .mood-header {
+        text-align: center;
+        margin-bottom: 40px;
+    }
+
+    .mood-header h1 {
+        font-size: 2rem;
+        color: #2c3e50;
+        margin-bottom: 10px;
+    }
+
+    .mood-header p {
+        color: #7f8c8d;
+        font-size: 1.1rem;
+    }
+
+    .mood-selector {
+        margin: 30px 0;
+    }
+
+    .mood-options {
+        display: flex;
+        justify-content: space-around;
+        gap: 15px;
+        flex-wrap: wrap;
+    }
+
+    .mood-option {
+        flex: 1;
+        min-width: 100px;
+        text-align: center;
+        padding: 20px 10px;
+        border: 3px solid transparent;
+        border-radius: 16px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        background: #f8f9fa;
+    }
+
+    .mood-option:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+    }
+
+    .mood-option.selected {
+        border-color: #9b59b6;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+    }
+
+    .mood-emoji {
+        font-size: 3rem;
+        margin-bottom: 10px;
+    }
+
+    .mood-label {
+        font-weight: 600;
+        font-size: 1rem;
+    }
+
+    .emotion-tags {
+        margin: 30px 0;
+    }
+
+    .emotion-tags h3 {
+        margin-bottom: 15px;
+        color: #2c3e50;
+    }
+
+    .tag-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .emotion-tag {
+        padding: 10px 20px;
+        border: 2px solid #ddd;
+        border-radius: 25px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        background: white;
+    }
+
+    .emotion-tag:hover {
+        border-color: #9b59b6;
+        background: #f8f4fb;
+    }
+
+    .emotion-tag.selected {
+        border-color: #9b59b6;
+        background: #9b59b6;
+        color: white;
+    }
+
+    .activity-section {
+        margin: 30px 0;
+    }
+
+    .journal-section {
+        margin: 30px 0;
+    }
+
+    .journal-section textarea {
+        width: 100%;
+        padding: 15px;
+        border: 2px solid #e0e0e0;
+        border-radius: 12px;
+        resize: vertical;
+        min-height: 150px;
+        font-family: inherit;
+        font-size: 1rem;
+    }
+
+    .journal-section textarea:focus {
+        outline: none;
+        border-color: #9b59b6;
+    }
+
+    .slider-section {
+        margin: 25px 0;
+    }
+
+    .slider-section label {
+        display: block;
+        margin-bottom: 10px;
+        color: #2c3e50;
+        font-weight: 600;
+    }
+
+    .slider-container {
+        position: relative;
+        padding: 10px 0;
+    }
+
+    .slider {
+        width: 100%;
+        height: 8px;
+        border-radius: 5px;
+        background: linear-gradient(to right, #e74c3c, #f39c12, #2ecc71);
+        outline: none;
+        -webkit-appearance: none;
+        appearance: none;
+    }
+
+    .slider::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 25px;
+        height: 25px;
+        border-radius: 50%;
+        background: white;
+        cursor: pointer;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+        border: 3px solid #9b59b6;
+    }
+
+    .slider::-moz-range-thumb {
+        width: 25px;
+        height: 25px;
+        border-radius: 50%;
+        background: white;
+        cursor: pointer;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+        border: 3px solid #9b59b6;
+    }
+
+    .slider-labels {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 5px;
+        font-size: 0.9rem;
+        color: #7f8c8d;
+    }
+
+    .submit-section {
+        text-align: center;
+        margin-top: 40px;
+    }
+
+    .btn-submit {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 15px 60px;
+        border: none;
+        border-radius: 30px;
+        font-size: 1.1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+    }
+
+    .btn-submit:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+    }
+
+    .btn-submit:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+
+    .already-checked {
+        background: linear-gradient(135deg, #56ccf2 0%, #2f80ed 100%);
+        color: white;
+        padding: 20px;
+        border-radius: 12px;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .alert {
+        padding: 15px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+    }
+
+    .alert-success {
+        background: #d4edda;
+        color: #155724;
+        border: 1px solid #c3e6cb;
+    }
+
+    .alert-info {
+        background: #d1ecf1;
+        color: #0c5460;
+        border: 1px solid #bee5eb;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="mood-container">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    {% if existing_checkin %}
+        <div class="already-checked">
+            <h2> You've already checked in today!</h2>
+            <p>You recorded a <strong>{{ existing_checkin.mood_label }}</strong> mood.</p>
+            <p style="margin-top: 15px;">
+                <a href="{{ url_for('mood.journal') }}" style="color: white; text-decoration: underline;">View Your Journal</a> | 
+                <a href="{{ url_for('mood.insights') }}" style="color: white; text-decoration: underline;">See Insights</a>
+            </p>
+        </div>
+    {% endif %}
+
+    <div class="mood-card">
+        <div class="mood-header">
+            <h1>How are you feeling today?</h1>
+            <p>Take a moment to check in with yourself</p>
+        </div>
+
+        <form id="moodForm" method="POST" action="{{ url_for('mood.submit_checkin') }}">
+            <!-- Mood Selector -->
+            <div class="mood-selector">
+                <h3>My mood is...</h3>
+                <div class="mood-options">
+                    <div class="mood-option" data-mood="1" data-label="Very Bad">
+                        <div class="mood-emoji"></div>
+                        <div class="mood-label">Very Bad</div>
+                    </div>
+                    <div class="mood-option" data-mood="2" data-label="Bad">
+                        <div class="mood-emoji"></div>
+                        <div class="mood-label">Bad</div>
+                    </div>
+                    <div class="mood-option" data-mood="3" data-label="Okay">
+                        <div class="mood-emoji"></div>
+                        <div class="mood-label">Okay</div>
+                    </div>
+                    <div class="mood-option" data-mood="4" data-label="Good">
+                        <div class="mood-emoji"></div>
+                        <div class="mood-label">Good</div>
+                    </div>
+                    <div class="mood-option" data-mood="5" data-label="Great">
+                        <div class="mood-emoji"></div>
+                        <div class="mood-label">Great</div>
+                    </div>
+                </div>
+                <input type="hidden" name="mood_level" id="moodLevel" required>
+                <input type="hidden" name="mood_label" id="moodLabel" required>
+            </div>
+
+            <!-- Emotion Tags -->
+            <div class="emotion-tags">
+                <h3>What emotions are you experiencing?</h3>
+                <div class="tag-container">
+                    <div class="emotion-tag" data-emotion="happy">Happy</div>
+                    <div class="emotion-tag" data-emotion="sad">Sad</div>
+                    <div class="emotion-tag" data-emotion="anxious">Anxious</div>
+                    <div class="emotion-tag" data-emotion="calm">Calm</div>
+                    <div class="emotion-tag" data-emotion="angry">Angry</div>
+                    <div class="emotion-tag" data-emotion="excited">Excited</div>
+                    <div class="emotion-tag" data-emotion="tired">Tired</div>
+                    <div class="emotion-tag" data-emotion="stressed">Stressed</div>
+                    <div class="emotion-tag" data-emotion="grateful">Grateful</div>
+                    <div class="emotion-tag" data-emotion="lonely">Lonely</div>
+                    <div class="emotion-tag" data-emotion="hopeful">Hopeful</div>
+                    <div class="emotion-tag" data-emotion="overwhelmed">Overwhelmed</div>
+                </div>
+                <input type="hidden" name="emotions" id="emotionsInput">
+            </div>
+
+            <!-- Energy Level -->
+            <div class="slider-section">
+                <label for="energyLevel">Energy Level</label>
+                <div class="slider-container">
+                    <input type="range" min="1" max="10" value="5" class="slider" id="energyLevel" name="energy_level">
+                    <div class="slider-labels">
+                        <span>Exhausted</span>
+                        <span>Energized</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stress Level -->
+            <div class="slider-section">
+                <label for="stressLevel">Stress Level</label>
+                <div class="slider-container">
+                    <input type="range" min="1" max="10" value="5" class="slider" id="stressLevel" name="stress_level">
+                    <div class="slider-labels">
+                        <span>Relaxed</span>
+                        <span>Stressed</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Activities -->
+            <div class="activity-section">
+                <h3>Activities today</h3>
+                <div class="tag-container">
+                    <div class="emotion-tag activity-tag" data-activity="work">Work</div>
+                    <div class="emotion-tag activity-tag" data-activity="exercise">Exercise</div>
+                    <div class="emotion-tag activity-tag" data-activity="social">Socializing</div>
+                    <div class="emotion-tag activity-tag" data-activity="family">Family Time</div>
+                    <div class="emotion-tag activity-tag" data-activity="hobbies">Hobbies</div>
+                    <div class="emotion-tag activity-tag" data-activity="relaxation">Relaxation</div>
+                    <div class="emotion-tag activity-tag" data-activity="meditation">Meditation</div>
+                    <div class="emotion-tag activity-tag" data-activity="sleep">Good Sleep</div>
+                </div>
+                <input type="hidden" name="activities" id="activitiesInput">
+            </div>
+
+            <!-- Journal Notes -->
+            <div class="journal-section">
+                <h3>Anything else on your mind? (Optional)</h3>
+                <textarea name="notes" placeholder="Write about your day, thoughts, or feelings..."></textarea>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="submit-section">
+                <button type="submit" class="btn-submit" id="submitBtn" disabled>Save Check-In</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    const selectedEmotions = new Set();
+    const selectedActivities = new Set();
+    let selectedMood = null;
+
+    // Mood selection
+    document.querySelectorAll('.mood-option').forEach(option => {
+        option.addEventListener('click', function() {
+            document.querySelectorAll('.mood-option').forEach(opt => opt.classList.remove('selected'));
+            this.classList.add('selected');
+            selectedMood = this.dataset.mood;
+            document.getElementById('moodLevel').value = this.dataset.mood;
+            document.getElementById('moodLabel').value = this.dataset.label;
+            updateSubmitButton();
+        });
+    });
+
+    // Emotion tags
+    document.querySelectorAll('.emotion-tag:not(.activity-tag)').forEach(tag => {
+        tag.addEventListener('click', function() {
+            const emotion = this.dataset.emotion;
+            if (selectedEmotions.has(emotion)) {
+                selectedEmotions.delete(emotion);
+                this.classList.remove('selected');
+            } else {
+                selectedEmotions.add(emotion);
+                this.classList.add('selected');
+            }
+            document.getElementById('emotionsInput').value = Array.from(selectedEmotions).join(',');
+        });
+    });
+
+    // Activity tags
+    document.querySelectorAll('.activity-tag').forEach(tag => {
+        tag.addEventListener('click', function() {
+            const activity = this.dataset.activity;
+            if (selectedActivities.has(activity)) {
+                selectedActivities.delete(activity);
+                this.classList.remove('selected');
+            } else {
+                selectedActivities.add(activity);
+                this.classList.add('selected');
+            }
+            document.getElementById('activitiesInput').value = Array.from(selectedActivities).join(',');
+        });
+    });
+
+    // Update submit button state
+    function updateSubmitButton() {
+        const submitBtn = document.getElementById('submitBtn');
+        if (selectedMood) {
+            submitBtn.disabled = false;
+        } else {
+            submitBtn.disabled = true;
+        }
+    }
+
+    // Form submission
+    document.getElementById('moodForm').addEventListener('submit', function(e) {
+        if (!selectedMood) {
+            e.preventDefault();
+            alert('Please select your mood level before submitting.');
+        }
+    });
+</script>
+{% endblock %}

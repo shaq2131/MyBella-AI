@@ -1,0 +1,468 @@
+{% extends "base.html" %}
+
+{% block title %}Chat - MyBella{% endblock %}
+
+{% block content %}
+<div class="chat-container">
+    <div class="chat-sidebar">
+        <div class="persona-selector">
+            <h3>Choose Your Companion</h3>
+            <div class="persona-options">
+                <div class="persona-option {{ 'active' if persona == 'Bella' else '' }}" data-persona="Bella">
+                    <div class="persona-avatar">B</div>
+                    <span>Bella</span>
+                </div>
+                <div class="persona-option {{ 'active' if persona == 'Alex' else '' }}" data-persona="Alex">
+                    <div class="persona-avatar">A</div>
+                    <span>Alex</span>
+                </div>
+                <div class="persona-option {{ 'active' if persona == 'Sam' else '' }}" data-persona="Sam">
+                    <div class="persona-avatar">S</div>
+                    <span>Sam</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="mode-selector">
+            <h3>Conversation Mode</h3>
+            <div class="mode-options">
+                <button class="mode-btn {{ 'active' if mode == 'friendly' else '' }}" data-mode="friendly">
+                    Friendly Chat
+                </button>
+                <button class="mode-btn {{ 'active' if mode == 'supportive' else '' }}" data-mode="supportive">
+                    Supportive
+                </button>
+                <button class="mode-btn {{ 'active' if mode == 'creative' else '' }}" data-mode="creative">
+                    Creative
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="chat-main">
+        <div class="chat-header">
+            <div class="current-persona">
+                <div class="persona-avatar">{{ persona[0] if persona else 'B' }}</div>
+                <div class="persona-info">
+                    <h4>{{ persona or 'Bella' }}</h4>
+                    <span class="status">Online</span>
+                </div>
+            </div>
+            <div class="chat-actions">
+                <button class="btn btn-secondary btn-sm" onclick="clearChat()">Clear Chat</button>
+                <button class="btn btn-primary btn-sm" onclick="startVoiceChat()">Voice Chat</button>
+            </div>
+        </div>
+
+        <div class="chat-messages" id="chatMessages">
+            <div class="welcome-message">
+                <div class="message bot-message">
+                    <div class="message-avatar">{{ persona[0] if persona else 'B' }}</div>
+                    <div class="message-content">
+                        <p>Hello! I'm {{ persona or 'Bella' }}, your AI companion. How can I help you today?</p>
+                        <span class="message-time">Just now</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="chat-input-container">
+            <form class="chat-form" onsubmit="sendMessage(event)">
+                <div class="input-wrapper">
+                    <input type="text" 
+                           id="messageInput" 
+                           placeholder="Type your message..." 
+                           class="chat-input"
+                           maxlength="500">
+                    <button type="button" class="voice-btn" onclick="toggleVoiceInput()">Voice</button>
+                </div>
+                <button type="submit" class="send-btn">Send</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<style>
+.chat-container {
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    height: calc(100vh - var(--header-height));
+    gap: 0;
+}
+
+.chat-sidebar {
+    background: var(--surface-color);
+    border-right: 1px solid var(--border-color);
+    padding: 1.5rem;
+    overflow-y: auto;
+}
+
+.persona-selector, .mode-selector {
+    margin-bottom: 2rem;
+}
+
+.persona-selector h3, .mode-selector h3 {
+    margin-bottom: 1rem;
+    color: var(--primary);
+    font-size: 1rem;
+}
+
+.persona-options {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.persona-option {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: 1px solid transparent;
+}
+
+.persona-option:hover {
+    background: var(--background-color);
+}
+
+.persona-option.active {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
+}
+
+.persona-avatar {
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 50%;
+    background: var(--primary);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+}
+
+.persona-option.active .persona-avatar {
+    background: white;
+    color: var(--primary);
+}
+
+.mode-options {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.mode-btn {
+    padding: 0.75rem;
+    border: 1px solid var(--border-color);
+    background: var(--surface-color);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: left;
+}
+
+.mode-btn:hover {
+    background: var(--background-color);
+}
+
+.mode-btn.active {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
+}
+
+.chat-main {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.chat-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid var(--border-color);
+    background: var(--surface-color);
+}
+
+.current-persona {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.persona-info h4 {
+    margin: 0;
+    font-size: 1.1rem;
+}
+
+.status {
+    font-size: 0.8rem;
+    color: var(--success-color);
+}
+
+.chat-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.chat-messages {
+    flex: 1;
+    padding: 1.5rem;
+    overflow-y: auto;
+    background: var(--background-color);
+}
+
+.message {
+    display: flex;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+}
+
+.message.user-message {
+    flex-direction: row-reverse;
+}
+
+.message-avatar {
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 50%;
+    background: var(--primary);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    flex-shrink: 0;
+}
+
+.user-message .message-avatar {
+    background: var(--secondary);
+}
+
+.message-content {
+    max-width: 70%;
+    background: var(--surface-color);
+    padding: 1rem;
+    border-radius: var(--radius-md);
+    position: relative;
+}
+
+.user-message .message-content {
+    background: var(--primary);
+    color: white;
+}
+
+.message-content p {
+    margin: 0;
+    line-height: 1.5;
+}
+
+.message-time {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    display: block;
+    margin-top: 0.5rem;
+}
+
+.user-message .message-time {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.chat-input-container {
+    padding: 1.5rem;
+    background: var(--surface-color);
+    border-top: 1px solid var(--border-color);
+}
+
+.chat-form {
+    display: flex;
+    gap: 0.75rem;
+    align-items: flex-end;
+}
+
+.input-wrapper {
+    flex: 1;
+    position: relative;
+}
+
+.chat-input {
+    width: 100%;
+    padding: 1rem;
+    padding-right: 3rem;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    resize: none;
+    font-family: inherit;
+}
+
+.voice-btn {
+    position: absolute;
+    right: 0.75rem;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    font-size: 1.25rem;
+    cursor: pointer;
+    padding: 0.25rem;
+}
+
+.send-btn {
+    background: var(--primary);
+    color: white;
+    border: none;
+    padding: 1rem 1.5rem;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    font-weight: 500;
+    transition: background 0.2s ease;
+}
+
+.send-btn:hover {
+    background: var(--primary-hover);
+}
+
+@media (max-width: 768px) {
+    .chat-container {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto 1fr;
+    }
+    
+    .chat-sidebar {
+        padding: 1rem;
+        border-right: none;
+        border-bottom: 1px solid var(--border-color);
+    }
+    
+    .persona-options {
+        flex-direction: row;
+        gap: 0.5rem;
+    }
+    
+    .persona-option {
+        flex-direction: column;
+        text-align: center;
+        padding: 0.5rem;
+    }
+    
+    .mode-options {
+        flex-direction: row;
+        gap: 0.5rem;
+    }
+    
+    .mode-btn {
+        font-size: 0.9rem;
+        padding: 0.5rem;
+    }
+}
+</style>
+
+<script>
+function sendMessage(event) {
+    event.preventDefault();
+    const input = document.getElementById('messageInput');
+    const message = input.value.trim();
+    
+    if (!message) return;
+    
+    // Add user message to chat
+    addMessage(message, 'user');
+    input.value = '';
+    
+    // Simulate bot response (replace with actual API call)
+    setTimeout(() => {
+        const responses = [
+            "That's really interesting! Tell me more about that.",
+            "I understand how you feel. How can I help you with that?",
+            "Thanks for sharing that with me. What would you like to explore next?",
+            "I'm here to listen and support you. Is there anything specific you'd like to talk about?"
+        ];
+        const randomResponse = responses[Math.floor(Math.random() * responses.length)];
+        addMessage(randomResponse, 'bot');
+    }, 1000);
+}
+
+function addMessage(text, sender) {
+    const messagesContainer = document.getElementById('chatMessages');
+    const messageDiv = document.createElement('div');
+    const isUser = sender === 'user';
+    const persona = '{{ persona or "B" }}';
+    
+    messageDiv.className = `message ${isUser ? 'user-message' : 'bot-message'}`;
+    messageDiv.innerHTML = `
+        <div class="message-avatar">${isUser ? '{{ current_user.name[0].upper() if current_user.name else "U" }}' : persona[0]}</div>
+        <div class="message-content">
+            <p>${text}</p>
+            <span class="message-time">Just now</span>
+        </div>
+    `;
+    
+    messagesContainer.appendChild(messageDiv);
+    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+}
+
+function clearChat() {
+    if (confirm('Are you sure you want to clear the chat history?')) {
+        const messagesContainer = document.getElementById('chatMessages');
+        messagesContainer.innerHTML = `
+            <div class="welcome-message">
+                <div class="message bot-message">
+                    <div class="message-avatar">{{ persona[0] if persona else 'B' }}</div>
+                    <div class="message-content">
+                        <p>Hello! I'm {{ persona or 'Bella' }}, your AI companion. How can I help you today?</p>
+                        <span class="message-time">Just now</span>
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+}
+
+function startVoiceCall() {
+    // Legacy alias (kept for backward compatibility)
+    startVoiceChat();
+}
+
+function startVoiceChat() {
+    alert('Voice chat feature coming soon!');
+}
+
+function toggleVoiceInput() {
+    alert('Voice input feature coming soon!');
+}
+
+// Persona and mode selection
+document.addEventListener('DOMContentLoaded', function() {
+    // Persona selection
+    document.querySelectorAll('.persona-option').forEach(option => {
+        option.addEventListener('click', function() {
+            document.querySelectorAll('.persona-option').forEach(o => o.classList.remove('active'));
+            this.classList.add('active');
+            
+            const persona = this.dataset.persona;
+            // Update current persona display
+            // In a real app, this would update the backend
+        });
+    });
+    
+    // Mode selection
+    document.querySelectorAll('.mode-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            
+            const mode = this.dataset.mode;
+            // In a real app, this would update the conversation mode
+        });
+    });
+});
+</script>
+{% endblock %}

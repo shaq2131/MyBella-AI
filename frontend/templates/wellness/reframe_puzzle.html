@@ -1,0 +1,475 @@
+{% extends "base.html" %}
+
+{% block title %}Reframe Puzzle - MyBella{% endblock %}
+
+{% block content %}
+<div class="reframe-container">
+    <div class="reframe-header">
+        <h1> Reframe Puzzle</h1>
+        <p class="subtitle">Turn negative thoughts into balanced perspectives</p>
+        <div class="stats-bar">
+            <div class="stat-item">
+                <span class="stat-label">Points:</span>
+                <span id="total-points" class="stat-value">0</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">Completed:</span>
+                <span id="completed-count" class="stat-value">0</span>
+            </div>
+        </div>
+    </div>
+
+    <div id="game-area" class="game-area">
+        <!-- Start Screen -->
+        <div id="start-screen" class="start-screen">
+            <div class="start-card">
+                <h2>Ready to Reframe?</h2>
+                <p>Practice identifying cognitive distortions and creating balanced thoughts.</p>
+                <ul class="game-instructions">
+                    <li>Read the negative thought presented</li>
+                    <li>Identify the cognitive distortion</li>
+                    <li>Reframe it into a balanced perspective</li>
+                    <li>Earn points based on quality (1-10)</li>
+                </ul>
+                <button id="start-btn" class="btn-primary">Start Puzzle</button>
+            </div>
+        </div>
+
+        <!-- Game Screen -->
+        <div id="game-screen" class="game-screen" style="display: none;">
+            <div class="puzzle-card">
+                <div class="thought-display">
+                    <label class="thought-label">Negative Thought:</label>
+                    <div id="negative-thought" class="thought-text"></div>
+                </div>
+
+                <div class="distortion-display">
+                    <label class="thought-label">Cognitive Distortion Detected:</label>
+                    <div id="distortion-type" class="distortion-badge"></div>
+                </div>
+
+                <div class="reframe-input-area">
+                    <label for="reframe-input" class="thought-label">Your Balanced Reframe:</label>
+                    <textarea 
+                        id="reframe-input" 
+                        class="reframe-textarea" 
+                        placeholder="Write a more balanced, realistic way to think about this situation..."
+                        rows="5"
+                    ></textarea>
+                    <div class="char-count">
+                        <span id="char-count">0</span> / 500 characters
+                    </div>
+                </div>
+
+                <div class="button-group">
+                    <button id="submit-reframe-btn" class="btn-primary">Submit Reframe</button>
+                    <button id="skip-btn" class="btn-secondary">Skip</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Results Screen -->
+        <div id="results-screen" class="results-screen" style="display: none;">
+            <div class="results-card">
+                <h2>Great Work!</h2>
+                
+                <div class="score-display">
+                    <div class="score-circle">
+                        <span id="score-value" class="score-number">0</span>
+                        <span class="score-label">/10</span>
+                    </div>
+                    <p id="score-message" class="score-message"></p>
+                </div>
+
+                <div class="feedback-section">
+                    <h3>AI Feedback:</h3>
+                    <div id="ai-feedback" class="feedback-text"></div>
+                </div>
+
+                <div class="alternatives-section">
+                    <h3>Alternative Reframes:</h3>
+                    <div id="alternative-reframes" class="alternatives-list"></div>
+                </div>
+
+                <div class="button-group">
+                    <button id="next-puzzle-btn" class="btn-primary">Next Puzzle</button>
+                    <button id="view-history-btn" class="btn-secondary">View History</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.reframe-container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+.reframe-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.reframe-header h1 {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+    color: var(--primary-color, #6C63FF);
+}
+
+.subtitle {
+    color: #666;
+    font-size: 1.1rem;
+}
+
+.stats-bar {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    margin-top: 1.5rem;
+    padding: 1rem;
+    background: #f8f9fa;
+    border-radius: 10px;
+}
+
+.stat-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.stat-label {
+    font-size: 0.9rem;
+    color: #666;
+}
+
+.stat-value {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--primary-color, #6C63FF);
+}
+
+.start-card, .puzzle-card, .results-card {
+    background: white;
+    border-radius: 15px;
+    padding: 2rem;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.start-card {
+    text-align: center;
+}
+
+.start-card h2 {
+    color: var(--primary-color, #6C63FF);
+    margin-bottom: 1rem;
+}
+
+.game-instructions {
+    text-align: left;
+    max-width: 500px;
+    margin: 2rem auto;
+    list-style: none;
+    padding: 0;
+}
+
+.game-instructions li {
+    padding: 0.8rem;
+    margin-bottom: 0.5rem;
+    background: #f8f9fa;
+    border-radius: 8px;
+}
+
+.thought-display, .distortion-display, .reframe-input-area {
+    margin-bottom: 1.5rem;
+}
+
+.thought-label {
+    display: block;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 0.5rem;
+}
+
+.thought-text {
+    padding: 1.5rem;
+    background: #fff3cd;
+    border-left: 4px solid #ffc107;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    line-height: 1.6;
+}
+
+.distortion-badge {
+    display: inline-block;
+    padding: 0.8rem 1.5rem;
+    background: #e3f2fd;
+    color: #1976d2;
+    border-radius: 20px;
+    font-weight: 600;
+}
+
+.reframe-textarea {
+    width: 100%;
+    padding: 1rem;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-family: inherit;
+    resize: vertical;
+    transition: border-color 0.3s;
+}
+
+.reframe-textarea:focus {
+    outline: none;
+    border-color: var(--primary-color, #6C63FF);
+}
+
+.char-count {
+    text-align: right;
+    font-size: 0.9rem;
+    color: #666;
+    margin-top: 0.5rem;
+}
+
+.button-group {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-top: 2rem;
+}
+
+.btn-primary, .btn-secondary {
+    padding: 1rem 2rem;
+    font-size: 1rem;
+    font-weight: 600;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.btn-primary {
+    background: var(--primary-color, #6C63FF);
+    color: white;
+}
+
+.btn-primary:hover {
+    background: #5a52d5;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(108,99,255,0.3);
+}
+
+.btn-secondary {
+    background: #e0e0e0;
+    color: #333;
+}
+
+.btn-secondary:hover {
+    background: #d0d0d0;
+}
+
+.score-display {
+    text-align: center;
+    margin: 2rem 0;
+}
+
+.score-circle {
+    display: inline-flex;
+    align-items: baseline;
+    justify-content: center;
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    margin-bottom: 1rem;
+}
+
+.score-number {
+    font-size: 3rem;
+    font-weight: bold;
+}
+
+.score-label {
+    font-size: 1.5rem;
+    margin-left: 0.2rem;
+}
+
+.score-message {
+    font-size: 1.2rem;
+    color: #666;
+    margin-top: 1rem;
+}
+
+.feedback-section, .alternatives-section {
+    margin-top: 2rem;
+}
+
+.feedback-section h3, .alternatives-section h3 {
+    color: var(--primary-color, #6C63FF);
+    margin-bottom: 1rem;
+}
+
+.feedback-text {
+    padding: 1.5rem;
+    background: #f8f9fa;
+    border-radius: 8px;
+    line-height: 1.8;
+}
+
+.alternatives-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.alternative-item {
+    padding: 1rem;
+    background: #e8f5e9;
+    border-left: 4px solid #4caf50;
+    border-radius: 8px;
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const startScreen = document.getElementById('start-screen');
+    const gameScreen = document.getElementById('game-screen');
+    const resultsScreen = document.getElementById('results-screen');
+    
+    const startBtn = document.getElementById('start-btn');
+    const submitBtn = document.getElementById('submit-reframe-btn');
+    const skipBtn = document.getElementById('skip-btn');
+    const nextPuzzleBtn = document.getElementById('next-puzzle-btn');
+    
+    const reframeInput = document.getElementById('reframe-input');
+    const charCount = document.getElementById('char-count');
+    
+    let currentPuzzleId = null;
+    let totalPoints = 0;
+    let completedCount = 0;
+
+    // Character counter
+    reframeInput.addEventListener('input', function() {
+        const length = this.value.length;
+        charCount.textContent = length;
+        if (length > 500) {
+            this.value = this.value.substring(0, 500);
+            charCount.textContent = 500;
+        }
+    });
+
+    // Start new puzzle
+    startBtn.addEventListener('click', startNewPuzzle);
+    nextPuzzleBtn.addEventListener('click', startNewPuzzle);
+    skipBtn.addEventListener('click', startNewPuzzle);
+
+    async function startNewPuzzle() {
+        try {
+            const response = await fetch('/wellness/games/reframe/start', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' }
+            });
+
+            if (!response.ok) throw new Error('Failed to start puzzle');
+
+            const data = await response.json();
+            currentPuzzleId = data.id;
+
+            document.getElementById('negative-thought').textContent = data.negative_thought;
+            document.getElementById('distortion-type').textContent = formatDistortion(data.cognitive_distortion);
+            
+            reframeInput.value = '';
+            charCount.textContent = '0';
+
+            showScreen(gameScreen);
+        } catch (error) {
+            console.error('Error starting puzzle:', error);
+            alert('Failed to start puzzle. Please try again.');
+        }
+    }
+
+    // Submit reframe
+    submitBtn.addEventListener('click', async function() {
+        const reframe = reframeInput.value.trim();
+        
+        if (!reframe) {
+            alert('Please write a reframe before submitting.');
+            return;
+        }
+
+        if (reframe.length < 20) {
+            alert('Please write a more detailed reframe (at least 20 characters).');
+            return;
+        }
+
+        try {
+            const response = await fetch('/wellness/games/reframe/submit', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    reframe_id: currentPuzzleId,
+                    user_reframe: reframe
+                })
+            });
+
+            if (!response.ok) throw new Error('Failed to submit reframe');
+
+            const result = await response.json();
+            displayResults(result);
+        } catch (error) {
+            console.error('Error submitting reframe:', error);
+            alert('Failed to submit reframe. Please try again.');
+        }
+    });
+
+    function displayResults(result) {
+        document.getElementById('score-value').textContent = result.quality_score;
+        document.getElementById('score-message').textContent = getScoreMessage(result.quality_score);
+        document.getElementById('ai-feedback').textContent = result.ai_feedback;
+
+        const alternativesList = document.getElementById('alternative-reframes');
+        alternativesList.innerHTML = '';
+        result.alternatives.forEach(alt => {
+            const div = document.createElement('div');
+            div.className = 'alternative-item';
+            div.textContent = alt;
+            alternativesList.appendChild(div);
+        });
+
+        totalPoints += result.total_points;
+        completedCount++;
+        document.getElementById('total-points').textContent = totalPoints;
+        document.getElementById('completed-count').textContent = completedCount;
+
+        showScreen(resultsScreen);
+    }
+
+    function showScreen(screen) {
+        startScreen.style.display = 'none';
+        gameScreen.style.display = 'none';
+        resultsScreen.style.display = 'none';
+        screen.style.display = 'block';
+    }
+
+    function formatDistortion(distortion) {
+        return distortion.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+    }
+
+    function getScoreMessage(score) {
+        if (score >= 9) return "Outstanding reframe! You're mastering this!";
+        if (score >= 7) return "Great work! That's a solid reframe!";
+        if (score >= 5) return "Good effort! Keep practicing!";
+        if (score >= 3) return "Not bad! Try to be more specific next time.";
+        return "Keep trying! Every attempt helps you grow. ";
+    }
+
+    // View history button
+    document.getElementById('view-history-btn').addEventListener('click', function() {
+        window.location.href = '/wellness/history';
+    });
+});
+</script>
+{% endblock %}

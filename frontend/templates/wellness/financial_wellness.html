@@ -1,0 +1,845 @@
+{% extends "base.html" %}
+
+{% block title %}Financial Wellness - MyBella{% endblock %}
+
+{% block extra_css %}
+<style>
+.finance-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: var(--spacing-lg);
+}
+
+.finance-header {
+    text-align: center;
+    margin-bottom: var(--spacing-xl);
+    background: linear-gradient(135deg, #96fbc4 0%, #f9f047 100%);
+    color: #2d3748;
+    padding: var(--spacing-xl);
+    border-radius: var(--radius-lg);
+}
+
+.wellness-score {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: var(--spacing-lg) 0;
+}
+
+.score-circle {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background: conic-gradient(#4CAF50 0deg 270deg, #e0e0e0 270deg 360deg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.score-inner {
+    width: 90px;
+    height: 90px;
+    background: white;
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.score-value {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #4CAF50;
+}
+
+.score-label {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+
+.finance-overview {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: var(--spacing-lg);
+    margin-bottom: var(--spacing-xl);
+}
+
+.overview-card {
+    background: var(--surface-color);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-lg);
+    border: 1px solid var(--border-color);
+    text-align: center;
+}
+
+.card-icon {
+    font-size: 2.5rem;
+    margin-bottom: var(--spacing-md);
+}
+
+.card-value {
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin-bottom: var(--spacing-sm);
+}
+
+.card-label {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
+
+.income-card .card-value { color: #4CAF50; }
+.expense-card .card-value { color: #f44336; }
+.savings-card .card-value { color: #2196F3; }
+.budget-card .card-value { color: #FF9800; }
+
+.quick-entry {
+    background: var(--surface-color);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-xl);
+    border: 1px solid var(--border-color);
+    margin-bottom: var(--spacing-xl);
+}
+
+.entry-tabs {
+    display: flex;
+    border-bottom: 2px solid var(--border-color);
+    margin-bottom: var(--spacing-lg);
+}
+
+.tab-btn {
+    flex: 1;
+    padding: var(--spacing-md);
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+    color: var(--text-secondary);
+    transition: all 0.3s ease;
+}
+
+.tab-btn.active {
+    color: var(--primary);
+    border-bottom: 2px solid var(--primary);
+}
+
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+.entry-form {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr auto;
+    gap: var(--spacing-md);
+    align-items: end;
+}
+
+.quick-categories {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: var(--spacing-sm);
+    margin: var(--spacing-md) 0;
+}
+
+.category-chip {
+    background: var(--background-color);
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: var(--spacing-sm);
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 0.9rem;
+}
+
+.category-chip:hover,
+.category-chip.selected {
+    border-color: var(--primary);
+    background: var(--primary-light);
+}
+
+.mood-correlation {
+    background: var(--surface-color);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-xl);
+    border: 1px solid var(--border-color);
+    margin-bottom: var(--spacing-xl);
+}
+
+.correlation-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--spacing-lg);
+}
+
+.correlation-chart {
+    height: 200px;
+    background: var(--background-color);
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-muted);
+    font-style: italic;
+}
+
+.correlation-insights {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+}
+
+.insight-item {
+    background: var(--background-color);
+    padding: var(--spacing-md);
+    border-radius: var(--radius-md);
+    border-left: 4px solid var(--primary);
+}
+
+.insight-title {
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: var(--spacing-xs);
+}
+
+.insight-description {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+
+.transactions-list {
+    background: var(--surface-color);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-xl);
+    border: 1px solid var(--border-color);
+    margin-bottom: var(--spacing-xl);
+}
+
+.transactions-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--spacing-lg);
+}
+
+.transaction-filters {
+    display: flex;
+    gap: var(--spacing-sm);
+}
+
+.filter-select {
+    padding: var(--spacing-sm) var(--spacing-md);
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius-md);
+    background: var(--background-color);
+    color: var(--text-primary);
+}
+
+.transaction-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--spacing-md);
+    border-bottom: 1px solid var(--border-light);
+    transition: background 0.3s ease;
+}
+
+.transaction-item:hover {
+    background: var(--background-color);
+}
+
+.transaction-item:last-child {
+    border-bottom: none;
+}
+
+.transaction-info {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+}
+
+.transaction-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+}
+
+.income-icon { background: #e8f5e9; color: #4CAF50; }
+.expense-icon { background: #ffebee; color: #f44336; }
+
+.transaction-details h4 {
+    margin: 0 0 var(--spacing-xs) 0;
+    color: var(--text-primary);
+}
+
+.transaction-meta {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+
+.transaction-amount {
+    font-weight: 700;
+    font-size: 1.1rem;
+}
+
+.income-amount { color: #4CAF50; }
+.expense-amount { color: #f44336; }
+
+.goals-section {
+    background: var(--surface-color);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-xl);
+    border: 1px solid var(--border-color);
+}
+
+.goals-grid {
+    display: grid;
+    gap: var(--spacing-lg);
+}
+
+.goal-item {
+    background: var(--background-color);
+    padding: var(--spacing-lg);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-light);
+}
+
+.goal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--spacing-md);
+}
+
+.goal-title {
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.goal-target {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+
+.progress-bar {
+    background: var(--border-color);
+    border-radius: var(--radius-full);
+    height: 8px;
+    overflow: hidden;
+    margin-bottom: var(--spacing-sm);
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--primary), var(--accent));
+    border-radius: var(--radius-full);
+    transition: width 0.3s ease;
+}
+
+.progress-text {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+
+@media (max-width: 768px) {
+    .finance-container {
+        padding: var(--spacing-md);
+    }
+    
+    .entry-form {
+        grid-template-columns: 1fr;
+        gap: var(--spacing-md);
+    }
+    
+    .correlation-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .finance-overview {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="finance-container">
+    <!-- Header -->
+    <div class="finance-header">
+        <h1> Financial Wellness</h1>
+        <p>Track your spending, understand your money habits, and improve your financial health</p>
+        
+        <div class="wellness-score">
+            <div class="score-circle">
+                <div class="score-inner">
+                    <div class="score-value">{{ financial_score or 78 }}</div>
+                    <div class="score-label">Wellness Score</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Financial Overview -->
+    <div class="finance-overview">
+        <div class="overview-card income-card">
+            <div class="card-icon"></div>
+            <div class="card-value">${{ monthly_income or '4,200' }}</div>
+            <div class="card-label">Monthly Income</div>
+        </div>
+        
+        <div class="overview-card expense-card">
+            <div class="card-icon"></div>
+            <div class="card-value">${{ monthly_expenses or '3,150' }}</div>
+            <div class="card-label">Monthly Expenses</div>
+        </div>
+        
+        <div class="overview-card savings-card">
+            <div class="card-icon"></div>
+            <div class="card-value">${{ total_savings or '15,800' }}</div>
+            <div class="card-label">Total Savings</div>
+        </div>
+        
+        <div class="overview-card budget-card">
+            <div class="card-icon"></div>
+            <div class="card-value">{{ budget_progress or 75 }}%</div>
+            <div class="card-label">Budget Progress</div>
+        </div>
+    </div>
+
+    <!-- Quick Entry -->
+    <div class="quick-entry">
+        <h2> Quick Entry</h2>
+        
+        <div class="entry-tabs">
+            <button class="tab-btn active" onclick="switchTab('expense')"> Expense</button>
+            <button class="tab-btn" onclick="switchTab('income')"> Income</button>
+            <button class="tab-btn" onclick="switchTab('savings')"> Savings</button>
+        </div>
+        
+        <!-- Expense Tab -->
+        <div id="expense-tab" class="tab-content active">
+            <form id="expense-form" class="entry-form">
+                <div class="form-group">
+                    <label class="form-label">Amount ($)</label>
+                    <input type="number" id="expense-amount" step="0.01" placeholder="0.00" class="form-input" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Description</label>
+                    <input type="text" id="expense-description" placeholder="What did you buy?" class="form-input" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Category</label>
+                    <select id="expense-category" class="form-select" required>
+                        <option value="">Select category</option>
+                        <option value="food"> Food & Dining</option>
+                        <option value="transport"> Transportation</option>
+                        <option value="shopping"> Shopping</option>
+                        <option value="entertainment"> Entertainment</option>
+                        <option value="health"> Health & Fitness</option>
+                        <option value="utilities"> Utilities</option>
+                        <option value="rent"> Rent/Housing</option>
+                        <option value="other"> Other</option>
+                    </select>
+                </div>
+                
+                <button type="submit" class="btn btn-primary"> Add Expense</button>
+            </form>
+            
+            <div class="quick-categories">
+                <div class="category-chip" onclick="quickExpense(5.50, 'Coffee', 'food')"> Coffee - $5.50</div>
+                <div class="category-chip" onclick="quickExpense(12.00, 'Lunch', 'food')"> Lunch - $12</div>
+                <div class="category-chip" onclick="quickExpense(3.50, 'Bus fare', 'transport')"> Bus - $3.50</div>
+                <div class="category-chip" onclick="quickExpense(15.00, 'Movie ticket', 'entertainment')"> Movie - $15</div>
+            </div>
+        </div>
+        
+        <!-- Income Tab -->
+        <div id="income-tab" class="tab-content">
+            <form id="income-form" class="entry-form">
+                <div class="form-group">
+                    <label class="form-label">Amount ($)</label>
+                    <input type="number" id="income-amount" step="0.01" placeholder="0.00" class="form-input" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Source</label>
+                    <input type="text" id="income-source" placeholder="Salary, freelance, etc." class="form-input" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Type</label>
+                    <select id="income-type" class="form-select" required>
+                        <option value="">Select type</option>
+                        <option value="salary"> Salary</option>
+                        <option value="freelance"> Freelance</option>
+                        <option value="investment"> Investment</option>
+                        <option value="bonus"> Bonus</option>
+                        <option value="other"> Other</option>
+                    </select>
+                </div>
+                
+                <button type="submit" class="btn btn-primary"> Add Income</button>
+            </form>
+        </div>
+        
+        <!-- Savings Tab -->
+        <div id="savings-tab" class="tab-content">
+            <form id="savings-form" class="entry-form">
+                <div class="form-group">
+                    <label class="form-label">Amount ($)</label>
+                    <input type="number" id="savings-amount" step="0.01" placeholder="0.00" class="form-input" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Goal</label>
+                    <input type="text" id="savings-goal" placeholder="Emergency fund, vacation, etc." class="form-input" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Account Type</label>
+                    <select id="savings-account" class="form-select" required>
+                        <option value="">Select account</option>
+                        <option value="emergency"> Emergency Fund</option>
+                        <option value="vacation"> Vacation</option>
+                        <option value="retirement"> Retirement</option>
+                        <option value="investment"> Investment</option>
+                        <option value="other"> Other</option>
+                    </select>
+                </div>
+                
+                <button type="submit" class="btn btn-primary"> Add to Savings</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Mood & Money Correlation -->
+    <div class="mood-correlation">
+        <h2> Mood & Money Connection</h2>
+        <div class="correlation-grid">
+            <div class="correlation-chart">
+                 Mood vs Spending Chart (Coming Soon)
+            </div>
+            
+            <div class="correlation-insights">
+                <div class="insight-item">
+                    <div class="insight-title"> Spending Pattern</div>
+                    <div class="insight-description">You tend to spend 23% more when your mood is below 5/10</div>
+                </div>
+                
+                <div class="insight-item">
+                    <div class="insight-title"> Best Shopping Days</div>
+                    <div class="insight-description">Your most thoughtful purchases happen on Tuesdays and Saturdays</div>
+                </div>
+                
+                <div class="insight-item">
+                    <div class="insight-title"> Emotional Triggers</div>
+                    <div class="insight-description">Stress-related spending peaks during work week evenings</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Transactions -->
+    <div class="transactions-list">
+        <div class="transactions-header">
+            <h2> Recent Transactions</h2>
+            <div class="transaction-filters">
+                <select class="filter-select" onchange="filterTransactions(this.value)">
+                    <option value="all">All</option>
+                    <option value="income">Income</option>
+                    <option value="expense">Expenses</option>
+                    <option value="savings">Savings</option>
+                </select>
+                
+                <select class="filter-select" onchange="filterByPeriod(this.value)">
+                    <option value="week">This Week</option>
+                    <option value="month">This Month</option>
+                    <option value="3months">3 Months</option>
+                </select>
+            </div>
+        </div>
+        
+        <div id="transactions-container">
+            <!-- Sample transactions - will be populated dynamically -->
+            <div class="transaction-item">
+                <div class="transaction-info">
+                    <div class="transaction-icon income-icon"></div>
+                    <div class="transaction-details">
+                        <h4>Salary Payment</h4>
+                        <div class="transaction-meta">Today, 9:00 AM - Employer</div>
+                    </div>
+                </div>
+                <div class="transaction-amount income-amount">+$3,500.00</div>
+            </div>
+            
+            <div class="transaction-item">
+                <div class="transaction-info">
+                    <div class="transaction-icon expense-icon"></div>
+                    <div class="transaction-details">
+                        <h4>Grocery Shopping</h4>
+                        <div class="transaction-meta">Yesterday, 6:30 PM - Food & Dining</div>
+                    </div>
+                </div>
+                <div class="transaction-amount expense-amount">-$87.23</div>
+            </div>
+            
+            <div class="transaction-item">
+                <div class="transaction-info">
+                    <div class="transaction-icon expense-icon"></div>
+                    <div class="transaction-details">
+                        <h4>Gas Station</h4>
+                        <div class="transaction-meta">2 days ago, 8:15 AM - Transportation</div>
+                    </div>
+                </div>
+                <div class="transaction-amount expense-amount">-$45.00</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Financial Goals -->
+    <div class="goals-section">
+        <h2> Financial Goals</h2>
+        <div class="goals-grid">
+            <div class="goal-item">
+                <div class="goal-header">
+                    <div class="goal-title"> Emergency Fund</div>
+                    <div class="goal-target">Target: $10,000</div>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 65%"></div>
+                </div>
+                <div class="progress-text">
+                    <span>$6,500 saved</span>
+                    <span>$3,500 to go</span>
+                </div>
+            </div>
+            
+            <div class="goal-item">
+                <div class="goal-header">
+                    <div class="goal-title"> Vacation Fund</div>
+                    <div class="goal-target">Target: $3,000</div>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 40%"></div>
+                </div>
+                <div class="progress-text">
+                    <span>$1,200 saved</span>
+                    <span>$1,800 to go</span>
+                </div>
+            </div>
+            
+            <div class="goal-item">
+                <div class="goal-header">
+                    <div class="goal-title"> House Down Payment</div>
+                    <div class="goal-target">Target: $50,000</div>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 22%"></div>
+                </div>
+                <div class="progress-text">
+                    <span>$11,000 saved</span>
+                    <span>$39,000 to go</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function switchTab(tab) {
+    // Update tab buttons
+    document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+    event.target.classList.add('active');
+    
+    // Update tab content
+    document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+    document.getElementById(tab + '-tab').classList.add('active');
+}
+
+function quickExpense(amount, description, category) {
+    const expenseData = {
+        transaction_type: 'expense',
+        amount: amount,
+        description: description,
+        category: category
+    };
+    
+    submitTransaction(expenseData);
+}
+
+function submitTransaction(data) {
+    fetch('{{ url_for("wellness.log_transaction") }}', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data)
+    })
+    .then(response => response.json())
+    .then(result => {
+        if (result.success) {
+            alert(' Transaction logged successfully!');
+            loadTransactions();
+        } else {
+            alert(' Error logging transaction: ' + result.error);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert(' Failed to log transaction');
+    });
+}
+
+function filterTransactions(type) {
+    console.log('Filtering by type:', type);
+    loadTransactions(type);
+}
+
+function filterByPeriod(period) {
+    console.log('Filtering by period:', period);
+    loadTransactions(null, period);
+}
+
+function loadTransactions(type = null, period = null) {
+    let url = '{{ url_for("wellness.financial_transactions") }}';
+    let params = new URLSearchParams();
+    
+    if (type && type !== 'all') params.append('type', type);
+    if (period) params.append('period', period);
+    
+    if (params.toString()) {
+        url += '?' + params.toString();
+    }
+    
+    fetch(url)
+    .then(response => response.json())
+    .then(data => {
+        updateTransactionsList(data.transactions);
+    })
+    .catch(error => {
+        console.error('Error loading transactions:', error);
+    });
+}
+
+function updateTransactionsList(transactions) {
+    const container = document.getElementById('transactions-container');
+    container.innerHTML = '';
+    
+    transactions.forEach(transaction => {
+        const item = document.createElement('div');
+        item.className = 'transaction-item';
+        
+        const isIncome = transaction.transaction_type === 'income';
+        const iconClass = isIncome ? 'income-icon' : 'expense-icon';
+        const amountClass = isIncome ? 'income-amount' : 'expense-amount';
+        const sign = isIncome ? '+' : '-';
+        const icon = getCategoryIcon(transaction.category);
+        
+        item.innerHTML = `
+            <div class="transaction-info">
+                <div class="transaction-icon ${iconClass}">${icon}</div>
+                <div class="transaction-details">
+                    <h4>${transaction.description}</h4>
+                    <div class="transaction-meta">${formatDate(transaction.created_at)} - ${transaction.category}</div>
+                </div>
+            </div>
+            <div class="transaction-amount ${amountClass}">${sign}$${transaction.amount.toFixed(2)}</div>
+        `;
+        
+        container.appendChild(item);
+    });
+}
+
+function getCategoryIcon(category) {
+    const icons = {
+        'food': '',
+        'transport': '',
+        'shopping': '',
+        'entertainment': '',
+        'health': '',
+        'utilities': '',
+        'rent': '',
+        'salary': '',
+        'freelance': '',
+        'investment': '',
+        'emergency': '',
+        'vacation': '',
+        'retirement': ''
+    };
+    return icons[category] || '';
+}
+
+function formatDate(dateString) {
+    const date = new Date(dateString);
+    const now = new Date();
+    const diff = now.getTime() - date.getTime();
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    
+    if (days === 0) return 'Today, ' + date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+    if (days === 1) return 'Yesterday, ' + date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+    return date.toLocaleDateString();
+}
+
+// Form submissions
+document.getElementById('expense-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const data = {
+        transaction_type: 'expense',
+        amount: parseFloat(document.getElementById('expense-amount').value),
+        description: document.getElementById('expense-description').value,
+        category: document.getElementById('expense-category').value
+    };
+    
+    submitTransaction(data);
+    this.reset();
+});
+
+document.getElementById('income-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const data = {
+        transaction_type: 'income',
+        amount: parseFloat(document.getElementById('income-amount').value),
+        description: document.getElementById('income-source').value,
+        category: document.getElementById('income-type').value
+    };
+    
+    submitTransaction(data);
+    this.reset();
+});
+
+document.getElementById('savings-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const data = {
+        transaction_type: 'savings',
+        amount: parseFloat(document.getElementById('savings-amount').value),
+        description: document.getElementById('savings-goal').value,
+        category: document.getElementById('savings-account').value
+    };
+    
+    submitTransaction(data);
+    this.reset();
+});
+
+// Load initial data
+document.addEventListener('DOMContentLoaded', function() {
+    loadTransactions();
+});
+</script>
+{% endblock %}

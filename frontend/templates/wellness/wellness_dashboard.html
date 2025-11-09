@@ -1,0 +1,589 @@
+{% extends "base.html" %}
+
+{% block title %}Wellness Dashboard - MyBella{% endblock %}
+
+{% block extra_css %}
+<style>
+.wellness-dashboard {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: var(--spacing-lg);
+}
+
+.wellness-header {
+    text-align: center;
+    margin-bottom: var(--spacing-xl);
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: var(--spacing-xl);
+    border-radius: var(--radius-lg);
+}
+
+.wellness-header h1 {
+    margin: 0 0 var(--spacing-sm) 0;
+    font-size: 2.5rem;
+    font-weight: 700;
+}
+
+.wellness-subtitle {
+    font-size: 1.2rem;
+    opacity: 0.9;
+    margin: 0;
+}
+
+.wellness-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: var(--spacing-lg);
+    margin-bottom: var(--spacing-xl);
+}
+
+.wellness-card {
+    display: block;
+    background: var(--surface-color);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-lg);
+    border: 1px solid var(--border-color);
+    transition: all 0.3s ease;
+    text-decoration: none;
+    color: inherit;
+    cursor: pointer;
+}
+
+.wellness-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--primary);
+}
+
+.card-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: var(--spacing-md);
+}
+
+.card-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    margin-right: var(--spacing-md);
+}
+
+.mood-icon { background: linear-gradient(135deg, #ff9a9e, #fecfef); }
+.cbt-icon { background: linear-gradient(135deg, #a8edea, #fed6e3); }
+.goals-icon { background: linear-gradient(135deg, #fbc2eb, #a6c1ee); }
+.finance-icon { background: linear-gradient(135deg, #96fbc4, #f9f047); }
+.social-icon { background: linear-gradient(135deg, #ffecd2, #fcb69f); }
+.insights-icon { background: linear-gradient(135deg, #e0c3fc, #9bb5ff); }
+
+.card-title {
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin: 0;
+    color: var(--text-primary);
+}
+
+.card-description {
+    color: var(--text-secondary);
+    margin: var(--spacing-sm) 0;
+    font-size: 0.95rem;
+    line-height: 1.5;
+}
+
+.card-stats {
+    display: flex;
+    justify-content: space-between;
+    margin-top: var(--spacing-md);
+    padding-top: var(--spacing-md);
+    border-top: 1px solid var(--border-color);
+}
+
+.stat-item {
+    text-align: center;
+}
+
+.stat-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--primary);
+    margin: 0;
+}
+
+.stat-label {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    margin: 0;
+}
+
+.quick-actions {
+    background: var(--surface-color);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-lg);
+    border: 1px solid var(--border-color);
+    margin-bottom: var(--spacing-xl);
+}
+
+.quick-actions h3 {
+    margin: 0 0 var(--spacing-md) 0;
+    color: var(--text-primary);
+}
+
+.action-buttons {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: var(--spacing-md);
+}
+
+.action-btn {
+    padding: var(--spacing-md);
+    background: var(--background-color);
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius-md);
+    text-decoration: none;
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    transition: all 0.3s ease;
+    font-weight: 500;
+}
+
+.action-btn:hover {
+    border-color: var(--primary);
+    background: var(--primary-light);
+    color: var(--primary);
+    transform: translateY(-1px);
+}
+
+.recent-activity {
+    background: var(--surface-color);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-lg);
+    border: 1px solid var(--border-color);
+}
+
+.activity-item {
+    display: flex;
+    align-items: center;
+    padding: var(--spacing-md);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.activity-item:last-child {
+    border-bottom: none;
+}
+
+.activity-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: var(--spacing-md);
+    font-size: 1.2rem;
+}
+
+.activity-content {
+    flex: 1;
+}
+
+.activity-title {
+    font-weight: 600;
+    margin: 0 0 var(--spacing-xs) 0;
+    color: var(--text-primary);
+}
+
+.activity-description {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    margin: 0;
+}
+
+.activity-time {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+
+.wellness-summary {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: var(--spacing-lg);
+    margin-bottom: var(--spacing-xl);
+}
+
+.summary-chart {
+    background: var(--surface-color);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-lg);
+    border: 1px solid var(--border-color);
+}
+
+.chart-placeholder {
+    height: 300px;
+    background: var(--background-color);
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-muted);
+    font-style: italic;
+}
+
+.progress-rings {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+}
+
+.progress-ring {
+    background: var(--surface-color);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-md);
+    text-align: center;
+    border: 1px solid var(--border-color);
+}
+
+.ring-title {
+    font-weight: 600;
+    margin-bottom: var(--spacing-sm);
+    color: var(--text-primary);
+}
+
+.ring-value {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--primary);
+    margin-bottom: var(--spacing-xs);
+}
+
+.ring-description {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+
+@media (max-width: 768px) {
+    .wellness-dashboard {
+        padding: var(--spacing-md);
+    }
+    
+    .wellness-header h1 {
+        font-size: 2rem;
+    }
+    
+    .wellness-summary {
+        grid-template-columns: 1fr;
+    }
+    
+    .wellness-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .action-buttons {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="wellness-dashboard">
+    <!-- Header -->
+    <div class="wellness-header">
+    <h1>Your Wellness Journey</h1>
+        <p class="wellness-subtitle">Comprehensive mental health, financial wellness, and life management</p>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="quick-actions">
+    <h3>Quick Actions</h3>
+        <div class="action-buttons">
+            <a href="{{ url_for('wellness.log_mood') }}" class="action-btn">
+                <span>Mood</span>
+                Log Today's Mood
+            </a>
+            <a href="{{ url_for('wellness.cbt_dashboard') }}" class="action-btn">
+                <span>CBT</span>
+                Start CBT Session
+            </a>
+            <a href="#" class="action-btn" onclick="quickFinanceEntry()">
+                <span>Budget</span>
+                Log Expense
+            </a>
+            <a href="{{ url_for('wellness.goals_dashboard') }}" class="action-btn">
+                <span>Goals</span>
+                Update Goals
+            </a>
+        </div>
+    </div>
+
+    <!-- Wellness Summary -->
+    <div class="wellness-summary">
+        <div class="summary-chart">
+            <h3>Your Wellness Trends (Last 30 Days)</h3>
+            <div class="chart-placeholder">
+                Mood & Wellness Chart (Coming Soon)
+            </div>
+        </div>
+        
+        <div class="progress-rings">
+            <div class="progress-ring">
+                <div class="ring-title">Overall Wellness</div>
+                <div class="ring-value">{{ wellness_score or 75 }}%</div>
+                <div class="ring-description">Great progress!</div>
+            </div>
+            
+            <div class="progress-ring">
+                <div class="ring-title">Active Goals</div>
+                <div class="ring-value">{{ active_goals_count or 3 }}</div>
+                <div class="ring-description">Goals in progress</div>
+            </div>
+            
+            <div class="progress-ring">
+                <div class="ring-title">CBT Sessions</div>
+                <div class="ring-value">{{ cbt_sessions_count or 12 }}</div>
+                <div class="ring-description">This month</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Wellness Modules -->
+    <div class="wellness-grid">
+        <!-- Mood Tracking -->
+    <a class="wellness-card" href="{{ url_for('wellness.mood_dashboard') }}">
+            <div class="card-header">
+                <div class="card-icon mood-icon">Mood</div>
+                <h3 class="card-title">Mood Tracking</h3>
+            </div>
+            <p class="card-description">Track your daily emotions, energy levels, and identify patterns in your mental wellness journey.</p>
+            <div class="card-stats">
+                <div class="stat-item">
+                    <p class="stat-value">{{ current_mood or 7 }}</p>
+                    <p class="stat-label">Today's Mood</p>
+                </div>
+                <div class="stat-item">
+                    <p class="stat-value">{{ mood_streak or 15 }}</p>
+                    <p class="stat-label">Day Streak</p>
+                </div>
+                <div class="stat-item">
+                    <p class="stat-value">Trend</p>
+                    <p class="stat-label">Trend</p>
+                </div>
+            </div>
+        </a>
+
+        <!-- CBT Sessions -->
+    <a class="wellness-card" href="{{ url_for('wellness.cbt_dashboard') }}">
+            <div class="card-header">
+                <div class="card-icon cbt-icon">CBT</div>
+                <h3 class="card-title">CBT Therapy</h3>
+            </div>
+            <p class="card-description">Cognitive Behavioral Therapy sessions to identify negative thought patterns and develop healthy coping strategies.</p>
+            <div class="card-stats">
+                <div class="stat-item">
+                    <p class="stat-value">{{ cbt_completion_rate or 85 }}%</p>
+                    <p class="stat-label">Completion Rate</p>
+                </div>
+                <div class="stat-item">
+                    <p class="stat-value">+{{ mood_improvement or 1.2 }}</p>
+                    <p class="stat-label">Mood Boost</p>
+                </div>
+                <div class="stat-item">
+                    <p class="stat-value">{{ cbt_sessions or 8 }}</p>
+                    <p class="stat-label">Sessions</p>
+                </div>
+            </div>
+        </a>
+
+        <!-- Goals & Progress -->
+    <a class="wellness-card" href="{{ url_for('wellness.goals_dashboard') }}">
+            <div class="card-header">
+                <div class="card-icon goals-icon">Goals</div>
+                <h3 class="card-title">Goals & Progress</h3>
+            </div>
+            <p class="card-description">Set and track wellness goals across mental health, physical fitness, career, and personal development.</p>
+            <div class="card-stats">
+                <div class="stat-item">
+                    <p class="stat-value">{{ goals_completion or 67 }}%</p>
+                    <p class="stat-label">Completion</p>
+                </div>
+                <div class="stat-item">
+                    <p class="stat-value">{{ active_goals or 5 }}</p>
+                    <p class="stat-label">Active Goals</p>
+                </div>
+                <div class="stat-item">
+                    <p class="stat-value">{{ completed_goals or 12 }}</p>
+                    <p class="stat-label">Completed</p>
+                </div>
+            </div>
+        </a>
+
+        <!-- Financial Wellness -->
+    <a class="wellness-card" href="{{ url_for('wellness.finance_dashboard') }}">
+            <div class="card-header">
+                <div class="card-icon finance-icon"></div>
+                <h3 class="card-title">Financial Wellness</h3>
+            </div>
+            <p class="card-description">Track spending habits, emotional purchasing patterns, and receive personalized financial guidance.</p>
+            <div class="card-stats">
+                <div class="stat-item">
+                    <p class="stat-value">{{ financial_score or 78 }}</p>
+                    <p class="stat-label">Wellness Score</p>
+                </div>
+                <div class="stat-item">
+                    <p class="stat-value">{{ savings_rate or 15 }}%</p>
+                    <p class="stat-label">Savings Rate</p>
+                </div>
+                <div class="stat-item">
+                    <p class="stat-value">${{ monthly_budget or 2500 }}</p>
+                    <p class="stat-label">Monthly Budget</p>
+                </div>
+            </div>
+        </a>
+
+        <!-- Social Wellness -->
+    <a class="wellness-card" href="{{ url_for('wellness.social_dashboard') }}">
+            <div class="card-header">
+                <div class="card-icon social-icon">Social</div>
+                <h3 class="card-title">Social Wellness</h3>
+            </div>
+            <p class="card-description">Manage relationships, track social interactions, and strengthen your support network for better mental health.</p>
+            <div class="card-stats">
+                <div class="stat-item">
+                    <p class="stat-value">{{ social_connections or 24 }}</p>
+                    <p class="stat-label">Connections</p>
+                </div>
+                <div class="stat-item">
+                    <p class="stat-value">{{ social_interactions or 8 }}</p>
+                    <p class="stat-label">This Week</p>
+                </div>
+                <div class="stat-item">
+                    <p class="stat-value">{{ support_score or 8.5 }}</p>
+                    <p class="stat-label">Support Level</p>
+                </div>
+            </div>
+        </a>
+
+        <!-- Wellness Insights -->
+    <a class="wellness-card" href="{{ url_for('wellness.wellness_insights') }}">
+            <div class="card-header">
+                <div class="card-icon insights-icon">Insights</div>
+                <h3 class="card-title">AI Insights</h3>
+            </div>
+            <p class="card-description">Personalized recommendations and insights powered by AI analysis of your wellness patterns and behaviors.</p>
+            <div class="card-stats">
+                <div class="stat-item">
+                    <p class="stat-value">{{ new_insights or 3 }}</p>
+                    <p class="stat-label">New Insights</p>
+                </div>
+                <div class="stat-item">
+                    <p class="stat-value">{{ insights_accuracy or 94 }}%</p>
+                    <p class="stat-label">Accuracy</p>
+                </div>
+                <div class="stat-item">
+                    <p class="stat-value">{{ recommendations or 7 }}</p>
+                    <p class="stat-label">Tips Available</p>
+                </div>
+            </div>
+        </a>
+    </div>
+
+    <!-- Recent Activity -->
+    <div class="recent-activity">
+    <h3>Recent Activity</h3>
+        <div class="activity-item">
+            <div class="activity-icon mood-icon">Mood</div>
+            <div class="activity-content">
+                <p class="activity-title">Logged Daily Mood</p>
+                <p class="activity-description">Feeling good today with energy level 8/10</p>
+            </div>
+            <div class="activity-time">2 hours ago</div>
+        </div>
+        
+        <div class="activity-item">
+            <div class="activity-icon cbt-icon">CBT</div>
+            <div class="activity-content">
+                <p class="activity-title">Completed CBT Session</p>
+                <p class="activity-description">Worked on challenging negative thoughts</p>
+            </div>
+            <div class="activity-time">Yesterday</div>
+        </div>
+        
+        <div class="activity-item">
+            <div class="activity-icon goals-icon">Goals</div>
+            <div class="activity-content">
+                <p class="activity-title">Goal Progress Updated</p>
+                <p class="activity-description">Exercise goal: 4/5 days this week</p>
+            </div>
+            <div class="activity-time">2 days ago</div>
+        </div>
+        
+        <div class="activity-item">
+            <div class="activity-icon finance-icon">Budget</div>
+            <div class="activity-content">
+                <p class="activity-title">Financial Insight Generated</p>
+                <p class="activity-description">You're saving 12% more than last month!</p>
+            </div>
+            <div class="activity-time">3 days ago</div>
+        </div>
+    </div>
+</div>
+
+<script>
+function quickFinanceEntry() {
+    // Simple modal for quick expense logging
+    const amount = prompt("Enter expense amount ($):");
+    if (amount && !isNaN(amount)) {
+        const category = prompt("Enter category (food, transport, entertainment, etc.):");
+        if (category) {
+            logQuickExpense(parseFloat(amount), category);
+        }
+    }
+}
+
+function logQuickExpense(amount, category) {
+    fetch('{{ url_for("wellness.log_transaction") }}', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            transaction_type: 'expense',
+            amount: amount,
+            category: category,
+            description: 'Quick entry'
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert('Expense logged successfully!');
+        } else {
+            alert('Error logging expense: ' + data.error);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Failed to log expense');
+    });
+}
+
+// Load wellness summary data
+document.addEventListener('DOMContentLoaded', function() {
+    fetch('{{ url_for("wellness.wellness_summary_api") }}')
+    .then(response => response.json())
+    .then(data => {
+        console.log('Wellness summary:', data);
+        // Update dashboard with real data
+        // This would update the displayed values with actual data
+    })
+    .catch(error => {
+        console.error('Error loading wellness summary:', error);
+    });
+});
+</script>
+{% endblock %}

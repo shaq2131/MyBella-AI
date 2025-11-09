@@ -1,0 +1,358 @@
+{% extends "base.html" %}
+
+{% block title %}Crisis Hotlines - MyBella{% endblock %}
+
+{% block styles %}
+<style>
+    .hotlines-container {
+        max-width: 1000px;
+        margin: 40px auto;
+        padding: 20px;
+    }
+
+    .hotlines-header {
+        text-align: center;
+        margin-bottom: 40px;
+        padding: 40px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border-radius: 16px;
+        color: white;
+    }
+
+    .hotlines-header h1 {
+        font-size: 2.5rem;
+        margin-bottom: 15px;
+        color: white;
+    }
+
+    .hotlines-header p {
+        font-size: 1.2rem;
+        opacity: 0.95;
+        color: white;
+    }
+
+    .emergency-notice {
+        background: #ff3b30;
+        color: white;
+        padding: 25px;
+        border-radius: 12px;
+        margin-bottom: 30px;
+        text-align: center;
+        box-shadow: 0 4px 20px rgba(255, 59, 48, 0.3);
+    }
+
+    .emergency-notice h2 {
+        margin-bottom: 10px;
+        color: white;
+        font-size: 1.8rem;
+    }
+
+    .emergency-notice p {
+        font-size: 1.1rem;
+        margin-bottom: 15px;
+        color: white;
+    }
+
+    .emergency-btn {
+        display: inline-block;
+        background: white;
+        color: #ff3b30;
+        padding: 12px 30px;
+        border-radius: 25px;
+        text-decoration: none;
+        font-weight: 700;
+        font-size: 1.1rem;
+        transition: all 0.3s ease;
+        margin: 5px;
+    }
+
+    .emergency-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(255,255,255,0.3);
+        color: #ff3b30;
+        text-decoration: none;
+    }
+
+    .hotlines-grid {
+        display: grid;
+        gap: 25px;
+        margin-bottom: 40px;
+    }
+
+    .hotline-card {
+        background: white;
+        border-radius: 16px;
+        padding: 30px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        transition: all 0.3s ease;
+        border-left: 6px solid #667eea;
+    }
+
+    .hotline-card:hover {
+        transform: translateX(10px);
+        box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+    }
+
+    .hotline-card.priority {
+        border-left-color: #ff3b30;
+        background: linear-gradient(135deg, #fff5f5 0%, #ffffff 100%);
+    }
+
+    .hotline-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 20px;
+        flex-wrap: wrap;
+        gap: 15px;
+    }
+
+    .hotline-name {
+        font-size: 1.6rem;
+        font-weight: 700;
+        color: #2c3e50;
+        flex: 1;
+    }
+
+    .hotline-number-box {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 12px 25px;
+        border-radius: 12px;
+        font-size: 1.5rem;
+        font-weight: 900;
+        letter-spacing: 1px;
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+    }
+
+    .hotline-card.priority .hotline-number-box {
+        background: #ff3b30;
+    }
+
+    .hotline-description {
+        color: #555;
+        font-size: 1.1rem;
+        line-height: 1.7;
+        margin-bottom: 20px;
+    }
+
+    .hotline-meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        padding-top: 15px;
+        border-top: 2px solid #f0f0f0;
+    }
+
+    .meta-item {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        color: #7f8c8d;
+        font-size: 0.95rem;
+    }
+
+    .meta-icon {
+        font-size: 1.2rem;
+    }
+
+    .call-action {
+        margin-top: 15px;
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+    }
+
+    .call-btn {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 12px 25px;
+        border-radius: 25px;
+        text-decoration: none;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .call-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        color: white;
+        text-decoration: none;
+    }
+
+    .hotline-card.priority .call-btn {
+        background: #ff3b30;
+    }
+
+    .additional-resources {
+        background: white;
+        border-radius: 16px;
+        padding: 40px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    }
+
+    .additional-resources h2 {
+        color: #2c3e50;
+        font-size: 2rem;
+        margin-bottom: 25px;
+    }
+
+    .resource-list {
+        display: grid;
+        gap: 15px;
+    }
+
+    .resource-item {
+        padding: 20px;
+        background: #f8f4fb;
+        border-radius: 10px;
+        border-left: 4px solid #9b59b6;
+    }
+
+    .resource-item h3 {
+        color: #2c3e50;
+        margin-bottom: 8px;
+        font-size: 1.2rem;
+    }
+
+    .resource-item p {
+        color: #555;
+        margin: 0;
+        font-size: 0.95rem;
+    }
+
+    @media (max-width: 768px) {
+        .hotline-header {
+            flex-direction: column;
+        }
+        
+        .hotline-number-box {
+            font-size: 1.2rem;
+            padding: 10px 20px;
+        }
+        
+        .hotlines-header h1 {
+            font-size: 1.8rem;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="hotlines-container">
+    <!-- Header -->
+    <div class="hotlines-header">
+        <h1> Crisis Support Hotlines</h1>
+        <p>Free, confidential help available 24/7</p>
+    </div>
+
+    <!-- Emergency Notice -->
+    <div class="emergency-notice">
+        <h2> In Immediate Danger?</h2>
+        <p>If you or someone else is in immediate danger, call emergency services now.</p>
+        <a href="tel:911" class="emergency-btn"> Call 911</a>
+        <a href="{{ url_for('crisis.immediate_help') }}" class="emergency-btn"> Immediate Help Page</a>
+    </div>
+
+    <!-- Hotlines Grid -->
+    <div class="hotlines-grid">
+        {% for hotline in hotlines %}
+        <div class="hotline-card {% if loop.index <= 2 %}priority{% endif %}">
+            <div class="hotline-header">
+                <div class="hotline-name">{{ hotline.name }}</div>
+                <div class="hotline-number-box">{{ hotline.number }}</div>
+            </div>
+            
+            <div class="hotline-description">
+                {{ hotline.description }}
+            </div>
+            
+            <div class="hotline-meta">
+                <div class="meta-item">
+                    <span class="meta-icon"></span>
+                    <span>{{ hotline.availability }}</span>
+                </div>
+                <div class="meta-item">
+                    <span class="meta-icon"></span>
+                    <span>{{ hotline.languages }}</span>
+                </div>
+                <div class="meta-item">
+                    <span class="meta-icon"></span>
+                    <span>Confidential</span>
+                </div>
+            </div>
+
+            <div class="call-action">
+                {% if 'Text' in hotline.number %}
+                <a href="sms:741741&body=HOME" class="call-btn">
+                     Send Text Message
+                </a>
+                {% elif hotline.number == '988' %}
+                <a href="tel:988" class="call-btn">
+                     Call Now
+                </a>
+                {% else %}
+                <a href="tel:{{ hotline.number.replace('-', '').replace(' ', '') }}" class="call-btn">
+                     Call Now
+                </a>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Additional Resources -->
+    <div class="additional-resources">
+        <h2> Additional Resources</h2>
+        <div class="resource-list">
+            <div class="resource-item">
+                <h3> International Resources</h3>
+                <p>If you're outside the US, visit <a href="https://www.iasp.info/resources/Crisis_Centres/" target="_blank">IASP Crisis Centers</a> to find help in your country.</p>
+            </div>
+            
+            <div class="resource-item">
+                <h3> Substance Abuse Support</h3>
+                <p>SAMHSA National Helpline: 1-800-662-4357 (Free, confidential, 24/7 treatment referral)</p>
+            </div>
+            
+            <div class="resource-item">
+                <h3> Domestic Violence Support</h3>
+                <p>National Domestic Violence Hotline: 1-800-799-7233 (24/7 support for domestic violence situations)</p>
+            </div>
+            
+            <div class="resource-item">
+                <h3> Veterans Support</h3>
+                <p>Veterans Crisis Line: 1-800-273-8255 (Press 1) or text 838255 (24/7 support for veterans)</p>
+            </div>
+            
+            <div class="resource-item">
+                <h3> LGBTQ+ Support</h3>
+                <p>The Trevor Project: 1-866-488-7386 or text START to 678678 (24/7 crisis support for LGBTQ+ youth)</p>
+            </div>
+            
+            <div class="resource-item">
+                <h3> Mental Health Support</h3>
+                <p>NAMI Helpline: 1-800-950-6264 (Information and support for mental health conditions, M-F 10am-10pm ET)</p>
+            </div>
+        </div>
+
+        <div style="text-align: center; margin-top: 40px; padding: 30px; background: #f8f4fb; border-radius: 12px;">
+            <p style="font-size: 1.2rem; color: #2c3e50; margin-bottom: 15px;">
+                <strong>Remember: Asking for help is a sign of strength, not weakness.</strong>
+            </p>
+            <p style="color: #7f8c8d;">
+                All hotlines listed are free, confidential, and staffed by trained professionals who care about you.
+            </p>
+            
+            {% if current_user.is_authenticated %}
+            <a href="{{ url_for('user_views.dashboard') }}" style="display: inline-block; margin-top: 20px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 12px 30px; border-radius: 25px; text-decoration: none; font-weight: 600;">
+                Return to Dashboard
+            </a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

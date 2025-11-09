@@ -1,0 +1,343 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Dashboard - MyBella{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="admin-container">
+    <!-- Header Section -->
+    <div class="admin-header">
+        <h1> Admin Dashboard</h1>
+        <div class="admin-stats-summary">
+            <div class="stat-card">
+                <div class="stat-icon"></div>
+                <div class="stat-info">
+                    <span class="stat-number" id="totalUsers">Loading...</span>
+                    <span class="stat-label">Total Users</span>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon"></div>
+                <div class="stat-info">
+                    <span class="stat-number" id="monthlyRevenue">Loading...</span>
+                    <span class="stat-label">Monthly Revenue</span>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon"></div>
+                <div class="stat-info">
+                    <span class="stat-number" id="totalPersonas">Loading...</span>
+                    <span class="stat-label">Active Personas</span>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon"></div>
+                <div class="stat-info">
+                    <span class="stat-number" id="apiUsage">Loading...</span>
+                    <span class="stat-label">API Calls Today</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation Tabs -->
+    <div class="admin-tabs">
+        <button class="tab-btn active" data-tab="analytics"> Analytics</button>
+        <button class="tab-btn" data-tab="personas"> Personas</button>
+        <button class="tab-btn" data-tab="system"> System</button>
+    </div>
+
+    <!-- Analytics Tab -->
+    <div class="tab-content active" id="analytics-tab">
+        <div class="analytics-grid">
+            <!-- User Analytics -->
+            <div class="analytics-card">
+                <h3> User Analytics</h3>
+                <div class="analytics-filters">
+                    <select id="userTimeFilter">
+                        <option value="day">Daily</option>
+                        <option value="week">Weekly</option>
+                        <option value="month" selected>Monthly</option>
+                        <option value="year">Annual</option>
+                    </select>
+                </div>
+                <div class="user-stats">
+                    <div class="stat-row">
+                        <span>Active Users:</span>
+                        <span id="activeUsers" class="stat-value">-</span>
+                    </div>
+                    <div class="stat-row">
+                        <span>Inactive Users:</span>
+                        <span id="inactiveUsers" class="stat-value">-</span>
+                    </div>
+                    <div class="stat-row">
+                        <span>New Registrations:</span>
+                        <span id="newRegistrations" class="stat-value">-</span>
+                    </div>
+                    <div class="stat-row">
+                        <span>Churn Rate:</span>
+                        <span id="churnRate" class="stat-value">-</span>
+                    </div>
+                </div>
+                <canvas id="userChart" width="400" height="200"></canvas>
+            </div>
+
+            <!-- Revenue Analytics -->
+            <div class="analytics-card">
+                <h3> Revenue Analytics</h3>
+                <div class="analytics-filters">
+                    <select id="revenueTimeFilter">
+                        <option value="day">Daily</option>
+                        <option value="week">Weekly</option>
+                        <option value="month" selected>Monthly</option>
+                        <option value="year">Annual</option>
+                    </select>
+                </div>
+                <div class="revenue-stats">
+                    <div class="stat-row">
+                        <span>Total Revenue:</span>
+                        <span id="totalRevenue" class="stat-value">-</span>
+                    </div>
+                    <div class="stat-row">
+                        <span>Average per User:</span>
+                        <span id="avgRevenue" class="stat-value">-</span>
+                    </div>
+                    <div class="stat-row">
+                        <span>Growth Rate:</span>
+                        <span id="growthRate" class="stat-value">-</span>
+                    </div>
+                    <div class="stat-row">
+                        <span>Subscription Revenue:</span>
+                        <span id="subscriptionRevenue" class="stat-value">-</span>
+                    </div>
+                </div>
+                <canvas id="revenueChart" width="400" height="200"></canvas>
+            </div>
+
+            <!-- API Usage Analytics -->
+            <div class="analytics-card">
+                <h3> API Usage</h3>
+                <div class="api-stats">
+                    <div class="stat-row">
+                        <span>Chat API Calls:</span>
+                        <span id="chatApiCalls" class="stat-value">-</span>
+                    </div>
+                    <div class="stat-row">
+                        <span>Voice API Calls:</span>
+                        <span id="voiceApiCalls" class="stat-value">-</span>
+                    </div>
+                    <div class="stat-row">
+                        <span>11Labs Usage:</span>
+                        <span id="elevenLabsUsage" class="stat-value">-</span>
+                    </div>
+                    <div class="stat-row">
+                        <span>Firebase Calls:</span>
+                        <span id="firebaseCalls" class="stat-value">-</span>
+                    </div>
+                    <div class="stat-row">
+                        <span>Average Response Time:</span>
+                        <span id="avgResponseTime" class="stat-value">-</span>
+                    </div>
+                </div>
+                <canvas id="apiChart" width="400" height="200"></canvas>
+            </div>
+
+            <!-- System Performance -->
+            <div class="analytics-card">
+                <h3> System Performance</h3>
+                <div class="performance-stats">
+                    <div class="stat-row">
+                        <span>Server Uptime:</span>
+                        <span id="serverUptime" class="stat-value">-</span>
+                    </div>
+                    <div class="stat-row">
+                        <span>Database Load:</span>
+                        <span id="dbLoad" class="stat-value">-</span>
+                    </div>
+                    <div class="stat-row">
+                        <span>Memory Usage:</span>
+                        <span id="memoryUsage" class="stat-value">-</span>
+                    </div>
+                    <div class="stat-row">
+                        <span>Active Connections:</span>
+                        <span id="activeConnections" class="stat-value">-</span>
+                    </div>
+                </div>
+                <div class="reload-section">
+                    <button class="btn btn-primary" id="reloadMetrics"> Reload Metrics</button>
+                    <span id="lastReload" class="last-reload">Last updated: Never</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Personas Management Tab -->
+    <div class="tab-content" id="personas-tab">
+        <div class="personas-header">
+            <h3> Persona Management</h3>
+            <button class="btn btn-primary" id="createPersonaBtn"> Create New Persona</button>
+        </div>
+
+        <div class="personas-grid" id="personasGrid">
+            <!-- Personas will be loaded here dynamically -->
+        </div>
+    </div>
+
+    <!-- System Tab -->
+    <div class="tab-content" id="system-tab">
+        <div class="system-grid">
+            <div class="system-card">
+                <h3> System Settings</h3>
+                <div class="system-controls">
+                    <div class="control-group">
+                        <label>API Rate Limit (per minute):</label>
+                        <input type="number" id="apiRateLimit" value="100" min="1" max="1000">
+                    </div>
+                    <div class="control-group">
+                        <label>Max Concurrent Users:</label>
+                        <input type="number" id="maxUsers" value="1000" min="1" max="10000">
+                    </div>
+                    <div class="control-group">
+                        <label>Chat Message Limit (per day):</label>
+                        <input type="number" id="chatLimit" value="50" min="1" max="1000">
+                    </div>
+                    <button class="btn btn-primary"> Save Settings</button>
+                </div>
+            </div>
+
+            <div class="system-card">
+                <h3> System Logs</h3>
+                <div class="log-viewer">
+                    <div class="log-filters">
+                        <select id="logLevel">
+                            <option value="all">All Levels</option>
+                            <option value="error">Errors</option>
+                            <option value="warning">Warnings</option>
+                            <option value="info">Info</option>
+                        </select>
+                        <button class="btn btn-secondary" id="refreshLogs"> Refresh</button>
+                    </div>
+                    <div class="log-content" id="logContent">
+                        <div class="log-entry">
+                            <span class="log-time">2025-10-08 14:30:15</span>
+                            <span class="log-level info">INFO</span>
+                            <span class="log-message">System started successfully</span>
+                        </div>
+                        <div class="log-entry">
+                            <span class="log-time">2025-10-08 14:29:45</span>
+                            <span class="log-level info">INFO</span>
+                            <span class="log-message">Database connection established</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Create Persona Modal -->
+<div class="modal" id="createPersonaModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3> Create New Persona</h3>
+            <button class="modal-close">&times;</button>
+        </div>
+        <form id="createPersonaForm">
+            <div class="form-group">
+                <label for="personaName">Persona Name:</label>
+                <input type="text" id="personaName" required>
+            </div>
+            <div class="form-group">
+                <label for="personaDescription">Description:</label>
+                <textarea id="personaDescription" rows="3" required></textarea>
+            </div>
+            <div class="form-group">
+                <label for="personaAvatar">Avatar URL:</label>
+                <input type="url" id="personaAvatar">
+            </div>
+            <div class="form-group">
+                <label for="personaPersonality">Personality Traits:</label>
+                <input type="text" id="personaPersonality" placeholder="e.g., friendly, helpful, witty">
+            </div>
+            <div class="form-group">
+                <label for="personaVoice">Voice Settings:</label>
+                <select id="personaVoice">
+                    <option value="default">Default Voice</option>
+                    <option value="female1">Female Voice 1</option>
+                    <option value="female2">Female Voice 2</option>
+                    <option value="male1">Male Voice 1</option>
+                    <option value="male2">Male Voice 2</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>
+                    <input type="checkbox" id="personaActive" checked>
+                    Active
+                </label>
+            </div>
+            <div class="form-actions">
+                <button type="button" class="btn btn-secondary" onclick="closeModal('createPersonaModal')">Cancel</button>
+                <button type="submit" class="btn btn-primary">Create Persona</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Edit Persona Modal -->
+<div class="modal" id="editPersonaModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3> Edit Persona</h3>
+            <button class="modal-close">&times;</button>
+        </div>
+        <form id="editPersonaForm">
+            <input type="hidden" id="editPersonaId">
+            <div class="form-group">
+                <label for="editPersonaName">Persona Name:</label>
+                <input type="text" id="editPersonaName" required>
+            </div>
+            <div class="form-group">
+                <label for="editPersonaDescription">Description:</label>
+                <textarea id="editPersonaDescription" rows="3" required></textarea>
+            </div>
+            <div class="form-group">
+                <label for="editPersonaAvatar">Avatar URL:</label>
+                <input type="url" id="editPersonaAvatar">
+            </div>
+            <div class="form-group">
+                <label for="editPersonaPersonality">Personality Traits:</label>
+                <input type="text" id="editPersonaPersonality">
+            </div>
+            <div class="form-group">
+                <label for="editPersonaVoice">Voice Settings:</label>
+                <select id="editPersonaVoice">
+                    <option value="default">Default Voice</option>
+                    <option value="female1">Female Voice 1</option>
+                    <option value="female2">Female Voice 2</option>
+                    <option value="male1">Male Voice 1</option>
+                    <option value="male2">Male Voice 2</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>
+                    <input type="checkbox" id="editPersonaActive">
+                    Active
+                </label>
+            </div>
+            <div class="form-actions">
+                <button type="button" class="btn btn-secondary" onclick="closeModal('editPersonaModal')">Cancel</button>
+                <button type="submit" class="btn btn-primary">Update Persona</button>
+                <button type="button" class="btn btn-danger" id="deletePersonaBtn">Delete</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="{{ url_for('static', filename='js/admin.js') }}"></script>
+{% endblock %}

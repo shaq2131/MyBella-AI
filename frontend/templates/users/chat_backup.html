@@ -1,0 +1,1131 @@
+{% extends "base.html" %}
+
+{% block title %}Chat - MyBella{% endblock %}
+
+{% block content %}
+{% set active_persona = selected_persona or personas|first %}
+<div class="chat-container">
+    <div class="chat-sidebar">
+        <div class="persona-selector">
+            <h3>Choose Your Companion</h3>
+            <div class="persona-options">
+                {% if personas %}
+                    {% for persona in personas %}
+                        {% set is_active = (active_persona and persona.id == active_persona.id) or (not active_persona and loop.first) %}
+                    <div class="persona-option {% if is_active %}active{% endif %}"
+                             data-persona-id="{{ persona.id }}"
+                             data-persona-name="{{ persona.display_name or persona.name }}"
+                        data-persona-key="{{ persona.name }}"
+                             data-persona-initial="{{ (persona.display_name or persona.name)[0]|upper }}"
+                             data-communication-style="{{ persona.communication_style or 'friendly' }}"
+                             data-persona-tagline="{{ persona.tagline or '' }}"
+                             data-persona-description="{{ persona.description or '' }}">
+                            <div class="persona-avatar">
+                                {{ (persona.display_name or persona.name)[0]|upper }}
+                            </div>
+                            <div class="persona-meta">
+                                <span class="persona-name">{{ persona.display_name or persona.name }}</span>
+                                {% if persona.tagline %}
+                                    <span class="persona-option-tagline">{{ persona.tagline }}</span>
+                                {% endif %}
+                                {% if persona.communication_style %}
+                                    <span class="persona-option-style">{{ persona.communication_style|capitalize }} style</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                <div class="persona-option active"
+                    data-persona-name="Bella"
+                    data-persona-key="Bella"
+                    data-persona-initial="B"
+                    data-communication-style="friendly"
+                    data-persona-tagline="Always here to keep you company."
+                    data-persona-description="A caring AI companion who is ready to chat.">
+                        <div class="persona-avatar">B</div>
+                        <div class="persona-meta">
+                            <span class="persona-name">Bella</span>
+                            <span class="persona-option-tagline">Always here to keep you company.</span>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+        
+        <div class="mode-selector">
+            <h3>Conversation Mode</h3>
+            <div class="mode-options">
+                <button class="mode-btn active" data-mode="friendly">
+                     Friendly Chat
+                </button>
+                <button class="mode-btn" data-mode="supportive">
+                     Supportive
+                </button>
+                <button class="mode-btn" data-mode="creative">
+                     Creative
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="chat-main">
+        <div class="chat-header">
+            <div class="current-persona">
+                <div class="persona-avatar">{{ (active_persona.display_name or active_persona.name)[0]|upper if active_persona else 'A' }}</div>
+                <div class="persona-info">
+                    <h4 id="personaNameHeading">{{ active_persona.display_name or active_persona.name if active_persona else 'AI Companion' }}</h4>
+                    <span class="persona-tagline" id="personaTagline">
+                        {% if active_persona %}
+                            {{ active_persona.tagline or active_persona.description or 'Always here to support you.' }}
+                        {% else %}
+                            Choose your AI companion to get started.
+                        {% endif %}
+                    </span>
+                    <div class="persona-meta-row">
+                        <span class="persona-style" id="personaStyle">
+                            {% if active_persona and active_persona.communication_style %}
+                                {{ active_persona.communication_style|capitalize }} style
+                            {% endif %}
+                        </span>
+                        <span class="status">Online</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="chat-controls">
+                <button class="control-btn" id="voiceBtn" title="Voice Chat">
+                    
+                </button>
+                <button class="control-btn" id="settingsBtn" title="Settings">
+                    
+                </button>
+            </div>
+        </div>
+
+        <div class="chat-messages" id="chatMessages">
+            <div class="message bot-message">
+                <div class="message-avatar">
+                    <div class="avatar">{{ (active_persona.display_name or active_persona.name)[0]|upper if active_persona else 'A' }}</div>
+                </div>
+                <div class="message-content">
+                    <div class="message-bubble">
+                        {% if active_persona %}
+                            <p class="message-text">Hello! I'm {{ active_persona.display_name or active_persona.name }}, your AI companion. {{ active_persona.tagline or 'How are you feeling today? I am here to chat, listen, and support you.' }}</p>
+                        {% else %}
+                            <p class="message-text">Hello! Choose a persona to start your conversation.</p>
+                        {% endif %}
+                    </div>
+                    <div class="message-time">Just now</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="chat-input-container">
+            <form id="chatForm" class="chat-input-form">
+                <div class="input-group">
+                    <input 
+                        type="text" 
+                        id="messageInput" 
+                        placeholder="Type your message..." 
+                        class="message-input"
+                        maxlength="500"
+                    >
+                    <div class="input-actions">
+                        <button type="button" class="emoji-btn" id="emojiBtn"></button>
+                        <button type="button" class="voice-input-btn" id="voiceInputBtn"></button>
+                        <button type="submit" class="send-btn" id="sendBtn">
+                            <span class="send-icon"></span>
+                        </button>
+                    </div>
+                </div>
+                <div class="char-counter">
+                    <span id="charCount">0</span>/500
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<style>
+.chat-container {
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    height: calc(100vh - 80px);
+    background: var(--background-color);
+    gap: 0;
+    overflow: hidden;
+}
+
+.chat-sidebar {
+    background: var(--surface-color);
+    border-right: 1px solid var(--border-color);
+    padding: 1.5rem;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.persona-selector h3,
+.mode-selector h3 {
+    color: var(--text-primary);
+    margin-bottom: 1rem;
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.persona-options {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.persona-option {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: 1px solid var(--border-color);
+    background: var(--background-color);
+}
+
+.persona-option:hover {
+    background: var(--primary-light);
+    border-color: var(--primary);
+}
+
+.persona-option.active {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
+}
+
+.persona-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+}
+
+.persona-name {
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.persona-option-tagline {
+    color: var(--text-secondary);
+    font-size: 0.75rem;
+}
+
+.persona-option-style {
+    color: var(--text-muted);
+    font-size: 0.7rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+.persona-style-label {
+    color: var(--primary);
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.persona-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--primary);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 0.875rem;
+}
+
+.persona-option.active .persona-avatar {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.mode-options {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.mode-btn {
+    padding: 0.75rem;
+    border: 1px solid var(--border-color);
+    background: var(--background-color);
+    color: var(--text-secondary);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: left;
+    font-size: 0.875rem;
+}
+
+.mode-btn:hover {
+    background: var(--primary-light);
+    border-color: var(--primary);
+    color: var(--text-primary);
+}
+
+.mode-btn.active {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
+}
+
+.chat-main {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.chat-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 1.5rem;
+    background: var(--surface-color);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.current-persona {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.current-persona .persona-avatar {
+    width: 40px;
+    height: 40px;
+    font-size: 1rem;
+}
+
+.persona-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+
+.persona-info h4 {
+    color: var(--text-primary);
+    margin: 0;
+    font-size: 1rem;
+}
+
+.persona-tagline {
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+}
+
+.persona-meta-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.persona-style {
+    color: var(--primary);
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: capitalize;
+}
+
+.status {
+    color: var(--success);
+    font-size: 0.75rem;
+    font-weight: 500;
+}
+
+.chat-controls {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.control-btn {
+    width: 36px;
+    height: 36px;
+    border: 1px solid var(--border-color);
+    background: var(--background-color);
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+}
+
+.control-btn:hover {
+    background: var(--primary-light);
+    border-color: var(--primary);
+}
+
+.chat-messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.message {
+    display: flex;
+    gap: 0.75rem;
+    max-width: 80%;
+}
+
+.bot-message {
+    align-self: flex-start;
+}
+
+.user-message {
+    align-self: flex-end;
+    flex-direction: row-reverse;
+}
+
+.message-avatar .avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--primary);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 0.875rem;
+}
+
+.user-message .message-avatar .avatar {
+    background: var(--text-muted);
+}
+
+.message-content {
+    flex: 1;
+}
+
+.message-bubble {
+    background: var(--surface-color);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: 0.875rem 1rem;
+    margin-bottom: 0.25rem;
+}
+
+.user-message .message-bubble {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
+}
+
+.message-text {
+    margin: 0;
+    line-height: 1.5;
+    color: inherit;
+}
+
+.message-time {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    padding: 0 0.25rem;
+}
+
+.user-message .message-time {
+    text-align: right;
+}
+
+.chat-input-container {
+    padding: 1.5rem;
+    background: var(--surface-color);
+    border-top: 1px solid var(--border-color);
+}
+
+.chat-input-form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.input-group {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: var(--background-color);
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: 0.75rem;
+    transition: border-color 0.2s ease;
+}
+
+.input-group:focus-within {
+    border-color: var(--primary);
+}
+
+.message-input {
+    flex: 1;
+    border: none;
+    outline: none;
+    background: transparent;
+    color: var(--text-primary);
+    font-size: 1rem;
+    resize: none;
+}
+
+.message-input::placeholder {
+    color: var(--text-muted);
+}
+
+.input-actions {
+    display: flex;
+    gap: 0.25rem;
+    align-items: center;
+}
+
+.emoji-btn,
+.voice-input-btn,
+.send-btn {
+    width: 32px;
+    height: 32px;
+    border: none;
+    background: transparent;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+}
+
+.emoji-btn:hover,
+.voice-input-btn:hover {
+    background: var(--background-color);
+}
+
+.send-btn {
+    background: var(--primary);
+    color: white;
+}
+
+.send-btn:hover {
+    background: var(--primary-dark);
+    transform: scale(1.05);
+}
+
+.send-btn:disabled {
+    background: var(--text-muted);
+    cursor: not-allowed;
+    transform: none;
+}
+
+.char-counter {
+    text-align: right;
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    padding: 0 0.5rem;
+}
+
+.typing-indicator {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+    color: var(--text-muted);
+    font-style: italic;
+}
+
+.typing-dots {
+    display: flex;
+    gap: 0.25rem;
+}
+
+.dot {
+    width: 6px;
+    height: 6px;
+    background: var(--text-muted);
+    border-radius: 50%;
+    animation: typing 1.4s infinite ease-in-out;
+}
+
+.dot:nth-child(1) { animation-delay: -0.32s; }
+.dot:nth-child(2) { animation-delay: -0.16s; }
+
+@keyframes typing {
+    0%, 80%, 100% {
+        transform: scale(0);
+        opacity: 0.5;
+    }
+    40% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    .chat-container {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto 1fr;
+    }
+    
+    .chat-sidebar {
+        border-right: none;
+        border-bottom: 1px solid var(--border-color);
+        flex-direction: row;
+        gap: 1rem;
+        padding: 1rem;
+        overflow-x: auto;
+    }
+    
+    .persona-selector,
+    .mode-selector {
+        min-width: 200px;
+    }
+    
+    .persona-options,
+    .mode-options {
+        flex-direction: row;
+        gap: 0.5rem;
+    }
+    
+    .persona-option {
+        flex-direction: column;
+        text-align: center;
+        min-width: 60px;
+        padding: 0.5rem;
+    }
+    
+    .mode-btn {
+        white-space: nowrap;
+        padding: 0.5rem;
+        font-size: 0.75rem;
+    }
+    
+    .message {
+        max-width: 90%;
+    }
+}
+
+@media (max-width: 480px) {
+    .chat-messages {
+        padding: 1rem;
+    }
+    
+    .chat-input-container {
+        padding: 1rem;
+    }
+    
+    .input-group {
+        padding: 0.5rem;
+    }
+    
+    .persona-selector h3,
+    .mode-selector h3 {
+        font-size: 0.875rem;
+    }
+}
+</style>
+
+<script>
+(() => {
+    let currentPersona = '';
+    let currentPersonaKey = '';
+    let currentPersonaId = null;
+    let currentPersonaInitial = 'A';
+    let currentCommunicationStyle = 'friendly';
+    let currentTagline = '';
+    let currentMode = 'friendly';
+    let isTyping = false;
+
+    const communicationStyleResponses = {
+        friendly: [
+            'That sounds wonderful! Tell me more.',
+            'I am glad you shared that. What else is on your mind?',
+            'You can always count on me for a warm chat.',
+            'Thanks for opening up. I would love to hear more.'
+        ],
+        nurturing: [
+            'You deserve kindness and care, and that is what I am here for.',
+            'Take a gentle breath. I am right here with you.',
+            'Your heart matters. Let us move at your pace.',
+            'I will hold space for you as long as you need.'
+        ],
+        supportive: [
+            'I appreciate you trusting me with this.',
+            'You are handling a lot, and I am here for every step.',
+            'Thank you for sharing. We can walk through this together.',
+            'You are not alone in this conversation.'
+        ],
+        creative: [
+            'That sparks a brilliant idea. Want to explore it?',
+            'I love your imagination. Tell me more about it.',
+            'What if we take that thought and build a new story?',
+            'Your creative mind makes every chat exciting.'
+        ],
+        therapeutic: [
+            'Let us slow down and notice how you are feeling.',
+            'We can process this together, one small piece at a time.',
+            'Your feelings are important. I am listening closely.',
+            'Let us ground ourselves and explore what comes next.'
+        ],
+        enthusiastic: [
+            'That energy is contagious! What happens next?',
+            'I am excited with you. Tell me every detail.',
+            'Let us ride this momentum together.',
+            'I love the passion you bring into this chat.'
+        ],
+        professional: [
+            'Let us break this down step by step.',
+            'I hear the key points you are raising. Want to review them together?',
+            'We can map out the next actions whenever you are ready.',
+            'I will keep things focused and clear for you.'
+        ]
+    };
+
+    const conversationModeResponses = {
+        friendly: [
+            'I am all ears. What else would you like to share?',
+            'Happy to chat about anything you like.',
+            'This is a safe space to talk about whatever you need.'
+        ],
+        supportive: [
+            'Thank you for trusting me with that.',
+            'I am staying right here with you as we talk it through.',
+            'We can take it one small step at a time.'
+        ],
+        creative: [
+            'Let us brainstorm something inspiring together.',
+            'Every idea you share opens a new path.',
+            'Ready to imagine a new twist on that thought?'
+        ]
+    };
+
+    document.addEventListener('DOMContentLoaded', () => {
+        initializeChat();
+    });
+
+    function initializeChat() {
+        setupInitialPersonaState();
+
+        document.querySelectorAll('.persona-option').forEach(option => {
+            option.addEventListener('click', function() {
+                selectPersonaOption(this);
+            });
+        });
+
+        document.querySelectorAll('.mode-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                selectMode(this.dataset.mode);
+            });
+        });
+
+        const voiceBtn = document.getElementById('voiceBtn');
+        if (voiceBtn) {
+            voiceBtn.addEventListener('click', toggleVoiceChat);
+        }
+
+        const voiceInputBtn = document.getElementById('voiceInputBtn');
+        if (voiceInputBtn) {
+            voiceInputBtn.addEventListener('click', startVoiceInput);
+        }
+
+        const emojiBtn = document.getElementById('emojiBtn');
+        if (emojiBtn) {
+            emojiBtn.addEventListener('click', showEmojiPicker);
+        }
+
+        const chatForm = document.getElementById('chatForm');
+        const messageInput = document.getElementById('messageInput');
+        const sendBtn = document.getElementById('sendBtn');
+        const charCount = document.getElementById('charCount');
+
+        if (!chatForm || !messageInput || !sendBtn || !charCount) {
+            return;
+        }
+
+        chatForm.addEventListener('submit', event => {
+            event.preventDefault();
+            sendMessage();
+        });
+
+        messageInput.addEventListener('input', function() {
+            const count = this.value.length;
+            charCount.textContent = count.toString();
+
+            if (count > 450) {
+                charCount.style.color = 'var(--warning)';
+            } else {
+                charCount.style.color = 'var(--text-muted)';
+            }
+
+            sendBtn.disabled = count === 0 || count > 500;
+        });
+
+        // Ensure initial state reflects any prefilled text
+        const initialCount = messageInput.value.length;
+        charCount.textContent = initialCount.toString();
+        charCount.style.color = initialCount > 450 ? 'var(--warning)' : 'var(--text-muted)';
+        sendBtn.disabled = initialCount === 0 || initialCount > 500;
+    }
+
+    function setupInitialPersonaState() {
+        const activeOption = document.querySelector('.persona-option.active') || document.querySelector('.persona-option');
+        if (activeOption) {
+            hydratePersonaState(activeOption.dataset);
+        } else {
+            currentPersona = 'AI Companion';
+            currentPersonaKey = currentPersona;
+            currentPersonaInitial = 'A';
+            currentTagline = 'Always here when you want to chat.';
+            updatePersonaHeader();
+        }
+    }
+
+    function hydratePersonaState(dataset) {
+        const parsedId = dataset.personaId ? parseInt(dataset.personaId, 10) : NaN;
+        currentPersonaId = Number.isNaN(parsedId) ? null : parsedId;
+        currentPersona = dataset.personaName || 'AI Companion';
+        currentPersonaKey = dataset.personaKey || currentPersona;
+        currentPersonaInitial = (dataset.personaInitial || currentPersona.charAt(0) || 'A').toUpperCase();
+        currentCommunicationStyle = dataset.communicationStyle || 'friendly';
+        currentTagline = dataset.personaTagline || dataset.personaDescription || '';
+        updatePersonaHeader();
+    }
+
+    function updatePersonaHeader() {
+        const avatarElements = document.querySelectorAll('.current-persona .persona-avatar');
+        avatarElements.forEach(el => {
+            el.textContent = getPersonaInitial();
+        });
+
+        const nameElement = document.getElementById('personaNameHeading');
+        if (nameElement) {
+            nameElement.textContent = currentPersona;
+        }
+
+        const taglineElement = document.getElementById('personaTagline');
+        if (taglineElement) {
+            taglineElement.textContent = currentTagline || 'Always here to chat whenever you are ready.';
+        }
+
+        const styleElement = document.getElementById('personaStyle');
+        if (styleElement) {
+            styleElement.textContent = currentCommunicationStyle ? `${capitalize(currentCommunicationStyle)} style` : '';
+        }
+    }
+
+    function selectPersonaOption(optionElement) {
+        const wasActive = optionElement.classList.contains('active');
+
+        document.querySelectorAll('.persona-option').forEach(option => {
+            option.classList.toggle('active', option === optionElement);
+        });
+
+        hydratePersonaState(optionElement.dataset);
+
+        if (!wasActive) {
+            switchPersonaOnServer(currentPersonaId);
+            addSystemMessage(`${currentPersona} joined the chat. ${currentTagline || 'How can I help you today?'}`);
+        }
+    }
+
+    function selectMode(mode) {
+        if (!mode) {
+            return;
+        }
+
+        currentMode = mode;
+
+        document.querySelectorAll('.mode-btn').forEach(btn => {
+            btn.classList.toggle('active', btn.dataset.mode === mode);
+        });
+
+        const modeNames = {
+            friendly: 'Friendly Chat',
+            supportive: 'Supportive',
+            creative: 'Creative'
+        };
+
+        addSystemMessage(`Mode changed to ${modeNames[mode] || 'Chat'}.`);
+    }
+
+    async function sendMessage() {
+        const messageInput = document.getElementById('messageInput');
+        const sendBtn = document.getElementById('sendBtn');
+
+        if (!messageInput || !sendBtn) {
+            return;
+        }
+
+        const rawMessage = messageInput.value;
+        const message = rawMessage.trim();
+
+        if (!message || isTyping) {
+            return;
+        }
+
+        addMessage(message, 'user');
+
+        messageInput.value = '';
+        const charCount = document.getElementById('charCount');
+        if (charCount) {
+            charCount.textContent = '0';
+            charCount.style.color = 'var(--text-muted)';
+        }
+
+        messageInput.disabled = true;
+        sendBtn.disabled = true;
+
+        showTypingIndicator();
+
+        let responseData = null;
+        let responseText = '';
+
+        try {
+            const payload = {
+                text: message,
+                persona: currentPersonaKey || currentPersona,
+                mode: currentMode,
+                persona_id: currentPersonaId,
+                use_voice: false
+            };
+
+            const response = await fetch('/api/chat', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(payload)
+            });
+
+            if (!response.ok) {
+                throw new Error(`Chat request failed with status ${response.status}`);
+            }
+
+            responseData = await response.json();
+            responseText = (responseData.text || '').trim();
+
+        } catch (error) {
+            console.error('Chat request error:', error);
+        } finally {
+            hideTypingIndicator();
+            messageInput.disabled = false;
+            sendBtn.disabled = false;
+            messageInput.focus();
+        }
+
+        if (responseText) {
+            addMessage(responseText, 'bot');
+            handleChatResponse(responseData);
+        } else {
+            const fallbackMessage = generateBotResponse();
+            addMessage(fallbackMessage, 'bot');
+            addSystemMessage('Using offline friendly response while the server is unavailable.');
+        }
+    }
+
+    function addMessage(text, sender, options = {}) {
+        const messagesContainer = document.getElementById('chatMessages');
+        if (!messagesContainer) {
+            return null;
+        }
+
+        const { isSystem = false } = options;
+
+        const messageDiv = document.createElement('div');
+        messageDiv.className = `message ${sender}-message`;
+
+        const avatarWrapper = document.createElement('div');
+        avatarWrapper.className = 'message-avatar';
+
+        const avatarCircle = document.createElement('div');
+        avatarCircle.className = 'avatar';
+        const avatarLetter = sender === 'user'
+            ? (window.currentUser && window.currentUser.name ? window.currentUser.name.charAt(0).toUpperCase() : 'U')
+            : getPersonaInitial();
+        avatarCircle.textContent = avatarLetter;
+
+        avatarWrapper.appendChild(avatarCircle);
+
+        const contentDiv = document.createElement('div');
+        contentDiv.className = 'message-content';
+
+        const bubble = document.createElement('div');
+        bubble.className = 'message-bubble';
+
+        const paragraph = document.createElement('p');
+        paragraph.className = 'message-text';
+        paragraph.textContent = text;
+
+        bubble.appendChild(paragraph);
+
+        const timeDiv = document.createElement('div');
+        timeDiv.className = 'message-time';
+        timeDiv.textContent = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+        contentDiv.appendChild(bubble);
+        contentDiv.appendChild(timeDiv);
+
+        messageDiv.appendChild(avatarWrapper);
+        messageDiv.appendChild(contentDiv);
+
+        if (isSystem) {
+            messageDiv.style.opacity = '0.7';
+        }
+
+        messagesContainer.appendChild(messageDiv);
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+
+        return messageDiv;
+    }
+
+    function addSystemMessage(text) {
+        addMessage(text, 'bot', { isSystem: true });
+    }
+
+    function showTypingIndicator() {
+        if (isTyping) {
+            return;
+        }
+
+        isTyping = true;
+
+        const messagesContainer = document.getElementById('chatMessages');
+        if (!messagesContainer) {
+            return;
+        }
+
+        const typingDiv = document.createElement('div');
+        typingDiv.id = 'typingIndicator';
+        typingDiv.className = 'message bot-message typing-indicator';
+
+        typingDiv.innerHTML = `
+            <div class="message-avatar">
+                <div class="avatar">${getPersonaInitial()}</div>
+            </div>
+            <div class="message-content">
+                <div class="message-bubble">
+                    <div class="typing-dots">
+                        <div class="dot"></div>
+                        <div class="dot"></div>
+                        <div class="dot"></div>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        messagesContainer.appendChild(typingDiv);
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    }
+
+    function hideTypingIndicator() {
+        const typingIndicator = document.getElementById('typingIndicator');
+        if (typingIndicator) {
+            typingIndicator.remove();
+        }
+        isTyping = false;
+    }
+
+    function generateBotResponse() {
+        const stylePool = communicationStyleResponses[currentCommunicationStyle] || [];
+        const modePool = conversationModeResponses[currentMode] || [];
+        const fallbackPool = communicationStyleResponses.friendly;
+
+        const combined = [...new Set([...stylePool, ...modePool, ...fallbackPool])];
+
+        if (!combined.length) {
+            return 'I am here and listening.';
+        }
+
+        const index = Math.floor(Math.random() * combined.length);
+        return combined[index];
+    }
+
+    function handleChatResponse(data) {
+        if (!data || typeof data !== 'object') {
+            return;
+        }
+
+        if (Array.isArray(data.achievements) && data.achievements.length) {
+            data.achievements.forEach(achievement => {
+                const title = achievement.title || 'Achievement unlocked';
+                const description = achievement.description || '';
+                addSystemMessage(`${title}${description ? ` - ${description}` : ''}`);
+            });
+        }
+
+        if (data.crisis_detected) {
+            addSystemMessage('Important: we detected language that may require urgent support. Here are crisis resources that can help.');
+        }
+
+        if (data.suggest_mood_checkin && data.mood_checkin_prompt) {
+            addSystemMessage(data.mood_checkin_prompt);
+        }
+
+        if (data.voice_used && typeof data.voice_minutes_remaining === 'number') {
+            addSystemMessage(`Voice minutes remaining: ${Math.max(0, Math.floor(data.voice_minutes_remaining))}`);
+        }
+    }
+
+    async function switchPersonaOnServer(personaId) {
+        if (!personaId) {
+            return;
+        }
+
+        try {
+            await fetch('/api/personas/switch', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ persona_id: personaId })
+            });
+        } catch (error) {
+            console.error('Failed to switch persona on server:', error);
+        }
+    }
+
+    function toggleVoiceChat() {
+        alert('Voice chat feature coming soon!');
+    }
+
+    function startVoiceInput() {
+        alert('Voice input feature coming soon!');
+    }
+
+    function showEmojiPicker() {
+        alert('Emoji picker coming soon!');
+    }
+
+    function getPersonaInitial() {
+        if (currentPersonaInitial) {
+            return currentPersonaInitial;
+        }
+        if (currentPersona) {
+            return currentPersona.charAt(0).toUpperCase();
+        }
+        return 'A';
+    }
+
+    function capitalize(text) {
+        if (!text) {
+            return '';
+        }
+        return text.charAt(0).toUpperCase() + text.slice(1);
+    }
+
+    window.currentUser = {
+        name: '{{ current_user.name if current_user.is_authenticated else "User" }}'
+    };
+})();
+</script>
+{% endblock %}

@@ -1,0 +1,234 @@
+{% extends "base.html" %}
+
+{% block title %}Tell Us About Yourself{% endblock %}
+
+{% block extra_css %}
+<style>
+.onboarding-container {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    padding: var(--spacing-xl);
+}
+
+.onboarding-card {
+    background: white;
+    border-radius: var(--radius-2xl);
+    padding: var(--spacing-3xl);
+    max-width: 700px;
+    width: 100%;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+}
+
+.progress-bar {
+    height: 4px;
+    background: var(--border-color);
+    border-radius: var(--radius-full);
+    margin-bottom: var(--spacing-2xl);
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+    width: 33%;
+    transition: width 0.3s;
+}
+
+.onboarding-title {
+    font-size: var(--font-size-2xl);
+    font-weight: 700;
+    margin-bottom: var(--spacing-md);
+}
+
+.onboarding-subtitle {
+    color: var(--text-secondary);
+    margin-bottom: var(--spacing-2xl);
+}
+
+.question-group {
+    margin-bottom: var(--spacing-2xl);
+}
+
+.question-label {
+    font-weight: 600;
+    margin-bottom: var(--spacing-md);
+    display: block;
+}
+
+.option-grid {
+    display: grid;
+    gap: var(--spacing-md);
+}
+
+.option-card {
+    padding: var(--spacing-lg);
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    cursor: pointer;
+    transition: all 0.2s;
+    background: white;
+}
+
+.option-card:hover {
+    border-color: var(--primary-color);
+    transform: translateY(-2px);
+}
+
+.option-card.selected {
+    border-color: var(--primary-color);
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+}
+
+.option-card input[type="radio"] {
+    display: none;
+}
+
+.option-title {
+    font-weight: 600;
+    margin-bottom: var(--spacing-xs);
+}
+
+.option-desc {
+    font-size: var(--font-size-sm);
+    color: var(--text-secondary);
+}
+
+.btn-container {
+    display: flex;
+    gap: var(--spacing-md);
+    margin-top: var(--spacing-2xl);
+}
+
+.btn {
+    padding: var(--spacing-md) var(--spacing-xl);
+    border-radius: var(--radius-lg);
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    flex: 1;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 20px rgba(102, 126, 234, 0.4);
+}
+
+.btn-secondary {
+    background: white;
+    border: 2px solid var(--border-color);
+    color: var(--text-primary);
+}
+
+.btn-secondary:hover {
+    border-color: var(--primary-color);
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="onboarding-container">
+    <div class="onboarding-card">
+        <div class="progress-bar">
+            <div class="progress-fill" style="width: 33%;"></div>
+        </div>
+        
+        <h2 class="onboarding-title">Tell us about yourself</h2>
+        <p class="onboarding-subtitle">
+            This helps us personalize your experience and provide better support.
+        </p>
+        
+        <form id="personalityForm">
+            <div class="question-group">
+                <label class="question-label">How would you describe yourself?</label>
+                <div class="option-grid">
+                    <label class="option-card">
+                        <input type="radio" name="personality_type" value="introverted" required>
+                        <div class="option-title"> Introverted</div>
+                        <div class="option-desc">I prefer quiet reflection and one-on-one conversations</div>
+                    </label>
+                    
+                    <label class="option-card">
+                        <input type="radio" name="personality_type" value="balanced" required>
+                        <div class="option-title"> Balanced</div>
+                        <div class="option-desc">I'm comfortable in both social and quiet settings</div>
+                    </label>
+                    
+                    <label class="option-card">
+                        <input type="radio" name="personality_type" value="extroverted" required>
+                        <div class="option-title"> Extroverted</div>
+                        <div class="option-desc">I thrive in social situations and group activities</div>
+                    </label>
+                </div>
+            </div>
+            
+            <div class="question-group">
+                <label class="question-label">What communication style do you prefer?</label>
+                <div class="option-grid">
+                    <label class="option-card">
+                        <input type="radio" name="communication_style" value="casual" required>
+                        <div class="option-title"> Casual & Relaxed</div>
+                        <div class="option-desc">Like chatting with a friend</div>
+                    </label>
+                    
+                    <label class="option-card">
+                        <input type="radio" name="communication_style" value="friendly" required>
+                        <div class="option-title"> Warm & Friendly</div>
+                        <div class="option-desc">Supportive and caring</div>
+                    </label>
+                    
+                    <label class="option-card">
+                        <input type="radio" name="communication_style" value="professional" required>
+                        <div class="option-title"> Professional & Clear</div>
+                        <div class="option-desc">Direct and to the point</div>
+                    </label>
+                </div>
+            </div>
+            
+            <div class="btn-container">
+                <a href="{{ url_for('onboarding.welcome') }}" class="btn btn-secondary">Back</a>
+                <button type="submit" class="btn btn-primary">Next</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+// Add selected class to option cards
+document.querySelectorAll('.option-card').forEach(card => {
+    card.addEventListener('click', function() {
+        const radio = this.querySelector('input[type="radio"]');
+        const name = radio.name;
+        
+        // Remove selected class from all cards in this group
+        document.querySelectorAll(`input[name="${name}"]`).forEach(r => {
+            r.closest('.option-card').classList.remove('selected');
+        });
+        
+        // Add selected class to this card
+        this.classList.add('selected');
+    });
+});
+
+// Handle form submission
+document.getElementById('personalityForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    // Store data in sessionStorage
+    const formData = new FormData(this);
+    sessionStorage.setItem('personality_type', formData.get('personality_type'));
+    sessionStorage.setItem('communication_style', formData.get('communication_style'));
+    
+            // Go to next step (persona selection)
+            window.location.href = '{{ url_for("onboarding.persona") }}';
+});
+</script>
+{% endblock %}

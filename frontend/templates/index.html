@@ -1,0 +1,528 @@
+{% extends "base.html" %}
+
+{% block title %}MyBella — Calm, Personal AI Companionship{% endblock %}
+
+{% block extra_css %}
+<style>
+:root {
+    --landing-bg: linear-gradient(180deg, #f9fbff 0%, #f2f5fb 100%);
+    --landing-surface: #ffffff;
+    --landing-border: rgba(99, 102, 241, 0.12);
+    --landing-text: #1e293b;
+    --landing-text-muted: rgba(30, 41, 59, 0.65);
+    --landing-accent: #6366f1;
+    --landing-shadow: 0 32px 60px rgba(99, 102, 241, 0.08);
+    --landing-radius: 28px;
+    --landing-radius-sm: 18px;
+    --landing-transition: 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+body {
+    background: var(--landing-bg);
+    color: var(--landing-text);
+    font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+.main {
+    padding: clamp(3rem, 5vw, 4.5rem) clamp(1.5rem, 5vw, 4rem);
+    display: flex;
+    flex-direction: column;
+    gap: clamp(4rem, 6vw, 6rem);
+}
+
+.hero {
+    display: grid;
+    grid-template-columns: 1.05fr 0.95fr;
+    gap: clamp(2rem, 4vw, 3.5rem);
+    align-items: center;
+}
+
+.hero-content {
+    display: grid;
+    gap: clamp(1.5rem, 3vw, 2.4rem);
+}
+
+.hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.65rem;
+    padding: 0.6rem 1.1rem;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.7);
+    border: 1px solid rgba(99, 102, 241, 0.15);
+    font-weight: 600;
+    font-size: 0.85rem;
+    backdrop-filter: blur(20px);
+}
+
+.hero-badge::before {
+    content: "";
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--landing-accent);
+}
+
+.hero h1 {
+    font-size: clamp(3rem, 5vw, 4rem);
+    font-weight: 400;
+    letter-spacing: -0.04em;
+    margin: 0;
+}
+
+.hero p {
+    margin: 0;
+    font-size: 1.1rem;
+    line-height: 1.75;
+    color: var(--landing-text-muted);
+    max-width: 36rem;
+}
+
+.hero-actions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.btn-primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.95rem 1.6rem;
+    border-radius: var(--landing-radius-sm);
+    background: linear-gradient(135deg, #6366f1, #4f46e5);
+    color: #ffffff;
+    font-weight: 600;
+    text-decoration: none;
+    box-shadow: 0 28px 38px rgba(99, 102, 241, 0.2);
+    transition: transform var(--landing-transition), box-shadow var(--landing-transition);
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 36px 48px rgba(99, 102, 241, 0.25);
+}
+
+.btn-ghost {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.9rem 1.3rem;
+    border-radius: var(--landing-radius-sm);
+    border: 1px solid rgba(99, 102, 241, 0.2);
+    background: rgba(255, 255, 255, 0.7);
+    color: var(--landing-accent);
+    text-decoration: none;
+    font-weight: 600;
+    transition: border-color var(--landing-transition), color var(--landing-transition);
+}
+
+.btn-ghost:hover {
+    border-color: var(--landing-accent);
+    color: var(--landing-accent);
+}
+
+.hero-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    font-size: 0.88rem;
+    color: var(--landing-text-muted);
+}
+
+.hero-meta span {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.hero-meta span::before {
+    content: "";
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: rgba(99, 102, 241, 0.5);
+}
+
+.hero-preview {
+    background: var(--landing-surface);
+    border-radius: var(--landing-radius);
+    border: 1px solid var(--landing-border);
+    box-shadow: var(--landing-shadow);
+    padding: clamp(1.75rem, 3vw, 2.3rem);
+    display: grid;
+    gap: 1.25rem;
+}
+
+.preview-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--landing-border);
+}
+
+.preview-header h3 {
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--landing-text);
+}
+
+.preview-header span {
+    font-size: 0.82rem;
+    color: var(--landing-text-muted);
+}
+
+.preview-list {
+    display: grid;
+    gap: 0.9rem;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.preview-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.8rem;
+    font-size: 0.92rem;
+    line-height: 1.5;
+    color: var(--landing-text);
+}
+
+.preview-list li::before {
+    content: "";
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: rgba(99, 102, 241, 0.6);
+    opacity: 0.7;
+    margin-top: 0.35rem;
+}
+
+.features {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: clamp(1.5rem, 3vw, 2rem);
+}
+
+.feature-card {
+    background: var(--landing-surface);
+    border-radius: var(--landing-radius);
+    border: 1px solid var(--landing-border);
+    padding: clamp(1.75rem, 3vw, 2.3rem);
+    display: grid;
+    gap: 1rem;
+    transition: transform var(--landing-transition), box-shadow var(--landing-transition);
+}
+
+.feature-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 28px 38px rgba(99, 102, 241, 0.15);
+}
+
+.feature-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    background: rgba(99, 102, 241, 0.1);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    color: var(--landing-accent);
+}
+
+.feature-card h3 {
+    margin: 0;
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--landing-text);
+}
+
+.feature-card p {
+    margin: 0;
+    font-size: 0.9rem;
+    line-height: 1.65;
+    color: var(--landing-text-muted);
+}
+
+.personas {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(3rem, 5vw, 4rem);
+    align-items: center;
+}
+
+.persona {
+    display: grid;
+    gap: 1.5rem;
+}
+
+.persona-label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    color: var(--landing-accent);
+    text-transform: uppercase;
+}
+
+.persona h3 {
+    margin: 0;
+    font-size: clamp(2.1rem, 4vw, 2.6rem);
+    font-weight: 400;
+    letter-spacing: -0.03em;
+    color: var(--landing-text);
+}
+
+.persona p {
+    margin: 0;
+    font-size: 1rem;
+    line-height: 1.7;
+    color: var(--landing-text-muted);
+    max-width: 28rem;
+}
+
+.persona-list {
+    display: grid;
+    gap: 0.75rem;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.persona-list li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 1.25rem;
+    border-radius: var(--landing-radius-sm);
+    border: 1px solid rgba(99, 102, 241, 0.15);
+    background: rgba(255, 255, 255, 0.8);
+}
+
+.persona-list span {
+    font-weight: 500;
+    color: var(--landing-text);
+}
+
+.persona-list small {
+    font-size: 0.8rem;
+    color: var(--landing-text-muted);
+}
+
+.section-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 2rem;
+}
+
+.section-heading h2 {
+    margin: 0;
+    font-size: clamp(2rem, 4vw, 2.6rem);
+    font-weight: 400;
+    letter-spacing: -0.03em;
+    color: var(--landing-text);
+    max-width: 32rem;
+}
+
+.section-heading p {
+    margin: 0;
+    font-size: 1rem;
+    line-height: 1.7;
+    color: var(--landing-text-muted);
+    max-width: 24rem;
+}
+
+.metrics {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: clamp(1.5rem, 3vw, 2rem);
+}
+
+.metric-card {
+    background: var(--landing-surface);
+    border-radius: var(--landing-radius);
+    border: 1px solid var(--landing-border);
+    padding: clamp(1.75rem, 3vw, 2.3rem);
+    text-align: center;
+}
+
+.metric-card strong {
+    display: block;
+    font-size: clamp(2.2rem, 4vw, 2.8rem);
+    font-weight: 600;
+    color: var(--landing-accent);
+    margin-bottom: 0.5rem;
+}
+
+.metric-card span {
+    font-size: 0.9rem;
+    line-height: 1.5;
+    color: var(--landing-text-muted);
+}
+
+.cta {
+    text-align: center;
+    padding: clamp(3rem, 6vw, 4rem) 0;
+}
+
+.cta h2 {
+    margin: 0 0 1rem;
+    font-size: clamp(2.4rem, 5vw, 3.2rem);
+    font-weight: 400;
+    letter-spacing: -0.04em;
+    color: var(--landing-text);
+}
+
+.cta p {
+    margin: 0 0 2rem;
+    font-size: 1.1rem;
+    line-height: 1.7;
+    color: var(--landing-text-muted);
+    max-width: 48rem;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+@media (max-width: 768px) {
+    .hero {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+    
+    .hero-actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .personas {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+    
+    .section-heading {
+        flex-direction: column;
+        gap: 1rem;
+    }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="hero" id="home">
+    <div class="hero-content">
+        <span class="hero-badge">Now welcoming mindful evenings</span>
+        <h1>Design calmer nights with a companion that remembers your rituals.</h1>
+        <p>MyBella listens, adapts, and keeps every reflection private. Built for people who crave intentional breaks, grounded motivation, and a voice that always feels present.</p>
+        <div class="hero-actions">
+            <a href="{{ url_for('user_auth.register') }}" class="btn-primary">Begin your setup</a>
+            <a href="{{ url_for('user_auth.login') }}" class="btn-ghost">Sign in</a>
+        </div>
+        <div class="hero-meta">
+            <span>4.9★ guided sessions</span>
+            <span>Trusted for 48k nightly resets</span>
+            <span>Private by default</span>
+        </div>
+    </div>
+    <div class="hero-preview" aria-label="Evening reset preview card">
+        <div class="preview-header">
+            <h3>Tonight's reset</h3>
+            <span>8:30 PM</span>
+        </div>
+        <ul class="preview-list">
+            <li>Check in about the day's energy</li>
+            <li>Brief guided reflection (3-5 minutes)</li>
+            <li>Set intention for tomorrow morning</li>
+            <li>Optional calming voice interaction</li>
+        </ul>
+    </div>
+</section>
+
+<section aria-labelledby="features-heading">
+    <div class="section-heading">
+        <h2 id="features-heading">What feels different with MyBella</h2>
+        <p>A companion designed to understand your patterns, respect your boundaries, and grow with your wellness journey.</p>
+    </div>
+    <div class="features">
+        <div class="feature-card">
+            <div class="feature-icon">🎯</div>
+            <h3>Intentional conversations</h3>
+            <p>No small talk or filler. Every interaction is designed to help you process, reflect, or simply decompress after your day.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">🔒</div>
+            <h3>Private by design</h3>
+            <p>Your conversations stay on your device. No cloud storage, no data mining. Your thoughts remain entirely yours.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">🌙</div>
+            <h3>Evening-focused rituals</h3>
+            <p>Built specifically for wind-down time. Gentle prompts that help you transition from day mode to rest mode.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">💭</div>
+            <h3>Memory that matters</h3>
+            <p>Remembers what you've shared before, creating continuity in your wellness journey without feeling invasive.</p>
+        </div>
+    </div>
+</section>
+
+<section class="personas">
+    <div class="persona">
+        <span class="persona-label">Choose your approach</span>
+        <h3>Find the voice that fits your evening style.</h3>
+        <p>Whether you prefer structured guidance or open conversation, MyBella adapts to how you like to unwind and reflect.</p>
+    </div>
+    <ul class="persona-list">
+        <li>
+            <span>The Guide</span>
+            <small>Gentle prompts and structure</small>
+        </li>
+        <li>
+            <span>The Listener</span>
+            <small>Open, conversational support</small>
+        </li>
+        <li>
+            <span>The Coach</span>
+            <small>Goal-focused reflection</small>
+        </li>
+        <li>
+            <span>The Friend</span>
+            <small>Warm, informal check-ins</small>
+        </li>
+    </ul>
+</section>
+
+<section aria-labelledby="metrics-heading">
+    <div class="section-heading">
+        <h2 id="metrics-heading">Proof it stays personal</h2>
+        <p>Designed with people who wanted less interface and more intention. Calm moments that feel like the product of great hardware and great care.</p>
+    </div>
+    <div class="metrics">
+        <div class="metric-card">
+            <strong>98%</strong>
+            <span>feel more composed within two weeks</span>
+        </div>
+        <div class="metric-card">
+            <strong>14m</strong>
+            <span>average focused reflection time</span>
+        </div>
+        <div class="metric-card">
+            <strong>72%</strong>
+            <span>build a sustainable nighttime ritual</span>
+        </div>
+    </div>
+</section>
+
+<section class="cta" aria-labelledby="cta-heading">
+    <h2 id="cta-heading">Quiet the noise, keep what matters.</h2>
+    <p>MyBella is your nightly operating system—precision-tuned to your energy, memories, and mood. When you're ready, we're already listening.</p>
+    <div class="hero-actions" style="justify-content: center;">
+        <a href="{{ url_for('user_auth.register') }}" class="btn-primary">Start in under two minutes</a>
+        <a href="{{ url_for('main.features') }}" class="btn-ghost">Explore the roadmap</a>
+    </div>
+</section>
+{% endblock %}

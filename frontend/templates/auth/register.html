@@ -1,0 +1,498 @@
+{% extends "base.html" %}
+
+{% block title %}Begin Your MyBella Setup{% endblock %}
+
+{% block header %}
+<header class="register-header">
+    <div class="register-header__inner">
+        <a href="{{ url_for('main.home') }}" class="register-logo" aria-label="Return to MyBella home">MyBella</a>
+        <a href="{{ url_for('user_auth.login') }}" class="register-link">Already a member?</a>
+    </div>
+</header>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+:root {
+    --register-bg: linear-gradient(160deg, #f8fbff 0%, #eef2f8 100%);
+    --register-accent: #101623;
+    --register-accent-soft: rgba(16, 22, 35, 0.65);
+    --register-border: rgba(15, 23, 42, 0.12);
+    --register-border-strong: rgba(15, 23, 42, 0.18);
+    --register-surface: rgba(255, 255, 255, 0.92);
+    --register-surface-alt: rgba(255, 255, 255, 0.78);
+    --register-shadow: 0 32px 60px rgba(15, 23, 42, 0.08);
+    --register-radius: 26px;
+    --register-radius-sm: 16px;
+    --register-transition: 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+body {
+    background: var(--register-bg);
+    color: var(--register-accent);
+    font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+.main {
+    padding: clamp(3rem, 5vw, 4.75rem) clamp(1.5rem, 5vw, 4rem);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.register-header {
+    position: sticky;
+    top: 0;
+    padding: clamp(1.25rem, 3vw, 1.75rem) clamp(1.75rem, 5vw, 3.5rem);
+    background: transparent;
+    z-index: 10;
+}
+
+.register-header__inner {
+    max-width: min(1080px, 100%);
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.register-logo {
+    font-weight: 600;
+    font-size: 1.2rem;
+    letter-spacing: -0.04em;
+    color: var(--register-accent);
+    text-decoration: none;
+}
+
+.register-link {
+    color: rgba(16, 22, 35, 0.75);
+    font-weight: 500;
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    transition: border-color var(--register-transition), color var(--register-transition);
+}
+
+.register-link:hover {
+    color: var(--register-accent);
+    border-color: rgba(16, 22, 35, 0.2);
+}
+
+.register-stage {
+    width: min(1080px, 100%);
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: clamp(2.5rem, 6vw, 4rem);
+    align-items: center;
+}
+
+.register-intro {
+    display: grid;
+    gap: clamp(1.75rem, 3vw, 2.4rem);
+}
+
+.register-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.55rem 1.1rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: rgba(16, 22, 35, 0.65);
+    border-radius: 999px;
+    border: 1px solid rgba(15, 23, 42, 0.14);
+    background: var(--register-surface-alt);
+    backdrop-filter: blur(20px);
+}
+
+.register-pill::before {
+    content: "";
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: rgba(16, 22, 35, 0.65);
+}
+
+.register-intro h1 {
+    font-size: clamp(2.8rem, 5vw, 3.6rem);
+    font-weight: 400;
+    letter-spacing: -0.04em;
+    margin: 0;
+}
+
+.register-intro p {
+    margin: 0;
+    max-width: 32rem;
+    font-size: 1.05rem;
+    line-height: 1.75;
+    color: var(--register-accent-soft);
+}
+
+.register-highlights {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 1rem;
+}
+
+.register-highlights li {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.85rem;
+    font-weight: 500;
+    color: rgba(16, 22, 35, 0.78);
+}
+
+.register-highlights li::before {
+    content: "";
+    margin-top: 0.5rem;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: rgba(16, 22, 35, 0.55);
+    opacity: 0.7;
+}
+
+.register-card {
+    background: var(--register-surface);
+    border-radius: var(--register-radius);
+    border: 1px solid var(--register-border);
+    box-shadow: var(--register-shadow);
+    padding: clamp(2.2rem, 4vw, 2.8rem);
+    display: grid;
+    gap: 1.75rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.register-card::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 18% -10%, rgba(148, 163, 184, 0.12), transparent 55%);
+    pointer-events: none;
+}
+
+.register-progress {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    position: relative;
+    z-index: 1;
+}
+
+.register-progress span {
+    font-size: 0.86rem;
+    font-weight: 600;
+    color: rgba(16, 22, 35, 0.6);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+}
+
+.register-progress-track {
+    flex: 1;
+    height: 6px;
+    border-radius: 999px;
+    background: rgba(148, 163, 184, 0.28);
+    overflow: hidden;
+}
+
+.register-progress-fill {
+    width: 25%;
+    height: 100%;
+    border-radius: inherit;
+    background: linear-gradient(90deg, rgba(16, 22, 35, 0.85), rgba(16, 22, 35, 1));
+}
+
+.register-card h2 {
+    margin: 0;
+    font-size: clamp(1.8rem, 3vw, 2.2rem);
+    font-weight: 400;
+    letter-spacing: -0.02em;
+    position: relative;
+    z-index: 1;
+}
+
+.register-card p.register-lead {
+    margin: 0;
+    font-size: 0.98rem;
+    line-height: 1.6;
+    color: rgba(16, 22, 35, 0.62);
+    position: relative;
+    z-index: 1;
+}
+
+#registerIntroForm {
+    display: grid;
+    gap: 1.3rem;
+    position: relative;
+    z-index: 1;
+}
+
+.register-field {
+    display: grid;
+    gap: 0.6rem;
+}
+
+.register-field label {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: rgba(16, 22, 35, 0.65);
+}
+
+.register-input {
+    width: 100%;
+    border-radius: var(--register-radius-sm);
+    border: 1.5px solid rgba(148, 163, 184, 0.45);
+    background: rgba(255, 255, 255, 0.96);
+    padding: 0.95rem 1.1rem;
+    font-size: 1rem;
+    font-family: inherit;
+    color: var(--register-accent);
+    transition: border-color var(--register-transition), box-shadow var(--register-transition), background var(--register-transition);
+}
+
+.register-input:hover {
+    border-color: rgba(16, 22, 35, 0.45);
+    background: #ffffff;
+}
+
+.register-input:focus {
+    outline: none;
+    border-color: var(--register-accent);
+    background: #ffffff;
+    box-shadow: 0 0 0 4px rgba(16, 22, 35, 0.08);
+}
+
+.register-input.error {
+    border-color: rgba(220, 38, 38, 0.6);
+    box-shadow: 0 0 0 3px rgba(248, 113, 113, 0.2);
+}
+
+.register-helper {
+    font-size: 0.85rem;
+    color: rgba(16, 22, 35, 0.55);
+}
+
+.register-feedback {
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: rgba(220, 38, 38, 0.85);
+    display: none;
+}
+
+.register-feedback.visible {
+    display: block;
+}
+
+.register-primary {
+    border: none;
+    border-radius: var(--register-radius-sm);
+    padding: 0.95rem 1.2rem;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #ffffff;
+    background: linear-gradient(135deg, #0f172a, #172235);
+    cursor: pointer;
+    transition: transform var(--register-transition), box-shadow var(--register-transition);
+}
+
+.register-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 20px 32px rgba(15, 23, 42, 0.18);
+}
+
+.register-primary:active {
+    transform: translateY(0);
+}
+
+.register-secondary {
+    font-size: 0.8rem;
+    color: rgba(16, 22, 35, 0.5);
+    margin: 0;
+}
+
+.register-auth {
+    font-size: 0.95rem;
+    margin: 0;
+    color: rgba(16, 22, 35, 0.65);
+}
+
+.register-auth a {
+    color: var(--register-accent);
+    font-weight: 600;
+    text-decoration: none;
+    border-bottom: 1px solid rgba(16, 22, 35, 0.15);
+    transition: border-color var(--register-transition);
+}
+
+.register-auth a:hover {
+    border-color: rgba(16, 22, 35, 0.4);
+}
+
+@media (max-width: 992px) {
+    .register-stage {
+        grid-template-columns: 1fr;
+        gap: 2.5rem;
+        text-align: center;
+    }
+
+    .register-header__inner {
+        max-width: 100%;
+    }
+
+    .register-intro {
+        justify-items: center;
+    }
+
+    .register-highlights li {
+        justify-content: center;
+    }
+
+    .register-card {
+        justify-self: center;
+        width: min(520px, 100%);
+    }
+}
+
+@media (max-width: 640px) {
+    .main {
+        padding: clamp(2rem, 8vw, 3rem) clamp(1rem, 6vw, 1.5rem);
+    }
+
+    .register-header {
+        padding: clamp(1rem, 6vw, 1.25rem) clamp(1rem, 6vw, 1.75rem);
+    }
+
+    .register-card {
+        padding: clamp(1.75rem, 7vw, 2.25rem);
+    }
+
+    .register-intro h1 {
+        font-size: clamp(2.4rem, 8vw, 2.8rem);
+    }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="register-stage" aria-labelledby="register-intro-heading">
+    <div class="register-intro">
+        <span class="register-pill">Thoughtfully crafted onboarding</span>
+        <h1 id="register-intro-heading">First, tell us your name.</h1>
+        <p>MyBella adapts every conversation to feel personal, calm, and precise. We start with your name so your companion can greet you with intention from the very first message.</p>
+        <ul class="register-highlights">
+            <li>Subtle tone adjustments tuned to how you like to be addressed</li>
+            <li>Nightly resets that remember your rituals and energy</li>
+            <li>Privacy-first design that keeps every reflection yours</li>
+        </ul>
+    </div>
+
+    <div class="register-card" role="region" aria-label="Registration introduction">
+        <div class="register-progress">
+            <span>Step 1 of 4</span>
+            <div class="register-progress-track" aria-hidden="true">
+                <div class="register-progress-fill"></div>
+            </div>
+        </div>
+        <h2>How should we greet you?</h2>
+        <p class="register-lead">Choose the name you want MyBella to use in every conversation. You can change it later.</p>
+        <form id="registerIntroForm" method="get" action="{{ url_for('user_auth.signup') }}" novalidate>
+            <div class="register-field">
+                <label for="introDisplayName">Display name</label>
+                <input type="text" id="introDisplayName" name="display_name" class="register-input" placeholder="e.g., Avery" autocomplete="name" minlength="2" required spellcheck="false">
+                <div id="introNameFeedback" class="register-feedback" role="alert"></div>
+            </div>
+            <p class="register-helper">We’ll mirror the spacing and capitalisation you provide.</p>
+            <button type="submit" class="register-primary">Continue</button>
+        </form>
+        <p class="register-secondary">By continuing you agree to our respectful use of your name inside the app.</p>
+        <p class="register-auth">Already have an account? <a href="{{ url_for('user_auth.login') }}">Sign in</a></p>
+    </div>
+</section>
+{% endblock %}
+
+{% block footer %}
+<footer class="register-footer" aria-label="Secondary navigation">
+    <div>© 2025 MyBella. Crafted with empathy.</div>
+    <div class="register-footer-links">
+        <a href="#">Privacy</a>
+        <span aria-hidden="true">·</span>
+        <a href="#">Terms</a>
+        <span aria-hidden="true">·</span>
+        <a href="#">Support</a>
+    </div>
+</footer>
+<style>
+.register-footer {
+    padding: 2rem clamp(1.5rem, 5vw, 4rem) 3rem;
+    display: flex;
+    justify-content: center;
+    gap: clamp(1rem, 5vw, 4rem);
+    align-items: center;
+    font-size: 0.85rem;
+    color: rgba(16, 22, 35, 0.55);
+}
+
+.register-footer-links {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.register-footer-links a {
+    color: rgba(16, 22, 35, 0.55);
+    text-decoration: none;
+}
+
+.register-footer-links a:hover {
+    color: var(--register-accent);
+}
+
+@media (max-width: 640px) {
+    .register-footer {
+        flex-direction: column;
+        text-align: center;
+    }
+}
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const form = document.getElementById('registerIntroForm');
+    const nameInput = document.getElementById('introDisplayName');
+    const feedback = document.getElementById('introNameFeedback');
+
+    const params = new URLSearchParams(window.location.search);
+    const storedName = sessionStorage.getItem('mybella.display_name');
+    const queryName = params.get('display_name');
+    const initialName = storedName || queryName;
+
+    if (initialName) {
+        nameInput.value = initialName;
+    }
+
+    nameInput.addEventListener('input', () => {
+        feedback.classList.remove('visible');
+        feedback.textContent = '';
+        nameInput.classList.remove('error');
+    });
+
+    form.addEventListener('submit', (event) => {
+        const value = nameInput.value.trim();
+        if (value.length < 2) {
+            event.preventDefault();
+            feedback.textContent = 'Please use at least two characters.';
+            feedback.classList.add('visible');
+            nameInput.classList.add('error');
+            nameInput.focus();
+            return;
+        }
+        sessionStorage.setItem('mybella.display_name', value);
+    });
+});
+</script>
+{% endblock %}

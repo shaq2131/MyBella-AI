@@ -1,0 +1,921 @@
+{% extends "base.html" %}
+
+{% block title %}Delete Account - MyBella{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="delete-account-page">
+        <div class="page-header">
+            <h1> Delete Account</h1>
+            <p class="text-muted">Permanently delete your MyBella account and all associated data</p>
+        </div>
+
+        {% if error_message %}
+        <div class="alert alert-error">
+            <span class="alert-icon"></span>
+            <span>{{ error_message }}</span>
+        </div>
+        {% endif %}
+
+        <div class="warning-section">
+            <div class="warning-banner">
+                <h2> This action cannot be undone!</h2>
+                <p>Deleting your account will permanently remove all your data from our servers. Please read the information below carefully before proceeding.</p>
+            </div>
+        </div>
+
+        <div class="deletion-info">
+            <h3> What will be deleted?</h3>
+            <div class="deletion-grid">
+                <div class="deletion-item">
+                    <div class="item-icon"></div>
+                    <div class="item-content">
+                        <h4>All Conversations</h4>
+                        <p>Every chat message and conversation history with AI companions</p>
+                        <div class="data-count">{{ conversation_count or 0 }} conversations</div>
+                    </div>
+                </div>
+
+                <div class="deletion-item">
+                    <div class="item-icon"></div>
+                    <div class="item-content">
+                        <h4>Profile Information</h4>
+                        <p>Your account details, preferences, and profile picture</p>
+                        <div class="data-count">Complete profile</div>
+                    </div>
+                </div>
+
+                <div class="deletion-item">
+                    <div class="item-icon"></div>
+                    <div class="item-content">
+                        <h4>Settings & Preferences</h4>
+                        <p>All your customizations and AI companion settings</p>
+                        <div class="data-count">All settings</div>
+                    </div>
+                </div>
+
+                <div class="deletion-item">
+                    <div class="item-icon"></div>
+                    <div class="item-content">
+                        <h4>Voice Interactions</h4>
+                        <p>Voice chat history and audio preferences</p>
+                        <div class="data-count">{{ voice_interactions or 0 }} interactions</div>
+                    </div>
+                </div>
+
+                <div class="deletion-item">
+                    <div class="item-icon"></div>
+                    <div class="item-content">
+                        <h4>Usage Analytics</h4>
+                        <p>Your app usage patterns and activity statistics</p>
+                        <div class="data-count">Complete history</div>
+                    </div>
+                </div>
+
+                <div class="deletion-item">
+                    <div class="item-icon"></div>
+                    <div class="item-content">
+                        <h4>Subscription & Billing</h4>
+                        <p>Payment history and subscription information</p>
+                        <div class="data-count">All records</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="alternatives-section">
+            <h3> Consider these alternatives</h3>
+            <div class="alternatives-grid">
+                <div class="alternative-card">
+                    <div class="alt-icon"></div>
+                    <div class="alt-content">
+                        <h4>Export Your Data</h4>
+                        <p>Download all your conversations and data before deleting your account</p>
+                        <a href="{{ url_for('user_views.export_data') }}" class="btn btn-outline-primary">
+                            Export Data
+                        </a>
+                    </div>
+                </div>
+
+                <div class="alternative-card">
+                    <div class="alt-icon"></div>
+                    <div class="alt-content">
+                        <h4>Deactivate Account</h4>
+                        <p>Temporarily disable your account while keeping your data safe</p>
+                        <button class="btn btn-outline-secondary" onclick="showDeactivateOptions()">
+                            Deactivate Instead
+                        </button>
+                    </div>
+                </div>
+
+                <div class="alternative-card">
+                    <div class="alt-icon"></div>
+                    <div class="alt-content">
+                        <h4>Privacy Settings</h4>
+                        <p>Adjust your privacy settings and data sharing preferences</p>
+                        <a href="{{ url_for('user_views.settings') }}" class="btn btn-outline-secondary">
+                            Review Settings
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="timeline-section">
+            <h3> Deletion Timeline</h3>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-marker">1</div>
+                    <div class="timeline-content">
+                        <h4>Immediate (0-1 hours)</h4>
+                        <p>Account access disabled, data queued for deletion</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-marker">2</div>
+                    <div class="timeline-content">
+                        <h4>24-48 hours</h4>
+                        <p>Personal data and conversations permanently deleted</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-marker">3</div>
+                    <div class="timeline-content">
+                        <h4>30 days</h4>
+                        <p>All backups and cached data completely removed</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="confirmation-section">
+            <h3> Confirm Account Deletion</h3>
+            <form class="deletion-form" method="POST" onsubmit="return validateDeletion(event)">
+                {{ form.hidden_tag() if form }}
+                
+                <div class="confirmation-steps">
+                    <div class="confirmation-step">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="confirm1" required>
+                            <span class="checkmark"></span>
+                            <span class="label-text">I understand that this action cannot be undone</span>
+                        </label>
+                    </div>
+
+                    <div class="confirmation-step">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="confirm2" required>
+                            <span class="checkmark"></span>
+                            <span class="label-text">I have exported or saved any data I want to keep</span>
+                        </label>
+                    </div>
+
+                    <div class="confirmation-step">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="confirm3" required>
+                            <span class="checkmark"></span>
+                            <span class="label-text">I am aware that all conversations and AI companion relationships will be lost</span>
+                        </label>
+                    </div>
+
+                    <div class="confirmation-step">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="confirm4" required>
+                            <span class="checkmark"></span>
+                            <span class="label-text">I have canceled any active subscriptions</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="password-verification">
+                    <h4> Verify Your Identity</h4>
+                    <div class="form-group">
+                        <label for="password" class="form-label">Enter your password to confirm deletion:</label>
+                        <input 
+                            type="password" 
+                            id="password" 
+                            name="password" 
+                            class="form-control"
+                            placeholder="Enter your password"
+                            required
+                        >
+                    </div>
+                </div>
+
+                <div class="final-confirmation">
+                    <h4> Final Confirmation</h4>
+                    <p>Type <strong>"DELETE MY ACCOUNT"</strong> in the box below to confirm:</p>
+                    <input 
+                        type="text" 
+                        id="deletion_confirmation" 
+                        name="deletion_confirmation"
+                        class="form-control confirmation-input"
+                        placeholder="Type DELETE MY ACCOUNT"
+                        required
+                    >
+                </div>
+
+                <div class="reason-section">
+                    <h4> Help us improve (optional)</h4>
+                    <p>Why are you deleting your account? This helps us improve MyBella for others.</p>
+                    <select name="deletion_reason" class="form-control">
+                        <option value="">Select a reason (optional)</option>
+                        <option value="privacy_concerns">Privacy concerns</option>
+                        <option value="not_using">Not using the service</option>
+                        <option value="found_alternative">Found an alternative</option>
+                        <option value="too_expensive">Too expensive</option>
+                        <option value="technical_issues">Technical issues</option>
+                        <option value="feature_limitations">Missing features</option>
+                        <option value="other">Other reason</option>
+                    </select>
+                    
+                    <div class="feedback-box" style="display: none;">
+                        <textarea 
+                            name="feedback" 
+                            placeholder="Please tell us more about your experience..."
+                            class="form-control"
+                            rows="3"
+                        ></textarea>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-danger" id="deleteBtn" disabled>
+                        <span class="btn-icon"></span>
+                        Permanently Delete Account
+                    </button>
+                    <a href="{{ url_for('user_views.profile') }}" class="btn btn-secondary">
+                        Cancel
+                    </a>
+                </div>
+            </form>
+        </div>
+
+        <div class="support-section">
+            <h3> Need Help?</h3>
+            <p>If you're experiencing issues or have questions, our support team is here to help before you delete your account.</p>
+            <div class="support-links">
+                <a href="mailto:support@mybella.ai" class="support-link">
+                    <span class="icon"></span>
+                    Email Support
+                </a>
+                <a href="{{ url_for('main.hotlines') }}" class="support-link">
+                    <span class="icon"></span>
+                    Help Center
+                </a>
+                <a href="{{ url_for('main.legal') }}" class="support-link">
+                    <span class="icon"></span>
+                    Privacy Policy
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Deactivate Modal -->
+<div id="deactivateModal" class="modal" onclick="closeModal(event)">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3> Deactivate Account Instead?</h3>
+            <button class="close-btn" onclick="closeDeactivateModal()">&times;</button>
+        </div>
+        <div class="modal-body">
+            <p>Account deactivation temporarily disables your account while preserving all your data. You can reactivate anytime by simply logging back in.</p>
+            
+            <div class="deactivate-benefits">
+                <h4>Benefits of deactivation:</h4>
+                <ul>
+                    <li> Keep all your conversations and data safe</li>
+                    <li> Reactivate anytime with a simple login</li>
+                    <li> No data loss or permanent consequences</li>
+                    <li> Take a break and come back when ready</li>
+                </ul>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-primary" onclick="deactivateAccount()">
+                Deactivate Account
+            </button>
+            <button class="btn btn-secondary" onclick="closeDeactivateModal()">
+                Continue with Deletion
+            </button>
+        </div>
+    </div>
+</div>
+
+<style>
+.delete-account-page {
+    padding: 2rem 0;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.page-header {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.alert {
+    padding: 1rem;
+    border-radius: var(--radius-md);
+    margin-bottom: 2rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-weight: 500;
+}
+
+.alert-error {
+    background: rgba(var(--danger-rgb), 0.1);
+    border: 1px solid var(--danger);
+    color: var(--danger);
+}
+
+.warning-section {
+    margin-bottom: 3rem;
+}
+
+.warning-banner {
+    background: linear-gradient(135deg, #ff6b6b, #ee5a52);
+    color: white;
+    padding: 2rem;
+    border-radius: var(--radius-lg);
+    text-align: center;
+}
+
+.warning-banner h2 {
+    margin-bottom: 1rem;
+}
+
+.deletion-info,
+.alternatives-section,
+.timeline-section,
+.confirmation-section {
+    margin-bottom: 3rem;
+}
+
+.deletion-info h3,
+.alternatives-section h3,
+.timeline-section h3,
+.confirmation-section h3 {
+    color: var(--primary);
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.deletion-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+}
+
+.deletion-item {
+    background: var(--surface-color);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    display: flex;
+    gap: 1rem;
+}
+
+.item-icon {
+    font-size: 1.5rem;
+    flex-shrink: 0;
+    margin-top: 0.25rem;
+}
+
+.item-content h4 {
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+}
+
+.item-content p {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    line-height: 1.4;
+    margin-bottom: 0.5rem;
+}
+
+.data-count {
+    color: var(--danger);
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.alternatives-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+}
+
+.alternative-card {
+    background: var(--surface-color);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    text-align: center;
+}
+
+.alt-icon {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+}
+
+.alt-content h4 {
+    color: var(--text-primary);
+    margin-bottom: 0.75rem;
+}
+
+.alt-content p {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    line-height: 1.4;
+    margin-bottom: 1.5rem;
+}
+
+.timeline {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.timeline-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    background: var(--surface-color);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+}
+
+.timeline-marker {
+    width: 40px;
+    height: 40px;
+    background: var(--primary);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    flex-shrink: 0;
+}
+
+.timeline-content h4 {
+    color: var(--text-primary);
+    margin-bottom: 0.25rem;
+}
+
+.timeline-content p {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    margin: 0;
+}
+
+.deletion-form {
+    background: var(--surface-color);
+    border: 2px solid var(--danger);
+    border-radius: var(--radius-lg);
+    padding: 2rem;
+}
+
+.confirmation-steps {
+    margin-bottom: 2rem;
+}
+
+.confirmation-step {
+    margin-bottom: 1rem;
+}
+
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    cursor: pointer;
+    padding: 0.75rem;
+    border-radius: var(--radius-md);
+    transition: background-color 0.2s ease;
+}
+
+.checkbox-label:hover {
+    background: var(--background-color);
+}
+
+.checkbox-label input[type="checkbox"] {
+    display: none;
+}
+
+.checkmark {
+    width: 20px;
+    height: 20px;
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    position: relative;
+    transition: all 0.2s ease;
+}
+
+.checkbox-label input[type="checkbox"]:checked + .checkmark {
+    background: var(--primary);
+    border-color: var(--primary);
+}
+
+.checkbox-label input[type="checkbox"]:checked + .checkmark::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-size: 0.875rem;
+    font-weight: bold;
+}
+
+.label-text {
+    color: var(--text-primary);
+    font-weight: 500;
+}
+
+.password-verification,
+.final-confirmation,
+.reason-section {
+    margin-bottom: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border-color);
+}
+
+.password-verification h4,
+.final-confirmation h4,
+.reason-section h4 {
+    color: var(--danger);
+    margin-bottom: 1rem;
+}
+
+.form-group {
+    margin-bottom: 1rem;
+}
+
+.form-label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: var(--text-primary);
+    font-weight: 600;
+}
+
+.form-control {
+    width: 100%;
+    padding: 0.875rem;
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius-md);
+    background: var(--background-color);
+    color: var(--text-primary);
+    font-size: 1rem;
+    transition: all 0.2s ease;
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: var(--primary);
+    background: var(--surface-color);
+    box-shadow: 0 0 0 3px rgba(var(--primary-rgb), 0.1);
+}
+
+.confirmation-input {
+    font-family: monospace;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.feedback-box {
+    margin-top: 1rem;
+}
+
+.form-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--border-color);
+}
+
+.btn-icon {
+    margin-right: 0.5rem;
+}
+
+.support-section {
+    background: var(--surface-color);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: 2rem;
+    text-align: center;
+}
+
+.support-section h3 {
+    color: var(--primary);
+    margin-bottom: 1rem;
+}
+
+.support-section p {
+    color: var(--text-secondary);
+    margin-bottom: 1.5rem;
+    line-height: 1.6;
+}
+
+.support-links {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.support-link {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+    background: var(--primary);
+    color: white;
+    text-decoration: none;
+    border-radius: var(--radius-md);
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.support-link:hover {
+    background: var(--primary-dark);
+    transform: translateY(-1px);
+    text-decoration: none;
+    color: white;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
+}
+
+.modal-content {
+    background: var(--surface-color);
+    margin: 10% auto;
+    padding: 0;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    width: 90%;
+    max-width: 500px;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.modal-header h3 {
+    color: var(--text-primary);
+    margin: 0;
+}
+
+.close-btn {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: var(--text-muted);
+    padding: 0.25rem;
+    line-height: 1;
+}
+
+.close-btn:hover {
+    color: var(--text-primary);
+}
+
+.modal-body {
+    padding: 1.5rem;
+}
+
+.deactivate-benefits h4 {
+    color: var(--text-primary);
+    margin: 1rem 0 0.5rem;
+}
+
+.deactivate-benefits ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.deactivate-benefits li {
+    padding: 0.25rem 0;
+    color: var(--text-secondary);
+}
+
+.modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    padding: 1.5rem;
+    border-top: 1px solid var(--border-color);
+}
+
+@media (max-width: 768px) {
+    .delete-account-page {
+        padding: 1rem 0;
+    }
+    
+    .deletion-grid,
+    .alternatives-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .timeline-item {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .form-actions {
+        flex-direction: column;
+    }
+    
+    .support-links {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .support-link {
+        width: 100%;
+        justify-content: center;
+        max-width: 200px;
+    }
+    
+    .modal-content {
+        width: 95%;
+        margin: 5% auto;
+    }
+}
+</style>
+
+<script>
+function validateDeletion(event) {
+    const checkboxes = document.querySelectorAll('.confirmation-step input[type="checkbox"]');
+    const password = document.getElementById('password').value;
+    const confirmation = document.getElementById('deletion_confirmation').value;
+    
+    // Check all confirmations
+    let allChecked = true;
+    checkboxes.forEach(checkbox => {
+        if (!checkbox.checked) {
+            allChecked = false;
+        }
+    });
+    
+    if (!allChecked) {
+        showError('Please confirm all requirements before proceeding.');
+        return false;
+    }
+    
+    if (!password.trim()) {
+        showError('Please enter your password to verify your identity.');
+        return false;
+    }
+    
+    if (confirmation.trim().toUpperCase() !== 'DELETE MY ACCOUNT') {
+        showError('Please type "DELETE MY ACCOUNT" exactly as shown to confirm.');
+        return false;
+    }
+    
+    // Final confirmation
+    const confirmed = confirm(
+        'This is your final warning!\n\n' +
+        'Are you absolutely sure you want to permanently delete your account?\n\n' +
+        'This action CANNOT be undone and ALL your data will be lost forever.'
+    );
+    
+    if (!confirmed) {
+        return false;
+    }
+    
+    return true;
+}
+
+function updateDeleteButton() {
+    const checkboxes = document.querySelectorAll('.confirmation-step input[type="checkbox"]');
+    const password = document.getElementById('password');
+    const confirmation = document.getElementById('deletion_confirmation');
+    const deleteBtn = document.getElementById('deleteBtn');
+    
+    let allChecked = true;
+    checkboxes.forEach(checkbox => {
+        if (!checkbox.checked) {
+            allChecked = false;
+        }
+    });
+    
+    const hasPassword = password.value.trim().length > 0;
+    const hasConfirmation = confirmation.value.trim().toUpperCase() === 'DELETE MY ACCOUNT';
+    
+    deleteBtn.disabled = !(allChecked && hasPassword && hasConfirmation);
+}
+
+function showDeactivateOptions() {
+    document.getElementById('deactivateModal').style.display = 'block';
+}
+
+function closeDeactivateModal() {
+    document.getElementById('deactivateModal').style.display = 'none';
+}
+
+function closeModal(event) {
+    if (event.target === document.getElementById('deactivateModal')) {
+        closeDeactivateModal();
+    }
+}
+
+function deactivateAccount() {
+    if (confirm('Deactivate your account? You can reactivate anytime by logging back in.')) {
+        // In a real application, this would deactivate the account
+        alert('Account deactivated successfully. You can reactivate anytime by logging back in.');
+        window.location.href = '/';
+    }
+}
+
+function showError(message) {
+    removeAlerts();
+    const alert = createAlert(message, 'error');
+    insertAlert(alert);
+}
+
+function removeAlerts() {
+    const existingAlerts = document.querySelectorAll('.alert');
+    existingAlerts.forEach(alert => alert.remove());
+}
+
+function createAlert(message, type) {
+    const alert = document.createElement('div');
+    alert.className = `alert alert-${type}`;
+    alert.innerHTML = `
+        <span class="alert-icon"></span>
+        <span>${message}</span>
+    `;
+    return alert;
+}
+
+function insertAlert(alert) {
+    const container = document.querySelector('.warning-section');
+    container.parentNode.insertBefore(alert, container);
+    
+    // Auto-remove after 5 seconds
+    setTimeout(() => {
+        if (alert.parentNode) {
+            alert.remove();
+        }
+    }, 5000);
+}
+
+// Initialize page
+document.addEventListener('DOMContentLoaded', function() {
+    // Add event listeners to form inputs
+    const checkboxes = document.querySelectorAll('.confirmation-step input[type="checkbox"]');
+    const password = document.getElementById('password');
+    const confirmation = document.getElementById('deletion_confirmation');
+    const reasonSelect = document.querySelector('select[name="deletion_reason"]');
+    const feedbackBox = document.querySelector('.feedback-box');
+    
+    // Update delete button state
+    [...checkboxes, password, confirmation].forEach(input => {
+        input.addEventListener('change', updateDeleteButton);
+        input.addEventListener('input', updateDeleteButton);
+    });
+    
+    // Show feedback box when "other" is selected
+    reasonSelect.addEventListener('change', function() {
+        if (this.value === 'other') {
+            feedbackBox.style.display = 'block';
+        } else {
+            feedbackBox.style.display = 'none';
+        }
+    });
+    
+    // Add escape key handler for modal
+    document.addEventListener('keydown', function(event) {
+        if (event.key === 'Escape') {
+            closeDeactivateModal();
+        }
+    });
+    
+    console.log('Delete Account page loaded');
+});
+</script>
+{% endblock %}

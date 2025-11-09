@@ -1,0 +1,414 @@
+{% extends "base.html" %}
+
+{% block title %}Legal Information • MyBella{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="legal-page">
+        <div class="page-header">
+            <h1> Legal Information</h1>
+            <p class="text-muted">Important legal documents and policies</p>
+        </div>
+
+        <div class="legal-nav">
+            <button class="nav-btn active" onclick="showSection('privacy')">Privacy Policy</button>
+            <button class="nav-btn" onclick="showSection('terms')">Terms of Service</button>
+            <button class="nav-btn" onclick="showSection('cookies')">Cookie Policy</button>
+            <button class="nav-btn" onclick="showSection('data')">Data Protection</button>
+        </div>
+
+        <div class="legal-content">
+            <!-- Privacy Policy -->
+            <div id="privacy" class="legal-section active">
+                <h2>Privacy Policy</h2>
+                <p class="updated">Last updated: October 8, 2025</p>
+                
+                <div class="section-content">
+                    <h3>1. Information We Collect</h3>
+                    <p>We collect information you provide directly to us, such as when you create an account, use our AI companion services, or contact us for support.</p>
+                    
+                    <h4>Personal Information:</h4>
+                    <ul>
+                        <li>Account information (name, email address, username)</li>
+                        <li>Profile information (profile picture, preferences)</li>
+                        <li>Conversation data with AI companions</li>
+                        <li>Usage analytics and interaction patterns</li>
+                    </ul>
+
+                    <h3>2. How We Use Your Information</h3>
+                    <p>We use the information we collect to:</p>
+                    <ul>
+                        <li>Provide, maintain, and improve our AI companion services</li>
+                        <li>Personalize your experience and AI interactions</li>
+                        <li>Communicate with you about your account and our services</li>
+                        <li>Analyze usage patterns to enhance our AI models</li>
+                        <li>Ensure the security and integrity of our platform</li>
+                    </ul>
+
+                    <h3>3. Information Sharing</h3>
+                    <p>We do not sell, trade, or otherwise transfer your personal information to third parties without your consent, except as described in this policy.</p>
+
+                    <h3>4. Data Security</h3>
+                    <p>We implement appropriate security measures to protect your personal information against unauthorized access, alteration, disclosure, or destruction.</p>
+
+                    <h3>5. Your Rights</h3>
+                    <p>You have the right to:</p>
+                    <ul>
+                        <li>Access your personal information</li>
+                        <li>Correct inaccurate information</li>
+                        <li>Delete your account and associated data</li>
+                        <li>Export your conversation history</li>
+                        <li>Opt-out of marketing communications</li>
+                    </ul>
+
+                    <h3>6. Contact Us</h3>
+                    <p>If you have questions about this Privacy Policy, please contact us at privacy@mybella.ai</p>
+                </div>
+            </div>
+
+            <!-- Terms of Service -->
+            <div id="terms" class="legal-section">
+                <h2>Terms of Service</h2>
+                <p class="updated">Last updated: October 8, 2025</p>
+                
+                <div class="section-content">
+                    <h3>1. Acceptance of Terms</h3>
+                    <p>By accessing and using MyBella, you accept and agree to be bound by the terms and provision of this agreement.</p>
+
+                    <h3>2. Description of Service</h3>
+                    <p>MyBella provides AI-powered companion services that allow users to engage in conversations with artificial intelligence personas.</p>
+
+                    <h3>3. User Responsibilities</h3>
+                    <p>You are responsible for:</p>
+                    <ul>
+                        <li>Maintaining the confidentiality of your account</li>
+                        <li>Using the service in compliance with applicable laws</li>
+                        <li>Respecting the AI companions and other users</li>
+                        <li>Not attempting to manipulate or exploit the AI systems</li>
+                    </ul>
+
+                    <h3>4. Prohibited Uses</h3>
+                    <p>You may not use MyBella for:</p>
+                    <ul>
+                        <li>Illegal activities or content</li>
+                        <li>Harassment or abusive behavior</li>
+                        <li>Attempting to reverse engineer our AI models</li>
+                        <li>Commercial use without explicit permission</li>
+                    </ul>
+
+                    <h3>5. Intellectual Property</h3>
+                    <p>All content, features, and functionality of MyBella are owned by us and protected by copyright, trademark, and other intellectual property laws.</p>
+
+                    <h3>6. Disclaimer of Warranties</h3>
+                    <p>MyBella is provided "as is" without any warranties, express or implied. We do not guarantee that the service will be uninterrupted or error-free.</p>
+
+                    <h3>7. Limitation of Liability</h3>
+                    <p>In no event shall MyBella be liable for any indirect, incidental, special, consequential, or punitive damages.</p>
+
+                    <h3>8. Termination</h3>
+                    <p>We may terminate or suspend your account at any time for violations of these terms or for any other reason.</p>
+                </div>
+            </div>
+
+            <!-- Cookie Policy -->
+            <div id="cookies" class="legal-section">
+                <h2>Cookie Policy</h2>
+                <p class="updated">Last updated: October 8, 2025</p>
+                
+                <div class="section-content">
+                    <h3>What are Cookies?</h3>
+                    <p>Cookies are small text files that are stored on your device when you visit our website. They help us provide you with a better experience by remembering your preferences and login status.</p>
+
+                    <h3>Types of Cookies We Use</h3>
+                    
+                    <h4>Essential Cookies</h4>
+                    <p>These cookies are necessary for the website to function properly. They enable basic features like security, network management, and accessibility.</p>
+                    
+                    <h4>Performance Cookies</h4>
+                    <p>These cookies help us understand how visitors interact with our website by collecting and reporting information anonymously.</p>
+                    
+                    <h4>Functionality Cookies</h4>
+                    <p>These cookies enable the website to remember choices you make and provide enhanced, more personal features.</p>
+
+                    <h3>Managing Cookies</h3>
+                    <p>You can control and manage cookies in various ways:</p>
+                    <ul>
+                        <li>Through your browser settings</li>
+                        <li>Using our cookie preference center</li>
+                        <li>Opting out of specific cookie categories</li>
+                    </ul>
+
+                    <div class="cookie-controls">
+                        <button class="btn btn-secondary" onclick="manageCookies()">Manage Cookie Preferences</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Data Protection -->
+            <div id="data" class="legal-section">
+                <h2>Data Protection & GDPR</h2>
+                <p class="updated">Last updated: October 8, 2025</p>
+                
+                <div class="section-content">
+                    <h3>Your Rights Under GDPR</h3>
+                    <p>If you are a resident of the European Union, you have the following rights regarding your personal data:</p>
+
+                    <h4>Right to Access</h4>
+                    <p>You can request a copy of all personal data we hold about you.</p>
+
+                    <h4>Right to Rectification</h4>
+                    <p>You can request that we correct any inaccurate or incomplete personal data.</p>
+
+                    <h4>Right to Erasure</h4>
+                    <p>You can request that we delete your personal data under certain circumstances.</p>
+
+                    <h4>Right to Data Portability</h4>
+                    <p>You can request to receive your personal data in a structured, commonly used format.</p>
+
+                    <h4>Right to Object</h4>
+                    <p>You can object to the processing of your personal data for certain purposes.</p>
+
+                    <h3>Data Processing Lawful Basis</h3>
+                    <p>We process your data based on:</p>
+                    <ul>
+                        <li>Your consent for AI companion interactions</li>
+                        <li>Contractual necessity for service provision</li>
+                        <li>Legitimate interest for service improvement</li>
+                        <li>Legal obligation for security and compliance</li>
+                    </ul>
+
+                    <h3>Data Retention</h3>
+                    <p>We retain your personal data only as long as necessary for the purposes outlined in our Privacy Policy or as required by law.</p>
+
+                    <h3>Data Transfers</h3>
+                    <p>When we transfer your data outside the EU, we ensure appropriate safeguards are in place to protect your information.</p>
+
+                    <div class="data-actions">
+                        <a href="{{ url_for('user_views.export_data') }}" class="btn btn-primary">Download My Data</a>
+                        <a href="{{ url_for('user_views.delete_account') }}" class="btn btn-secondary">Delete My Account</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="contact-section">
+            <h3>Questions?</h3>
+            <p>If you have any questions about our legal policies, please contact us:</p>
+            <div class="contact-info">
+                <div class="contact-item">
+                    <strong>Email:</strong> legal@mybella.ai
+                </div>
+                <div class="contact-item">
+                    <strong>Address:</strong> MyBella Legal Department, 123 AI Street, Tech City, TC 12345
+                </div>
+                <div class="contact-item">
+                    <strong>Data Protection Officer:</strong> dpo@mybella.ai
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.legal-page {
+    padding: 2rem 0;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.page-header {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.legal-nav {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.nav-btn {
+    padding: 0.75rem 1.5rem;
+    border: 1px solid var(--border-color);
+    background: var(--surface-color);
+    color: var(--text-secondary);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-weight: 500;
+}
+
+.nav-btn:hover {
+    background: var(--background-color);
+    color: var(--text-primary);
+}
+
+.nav-btn.active {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
+}
+
+.legal-content {
+    background: var(--surface-color);
+    border-radius: var(--radius-lg);
+    padding: 2rem;
+    margin-bottom: 2rem;
+    border: 1px solid var(--border-color);
+}
+
+.legal-section {
+    display: none;
+}
+
+.legal-section.active {
+    display: block;
+}
+
+.legal-section h2 {
+    color: var(--primary);
+    margin-bottom: 0.5rem;
+}
+
+.updated {
+    color: var(--text-muted);
+    font-style: italic;
+    margin-bottom: 2rem;
+}
+
+.section-content h3 {
+    color: var(--text-primary);
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 0.5rem;
+}
+
+.section-content h4 {
+    color: var(--text-secondary);
+    margin-top: 1.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.section-content p {
+    line-height: 1.6;
+    margin-bottom: 1rem;
+    color: var(--text-secondary);
+}
+
+.section-content ul {
+    margin-bottom: 1rem;
+    padding-left: 1.5rem;
+}
+
+.section-content li {
+    margin-bottom: 0.5rem;
+    color: var(--text-secondary);
+}
+
+.cookie-controls,
+.data-actions {
+    margin-top: 2rem;
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.contact-section {
+    background: var(--background-color);
+    padding: 2rem;
+    border-radius: var(--radius-lg);
+    text-align: center;
+}
+
+.contact-section h3 {
+    color: var(--primary);
+    margin-bottom: 1rem;
+}
+
+.contact-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    max-width: 400px;
+    margin: 1.5rem auto 0;
+}
+
+.contact-item {
+    padding: 0.75rem;
+    background: var(--surface-color);
+    border-radius: var(--radius-md);
+    text-align: left;
+}
+
+.contact-item strong {
+    color: var(--primary);
+}
+
+@media (max-width: 768px) {
+    .legal-page {
+        padding: 1rem 0;
+    }
+    
+    .legal-nav {
+        flex-direction: column;
+    }
+    
+    .nav-btn {
+        width: 100%;
+        text-align: center;
+    }
+    
+    .legal-content {
+        padding: 1.5rem;
+    }
+    
+    .cookie-controls,
+    .data-actions {
+        flex-direction: column;
+    }
+    
+    .cookie-controls .btn,
+    .data-actions .btn {
+        width: 100%;
+    }
+    
+    .contact-info {
+        text-align: center;
+    }
+}
+</style>
+
+<script>
+function showSection(sectionId) {
+    // Hide all sections
+    document.querySelectorAll('.legal-section').forEach(section => {
+        section.classList.remove('active');
+    });
+    
+    // Remove active class from all nav buttons
+    document.querySelectorAll('.nav-btn').forEach(btn => {
+        btn.classList.remove('active');
+    });
+    
+    // Show selected section
+    document.getElementById(sectionId).classList.add('active');
+    
+    // Add active class to clicked button
+    event.target.classList.add('active');
+}
+
+function manageCookies() {
+    // In a real application, this would open a cookie preference modal
+    alert('Cookie preference management coming soon! For now, you can manage cookies through your browser settings.');
+}
+
+// Initialize page
+document.addEventListener('DOMContentLoaded', function() {
+    // Show privacy section by default
+    showSection('privacy');
+});
+</script>
+{% endblock %}

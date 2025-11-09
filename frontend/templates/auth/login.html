@@ -1,0 +1,237 @@
+{% extends "base.html" %}
+
+{% block title %}Sign In - MyBella{% endblock %}
+
+{% block extra_css %}
+<style>
+.auth-container {
+    min-height: calc(100vh - 120px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--spacing-lg) 0;
+}
+
+.auth-card {
+    background: var(--surface-color);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-lg);
+    padding: var(--spacing-2xl);
+    width: 100%;
+    max-width: 400px;
+    border: 1px solid var(--border-color);
+}
+
+.auth-header {
+    text-align: center;
+    margin-bottom: var(--spacing-xl);
+}
+
+.auth-title {
+    font-size: var(--font-size-2xl);
+    font-weight: 700;
+    margin-bottom: var(--spacing-sm);
+    color: var(--text-primary);
+}
+
+.auth-subtitle {
+    color: var(--text-secondary);
+    font-size: var(--font-size-sm);
+}
+
+.auth-form {
+    margin-bottom: var(--spacing-lg);
+}
+
+.auth-footer {
+    text-align: center;
+    padding-top: var(--spacing-lg);
+    border-top: 1px solid var(--border-color);
+}
+
+.auth-link {
+    color: var(--primary-color);
+    font-weight: 500;
+}
+
+.auth-link:hover {
+    color: var(--primary-dark);
+}
+
+.password-toggle {
+    position: relative;
+}
+
+.password-toggle-btn {
+    position: absolute;
+    right: var(--spacing-sm);
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    padding: var(--spacing-xs);
+}
+
+.password-toggle-btn:hover {
+    color: var(--text-primary);
+}
+
+.remember-me {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    margin: var(--spacing-md) 0;
+}
+
+.checkbox {
+    width: 16px;
+    height: 16px;
+    accent-color: var(--primary-color);
+}
+
+.forgot-password {
+    text-align: right;
+    margin-top: var(--spacing-sm);
+}
+
+.forgot-password a {
+    color: var(--text-muted);
+    font-size: var(--font-size-sm);
+}
+
+.forgot-password a:hover {
+    color: var(--primary-color);
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="auth-container">
+    <div class="container">
+        <div class="auth-card">
+            <div class="auth-header">
+                <h1 class="auth-title">Welcome back</h1>
+                <p class="auth-subtitle">Sign in to continue your AI companion journey</p>
+            </div>
+
+            <form method="POST" class="auth-form" id="loginForm">
+                
+                <div class="form-group">
+                    <label for="email" class="form-label">Email</label>
+                    <input type="email" id="email" name="email" class="form-input" placeholder="Enter your email" autocomplete="email" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="password" class="form-label">Password</label>
+                    <div class="password-toggle">
+                        <input type="password" id="password" name="password" class="form-input" placeholder="Enter your password" autocomplete="current-password" required>
+                        <button type="button" class="password-toggle-btn" onclick="togglePassword('password')">
+                            <span id="password-icon"></span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="remember-me">
+                    <input type="checkbox" id="remember_me" name="remember_me" class="checkbox">
+                    <label for="remember_me" class="text-sm">Remember me</label>
+                </div>
+
+                <div class="forgot-password">
+                    <a href="#" onclick="showForgotPassword()">Forgot your password?</a>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-lg" style="width: 100%; margin-top: var(--spacing-lg);">
+                    <span class="btn-text">Sign In</span>
+                    <span class="loading hidden">Signing in...</span>
+                </button>
+            </form>
+
+            <div class="auth-footer">
+                <p class="text-sm text-secondary">
+                    Don't have an account? 
+                    <a href="{{ url_for('user_auth.register') }}" class="auth-link">Create one here</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Forgot Password Modal -->
+<div id="forgotPasswordModal" class="modal-overlay hidden" style="display: none;">
+    <div class="modal">
+        <h3>Reset Password</h3>
+        <p class="text-secondary mb-4">Enter your email address and we'll send you a link to reset your password.</p>
+        
+        <form id="forgotPasswordForm">
+            <div class="form-group">
+                <label class="form-label">Email Address</label>
+                <input type="email" class="form-input" placeholder="Enter your email" required>
+            </div>
+            
+            <div class="flex gap-2">
+                <button type="button" class="btn btn-secondary" onclick="hideForgotPassword()">Cancel</button>
+                <button type="submit" class="btn btn-primary">Send Reset Link</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Password visibility toggle
+function togglePassword(fieldId) {
+    const field = document.getElementById(fieldId);
+    const icon = document.getElementById(fieldId + '-icon');
+    
+    if (field.type === 'password') {
+        field.type = 'text';
+        icon.textContent = '';
+    } else {
+        field.type = 'password';
+        icon.textContent = '';
+    }
+}
+
+// Forgot password modal
+function showForgotPassword() {
+    document.getElementById('forgotPasswordModal').classList.remove('hidden');
+}
+
+function hideForgotPassword() {
+    document.getElementById('forgotPasswordModal').classList.add('hidden');
+}
+
+// Form submission
+document.getElementById('loginForm').addEventListener('submit', function(e) {
+    const submitBtn = this.querySelector('button[type="submit"]');
+    const btnText = submitBtn.querySelector('.btn-text');
+    const loading = submitBtn.querySelector('.loading');
+    
+    btnText.classList.add('hidden');
+    loading.classList.remove('hidden');
+    submitBtn.disabled = true;
+});
+
+// Forgot password form
+document.getElementById('forgotPasswordForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    // Show success message
+    alert('If an account with that email exists, we\'ve sent you a reset link.');
+    hideForgotPassword();
+});
+
+// Close modal when clicking outside
+document.getElementById('forgotPasswordModal').addEventListener('click', function(e) {
+    if (e.target === this) {
+        hideForgotPassword();
+    }
+});
+
+// Auto-focus first input
+document.querySelector('.form-input').focus();
+</script>
+{% endblock %}

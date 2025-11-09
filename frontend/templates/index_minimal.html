@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+
+{% block title %}MyBella — AI Companion{% endblock %}
+
+{% block extra_css %}
+<style>
+:root {
+    --primary: #6366f1;
+    --primary-dark: #4f46e5;
+    --secondary: #f472b6;
+    --accent: #06d6a0;
+    --bg: #f8fafc;
+    --surface: #ffffff;
+    --text: #1e293b;
+    --text-muted: #64748b;
+    --border: #e2e8f0;
+}
+
+body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: Inter, -apple-system, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.hero {
+    padding: 4rem 2rem;
+    text-align: center;
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+    color: white;
+    min-height: 60vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.hero h1 {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    font-weight: 600;
+}
+
+.hero p {
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+    opacity: 0.9;
+}
+
+.btn {
+    display: inline-block;
+    padding: 1rem 2rem;
+    background: var(--surface);
+    color: var(--primary);
+    text-decoration: none;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    margin: 0.5rem;
+    transition: transform 0.2s;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="hero">
+    <div>
+        <h1>Welcome to MyBella</h1>
+        <p>Your AI companion for meaningful conversations and wellness support</p>
+        <a href="{{ url_for('user_auth.register') }}" class="btn">Get Started</a>
+        <a href="{{ url_for('user_auth.login') }}" class="btn">Sign In</a>
+    </div>
+</section>
+{% endblock %}

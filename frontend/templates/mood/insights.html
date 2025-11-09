@@ -1,0 +1,395 @@
+{% extends "base.html" %}
+
+{% block title %}Mood Insights - MyBella{% endblock %}
+
+{% block styles %}
+<style>
+    .insights-container {
+        max-width: 1200px;
+        margin: 40px auto;
+        padding: 20px;
+    }
+
+    .insights-header {
+        text-align: center;
+        margin-bottom: 40px;
+    }
+
+    .insights-header h1 {
+        font-size: 2.5rem;
+        color: #2c3e50;
+        margin-bottom: 10px;
+    }
+
+    .insights-header p {
+        color: #7f8c8d;
+        font-size: 1.1rem;
+    }
+
+    .insights-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 25px;
+        margin-bottom: 40px;
+    }
+
+    .insight-card {
+        background: white;
+        border-radius: 16px;
+        padding: 30px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    }
+
+    .insight-card h3 {
+        color: #2c3e50;
+        margin-bottom: 20px;
+        font-size: 1.3rem;
+    }
+
+    .trend-indicator {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        padding: 20px;
+        border-radius: 12px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        margin-bottom: 15px;
+    }
+
+    .trend-icon {
+        font-size: 3rem;
+    }
+
+    .trend-text {
+        flex: 1;
+    }
+
+    .trend-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin-bottom: 5px;
+    }
+
+    .trend-subtitle {
+        font-size: 0.95rem;
+        opacity: 0.9;
+    }
+
+    .stat-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px 0;
+        border-bottom: 1px solid #f0f0f0;
+    }
+
+    .stat-row:last-child {
+        border-bottom: none;
+    }
+
+    .stat-label {
+        color: #7f8c8d;
+        font-size: 1rem;
+    }
+
+    .stat-value {
+        font-weight: 700;
+        color: #2c3e50;
+        font-size: 1.2rem;
+    }
+
+    .emotion-list {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .emotion-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 12px 15px;
+        background: #f8f4fb;
+        border-radius: 10px;
+        border-left: 4px solid #9b59b6;
+    }
+
+    .emotion-name {
+        font-weight: 600;
+        color: #2c3e50;
+        text-transform: capitalize;
+    }
+
+    .emotion-count {
+        background: #9b59b6;
+        color: white;
+        padding: 4px 12px;
+        border-radius: 15px;
+        font-size: 0.9rem;
+        font-weight: 600;
+    }
+
+    .activity-list {
+        display: grid;
+        gap: 10px;
+    }
+
+    .activity-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 12px 15px;
+        background: #e8f5e9;
+        border-radius: 10px;
+        border-left: 4px solid #4caf50;
+    }
+
+    .activity-name {
+        font-weight: 600;
+        color: #2c3e50;
+        text-transform: capitalize;
+    }
+
+    .activity-count {
+        background: #4caf50;
+        color: white;
+        padding: 4px 12px;
+        border-radius: 15px;
+        font-size: 0.9rem;
+        font-weight: 600;
+    }
+
+    .chart-placeholder {
+        width: 100%;
+        height: 250px;
+        background: linear-gradient(135deg, #f8f4fb 0%, #e8f5e9 100%);
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #7f8c8d;
+        font-size: 1.1rem;
+        text-align: center;
+        padding: 20px;
+    }
+
+    .recommendation-card {
+        background: linear-gradient(135deg, #ffeaa7 0%, #fdcb6e 100%);
+        border-radius: 16px;
+        padding: 30px;
+        margin-top: 30px;
+    }
+
+    .recommendation-card h3 {
+        color: #2c3e50;
+        margin-bottom: 15px;
+        font-size: 1.5rem;
+    }
+
+    .recommendation-list {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .recommendation-item {
+        background: white;
+        padding: 15px 20px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+    }
+
+    .recommendation-icon {
+        font-size: 1.8rem;
+    }
+
+    .recommendation-text {
+        color: #2c3e50;
+        font-size: 1rem;
+    }
+
+    .no-insights {
+        text-align: center;
+        padding: 60px 20px;
+        background: white;
+        border-radius: 16px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    }
+
+    .no-insights-emoji {
+        font-size: 4rem;
+        margin-bottom: 20px;
+    }
+
+    .btn-primary {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 12px 35px;
+        border: none;
+        border-radius: 25px;
+        font-size: 1rem;
+        font-weight: 600;
+        text-decoration: none;
+        display: inline-block;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        color: white;
+        text-decoration: none;
+    }
+
+    .action-buttons {
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+        margin-top: 40px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="insights-container">
+    <div class="insights-header">
+        <h1> Your Mood Insights</h1>
+        <p>Understand your emotional patterns and trends</p>
+    </div>
+
+    {% if stats and stats.total_entries > 0 %}
+        <!-- Trend Card -->
+        <div class="trend-indicator">
+            <div class="trend-icon">
+                {% if stats.mood_trend == 'improving' %}
+                {% elif stats.mood_trend == 'declining' %}
+                {% else %}
+                {% endif %}
+            </div>
+            <div class="trend-text">
+                <div class="trend-title">
+                    {% if stats.mood_trend == 'improving' %}Your mood is improving!
+                    {% elif stats.mood_trend == 'declining' %}Your mood needs attention
+                    {% else %}Your mood is stable
+                    {% endif %}
+                </div>
+                <div class="trend-subtitle">
+                    {% if stats.mood_trend == 'improving' %}Keep up the great work!
+                    {% elif stats.mood_trend == 'declining' %}Let's work together to feel better
+                    {% else %}You're maintaining emotional balance
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Insights Grid -->
+        <div class="insights-grid">
+            <!-- Overall Stats -->
+            <div class="insight-card">
+                <h3> Overall Statistics</h3>
+                <div class="stat-row">
+                    <span class="stat-label">Total Check-ins</span>
+                    <span class="stat-value">{{ stats.total_entries }}</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">Average Mood</span>
+                    <span class="stat-value">{{ stats.avg_mood|round(1) }}/5</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">Current Streak</span>
+                    <span class="stat-value">{{ stats.current_streak }} days</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">Longest Streak</span>
+                    <span class="stat-value">{{ stats.longest_streak }} days</span>
+                </div>
+            </div>
+
+            <!-- Top Emotions -->
+            <div class="insight-card">
+                <h3> Most Common Emotions</h3>
+                {% if stats.emotion_frequency %}
+                <div class="emotion-list">
+                    {% for emotion, count in stats.emotion_frequency[:5] %}
+                    <div class="emotion-item">
+                        <span class="emotion-name">{{ emotion }}</span>
+                        <span class="emotion-count">{{ count }}x</span>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <p style="color: #7f8c8d; text-align: center; padding: 20px;">No emotion data yet</p>
+                {% endif %}
+            </div>
+
+            <!-- Activities -->
+            <div class="insight-card">
+                <h3> Your Activities</h3>
+                {% if stats.activity_frequency %}
+                <div class="activity-list">
+                    {% for activity, count in stats.activity_frequency[:5] %}
+                    <div class="activity-item">
+                        <span class="activity-name">{{ activity }}</span>
+                        <span class="activity-count">{{ count }}x</span>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <p style="color: #7f8c8d; text-align: center; padding: 20px;">No activity data yet</p>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Chart Placeholder -->
+        <div class="insight-card">
+            <h3> Mood Trend Over Time</h3>
+            <div class="chart-placeholder">
+                Chart visualization coming soon!<br>
+                Your {{ stats.total_entries }}-day mood journey will be displayed here
+            </div>
+        </div>
+
+        <!-- Recommendations -->
+        {% if stats.mood_trend == 'declining' or stats.avg_mood < 3 %}
+        <div class="recommendation-card">
+            <h3> Personalized Recommendations</h3>
+            <div class="recommendation-list">
+                <div class="recommendation-item">
+                    <div class="recommendation-icon"></div>
+                    <div class="recommendation-text">Try a guided meditation to reduce stress</div>
+                </div>
+                <div class="recommendation-item">
+                    <div class="recommendation-icon"></div>
+                    <div class="recommendation-text">A short walk can improve your mood significantly</div>
+                </div>
+                <div class="recommendation-item">
+                    <div class="recommendation-icon"></div>
+                    <div class="recommendation-text">Talk to Isabella - she's here to listen</div>
+                </div>
+                <div class="recommendation-item">
+                    <div class="recommendation-icon"></div>
+                    <div class="recommendation-text">Journal your thoughts to process emotions</div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+        <div class="action-buttons">
+            <a href="{{ url_for('mood.checkin') }}" class="btn-primary">Add Check-In</a>
+            <a href="{{ url_for('mood.journal') }}" class="btn-primary">View Journal</a>
+            <a href="{{ url_for('user_views.dashboard') }}" class="btn-primary">Back to Dashboard</a>
+        </div>
+    {% else %}
+        <div class="no-insights">
+            <div class="no-insights-emoji"></div>
+            <h2>Not enough data for insights yet</h2>
+            <p>Start tracking your mood daily to see meaningful patterns and trends.</p>
+            <a href="{{ url_for('mood.checkin') }}" class="btn-primary">Start Tracking</a>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

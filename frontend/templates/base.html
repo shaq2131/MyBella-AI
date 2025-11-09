@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}MyBella - AI Companion{% endblock %}</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='img/favicon.ico') }}">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+    {% block extra_css %}{% endblock %}
+    
+    <!-- Meta tags -->
+    <meta name="description" content="MyBella - Your AI companion for meaningful conversations and voice interactions">
+    <meta name="keywords" content="AI, companion, chat, voice, conversation">
+    <meta name="author" content="MyBella">
+    
+    <!-- Open Graph / Social Media -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="{% block og_title %}MyBella - AI Companion{% endblock %}">
+    <meta property="og:description" content="{% block og_description %}Your AI companion for meaningful conversations and voice interactions{% endblock %}">
+    <meta property="og:image" content="{{ url_for('static', filename='img/og-image.png', _external=True) }}">
+    <meta property="og:url" content="{{ request.url }}">
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{% block twitter_title %}MyBella - AI Companion{% endblock %}">
+    <meta name="twitter:description" content="{% block twitter_description %}Your AI companion for meaningful conversations and voice interactions{% endblock %}">
+    <meta name="twitter:image" content="{{ url_for('static', filename='img/og-image.png', _external=True) }}">
+    
+    <!-- PWA / Mobile App -->
+    <meta name="theme-color" content="#6366f1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="MyBella">
+    
+    <!-- Security -->
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="X-Frame-Options" content="DENY">
+    <meta http-equiv="X-XSS-Protection" content="1; mode=block">
+</head>
+<body class="loading">
+    <!-- Flash Messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="flash-messages">
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ 'error' if category == 'error' else 'success' if category == 'success' else 'warning' }}" role="alert">
+                        {{ message }}
+                        <button type="button" class="alert-close" onclick="this.parentElement.remove()">&times;</button>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    <!-- Header/Navigation -->
+    {% block header %}
+    <header class="header">
+        <div class="container">
+            <nav class="navbar">
+                <a href="{{ url_for('main.home') }}" class="logo">
+                    <span>MyBella</span>
+                </a>
+                
+                <ul class="nav-links hide-mobile">
+                    {% if current_user.is_authenticated %}
+                        <li><a href="{{ url_for('user_views.dashboard') }}" class="nav-link {{ 'active' if request.endpoint == 'user_views.dashboard' }}">Dashboard</a></li>
+                        <li><a href="{{ url_for('user_views.chat') }}" class="nav-link {{ 'active' if request.endpoint == 'user_views.chat' }}">Chat</a></li>
+                        <li><a href="{{ url_for('wellness.wellness_dashboard') }}" class="nav-link {{ 'active' if 'wellness' in request.endpoint }}">Wellness</a></li>
+                        <li><a href="{{ url_for('user_views.profile') }}" class="nav-link {{ 'active' if request.endpoint == 'user_views.profile' }}">Profile</a></li>
+                        
+                        <!-- Desktop-only navigation link -->
+                        <li class="hide-mobile-tablet"><a href="{{ url_for('main.analytics') }}" class="nav-link {{ 'active' if request.endpoint == 'main.analytics' }}">Analytics</a></li>
+                        
+                        {% if current_user.is_admin %}
+                            <li><a href="{{ url_for('admin.dashboard') }}" class="nav-link {{ 'active' if 'admin' in request.endpoint }}">Admin</a></li>
+                        {% endif %}
+                        
+                        <li class="nav-user">
+                            <div class="flex items-center gap-2">
+                                {% if current_user.profile_picture %}
+                                    <img src="{{ url_for('static', filename='uploads/profile_pics/' + current_user.profile_picture) }}" 
+                                         alt="{{ current_user.name }}" 
+                                         class="avatar avatar-sm">
+                                {% else %}
+                                    <div class="avatar avatar-sm bg-primary">{{ current_user.name[0].upper() }}</div>
+                                {% endif %}
+                                <span class="text-sm">{{ current_user.name }}</span>
+                            </div>
+                        </li>
+                        
+                        <li><a href="{{ url_for('user_auth.logout') }}" class="btn btn-secondary btn-sm">Logout</a></li>
+                    {% else %}
+                        <li><a href="{{ url_for('main.home') }}" class="nav-link {{ 'active' if request.endpoint == 'main.home' }}">Home</a></li>
+                        <!-- Desktop-only navigation link for guests -->
+                        <li class="hide-mobile-tablet"><a href="{{ url_for('main.features') }}" class="nav-link {{ 'active' if request.endpoint == 'main.features' }}">Features</a></li>
+                        <li><a href="{{ url_for('user_auth.login') }}" class="nav-link">Login</a></li>
+                        <li><a href="{{ url_for('user_auth.register') }}" class="btn btn-primary btn-sm">Get Started</a></li>
+                    {% endif %}
+                </ul>
+
+                <!-- Mobile menu button - moved to the right -->
+                <button class="mobile-menu-btn show-mobile" id="mobileMenuBtn" aria-label="Toggle navigation" aria-expanded="false">
+                    Menu
+                </button>
+            </nav>
+        </div>
+        
+        <!-- Mobile Navigation Menu -->
+        <div class="mobile-nav" id="mobileNav">
+            <ul class="nav-links">
+                {% if current_user.is_authenticated %}
+                    <li><a href="{{ url_for('user_views.dashboard') }}" class="nav-link">Dashboard</a></li>
+                    <li><a href="{{ url_for('user_views.chat') }}" class="nav-link">Chat</a></li>
+                    <li><a href="/wellness/" class="nav-link">Wellness</a></li>
+                    <li><a href="{{ url_for('user_views.profile') }}" class="nav-link">Profile</a></li>
+                    
+                    {% if current_user.is_admin %}
+                        <li><a href="{{ url_for('admin.dashboard') }}" class="nav-link">Admin Panel</a></li>
+                    {% endif %}
+                    
+                    <li class="mt-4">
+                        <div class="text-center mb-2">
+                            <div class="avatar avatar-md bg-primary mx-auto mb-2">{{ current_user.name[0].upper() }}</div>
+                            <div class="text-sm font-medium">{{ current_user.name }}</div>
+                        </div>
+                    </li>
+                    <li><a href="{{ url_for('user_auth.logout') }}" class="btn btn-secondary">Logout</a></li>
+                {% else %}
+                    <li><a href="{{ url_for('main.home') }}" class="nav-link">Home</a></li>
+                    <li><a href="{{ url_for('user_auth.login') }}" class="nav-link">Login</a></li>
+                    <li><a href="{{ url_for('user_auth.register') }}" class="btn btn-primary">Get Started</a></li>
+                {% endif %}
+            </ul>
+        </div>
+    </header>
+    {% endblock %}
+
+    <!-- Main Content -->
+    <main class="main">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    {% block footer %}
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <p>&copy; 2025 MyBella. Building meaningful AI connections.</p>
+                <div class="footer-links">
+                    <a href="#" class="text-muted">Privacy Policy</a>
+                    <span class="text-muted">&bull;</span>
+                    <a href="#" class="text-muted">Terms of Service</a>
+                    <span class="text-muted">&bull;</span>
+                    <a href="#" class="text-muted">Support</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+    {% endblock %}
+
+    <!-- Core JavaScript -->
+    <script src="{{ url_for('static', filename='js/main.js') }}" defer></script>
+    
+    <!-- Socket.IO for real-time features -->
+    {% if current_user.is_authenticated %}
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.2/socket.io.js"></script>
+        <script src="{{ url_for('static', filename='js/socket.js') }}" defer></script>
+    {% endif %}
+    
+    <!-- Page-specific JavaScript -->
+    {% block extra_js %}{% endblock %}
+    
+    <!-- Analytics / Tracking (if needed) -->
+    {% block analytics %}{% endblock %}
+</body>
+</html>

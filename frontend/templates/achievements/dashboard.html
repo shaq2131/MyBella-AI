@@ -1,0 +1,190 @@
+{% extends "base.html" %}
+
+{% block title %}Achievements - MyBella{% endblock %}
+
+{% block extra_css %}{% endblock %}
+
+{% block content %}
+{% set unlocked = achievements.unlocked or [] %}
+{% set locked = achievements.locked or [] %}
+
+<div class="achievements-page">
+    <div class="container">
+    <header class="page-heading" data-animate="fade-up" data-animate-delay="60">
+            <span class="page-heading__eyebrow">Progress hub</span>
+            <h1 class="page-heading__title">Achievements &amp; streaks</h1>
+            <p class="page-heading__subtitle">Celebrate your consistency, unlock new badges, and keep your momentum thriving with MyBella.</p>
+        </header>
+
+    <div class="card-grid card-grid--columns-4 achievements-metrics" data-animate="fade-up" data-animate-delay="120">
+            <article class="stat-card">
+                <div class="stat-icon" aria-hidden="true">Achievements</div>
+                <p class="stat-value">{{ stats.achievements.unlocked }}</p>
+                <p class="stat-label">Achievements unlocked</p>
+                <div class="stat-meta">
+                    {{ stats.achievements.percentage|default(0)|round(0) }}% of {{ stats.achievements.total|default(0) }} total
+                </div>
+            </article>
+
+            <article class="stat-card">
+                <div class="stat-icon" aria-hidden="true">Points</div>
+                <p class="stat-value">{{ stats.total_points|default(0) }}</p>
+                <p class="stat-label">Total achievement points</p>
+                <div class="stat-meta">Keep exploring features to earn more</div>
+            </article>
+
+            <article class="stat-card">
+                <div class="stat-icon" aria-hidden="true">Streak</div>
+                <p class="stat-value">{{ stats.streak.current_streak|default(0) }}</p>
+                <p class="stat-label">Current streak (days)</p>
+                <div class="stat-meta">Last check-in {{ stats.streak.last_checkin_date|default('—')[:10] }}</div>
+            </article>
+
+            <article class="stat-card">
+                <div class="stat-icon" aria-hidden="true">Best</div>
+                <p class="stat-value">{{ stats.streak.longest_streak|default(0) }}</p>
+                <p class="stat-label">Longest streak</p>
+                <div class="stat-meta">{{ stats.streak.total_checkins|default(0) }} lifetime check-ins</div>
+            </article>
+        </div>
+
+    <section class="streak-panel glass-card" data-animate="fade-up" data-animate-delay="180">
+            <div class="streak-panel__header">
+                <div class="streak-panel__copy">
+                    <span class="streak-panel__eyebrow">Daily rhythm</span>
+                    <h2 class="streak-panel__title">Keep the flame alive</h2>
+                    <p class="streak-panel__subtitle">You're on a {{ stats.streak.current_streak|default(0) }} day streak. Stay consistent to set a new personal best and unlock bonus rewards.</p>
+                </div>
+                <div class="streak-panel__counter" aria-live="polite">
+                    <span class="streak-counter">
+                        <span class="streak-counter__icon" aria-hidden="true">Streak</span>
+                        {{ stats.streak.current_streak|default(0) }}
+                    </span>
+                    <span class="streak-caption">Current streak</span>
+                </div>
+            </div>
+
+            <div class="streak-highlights">
+                <div class="streak-pill">
+                    <span class="streak-pill__label">Longest streak</span>
+                    <span class="streak-pill__value">{{ stats.streak.longest_streak|default(0) }} days</span>
+                </div>
+                <div class="streak-pill">
+                    <span class="streak-pill__label">Total check-ins</span>
+                    <span class="streak-pill__value">{{ stats.streak.total_checkins|default(0) }}</span>
+                </div>
+                {% if stats.streak.streak_start_date %}
+                <div class="streak-pill">
+                    <span class="streak-pill__label">Streak started</span>
+                    <span class="streak-pill__value">{{ stats.streak.streak_start_date[:10] }}</span>
+                </div>
+                {% endif %}
+            </div>
+
+            <div class="streak-calendar" role="list">
+                {% for day in calendar_data %}
+                <div
+                    class="streak-calendar__day {% if day.checked_in %}is-active{% endif %} {% if day.is_today %}is-today{% endif %}"
+                    role="listitem"
+                    aria-label="{{ day.date }}{% if day.checked_in %} — checked in{% else %} — missed{% endif %}"
+                    data-date="{{ day.date }}">
+                    <span class="streak-calendar__label">{{ day.date[-2:] }}</span>
+                </div>
+                {% endfor %}
+            </div>
+        </section>
+
+    <section class="page-section surface-card achievements-section" data-animate="fade-up" data-animate-delay="210">
+            <div class="achievements-section__header">
+                <div>
+                    <h2 class="achievements-section__title">Badge showcase</h2>
+                    <p class="achievements-section__subtitle">You've unlocked {{ unlocked|length }} of {{ stats.achievements.total|default(0) }} achievements. Keep going to reveal the rest.</p>
+                </div>
+                {% if unlocked or locked %}
+                <div class="achievements-filters">
+                    <button class="filter-chip is-active" type="button" data-achievement-filter="all">All</button>
+                    <button class="filter-chip" type="button" data-achievement-filter="unlocked">Unlocked</button>
+                    <button class="filter-chip" type="button" data-achievement-filter="locked">In progress</button>
+                </div>
+                {% endif %}
+            </div>
+
+            {% if unlocked or locked %}
+            <div class="achievements-grid" id="achievementsGrid">
+                {% for item in unlocked %}
+                <article class="achievement-card" data-achievement-state="unlocked" data-tier="{{ item.achievement.tier|default('bronze') }}" style="--achievement-accent: {{ item.achievement.color|default('#6366f1') }};">
+                    <span class="achievement-card__badge">Unlocked</span>
+                    <div class="achievement-card__icon" aria-hidden="true">{{ item.achievement.icon }}</div>
+                    <span class="achievement-card__tier is-{{ item.achievement.tier|default('bronze') }}">{{ item.achievement.tier|default('bronze')|title }}</span>
+                    <h3 class="achievement-card__title">{{ item.achievement.name }}</h3>
+                    <p class="achievement-card__description">{{ item.achievement.description }}</p>
+                    <div class="achievement-card__footer">
+                        <span class="achievement-card__points">+{{ item.achievement.points }} pts</span>
+                        <span class="achievement-card__date">Unlocked {{ item.unlocked_at[:10] }}</span>
+                    </div>
+                </article>
+                {% endfor %}
+
+                {% for item in locked %}
+                <article class="achievement-card is-locked" data-achievement-state="locked" data-tier="{{ item.achievement.tier|default('bronze') }}" style="--achievement-accent: {{ item.achievement.color|default('#6366f1') }};">
+                    <div class="achievement-card__icon" aria-hidden="true">{{ item.achievement.icon }}</div>
+                    <span class="achievement-card__tier is-{{ item.achievement.tier|default('bronze') }}">{{ item.achievement.tier|default('bronze')|title }}</span>
+                    <h3 class="achievement-card__title">{{ item.achievement.name }}</h3>
+                    <p class="achievement-card__description">{{ item.achievement.description }}</p>
+                    <div class="achievement-card__footer">
+                        <span class="achievement-card__points">+{{ item.achievement.points }} pts</span>
+                        <span class="achievement-card__progress">{{ item.progress|default(0) }} / {{ item.achievement.condition_value }}</span>
+                    </div>
+                    <div class="achievement-progress" role="progressbar" aria-valuenow="{{ item.progress_percentage|default(0)|round(0) }}" aria-valuemin="0" aria-valuemax="100">
+                        <span class="achievement-progress__fill" style="width: {{ item.progress_percentage|default(0) }}%;"></span>
+                    </div>
+                    <div class="achievement-progress__meta">
+                        <span>Keep going</span>
+                        <span>{{ item.progress_percentage|default(0)|round(0) }}%</span>
+                    </div>
+                </article>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="achievements-empty" data-animate="fade-up" data-animate-delay="240">
+                <h3>Start your achievement journey</h3>
+                <p>Log a mood entry, join a chat, or complete a wellness activity to unlock your first badge.</p>
+            </div>
+            {% endif %}
+        </section>
+
+    <div class="achievements-actions" data-animate="fade-up" data-animate-delay="240">
+            <a href="{{ url_for('achievements.leaderboard') }}" class="btn btn-primary">View leaderboard</a>
+            <a href="{{ url_for('user_views.dashboard') }}" class="btn btn-secondary">Back to dashboard</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const filterButtons = document.querySelectorAll('[data-achievement-filter]');
+    const cards = document.querySelectorAll('[data-achievement-state]');
+
+    if (!filterButtons.length) {
+        return;
+    }
+
+    filterButtons.forEach((button) => {
+        button.addEventListener('click', () => {
+            const target = button.dataset.achievementFilter;
+
+            filterButtons.forEach((control) => {
+                control.classList.toggle('is-active', control === button);
+            });
+
+            cards.forEach((card) => {
+                const matches = target === 'all' || card.dataset.achievementState === target;
+                card.hidden = !matches;
+            });
+        });
+    });
+});
+</script>
+{% endblock %}

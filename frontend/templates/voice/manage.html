@@ -1,0 +1,490 @@
+{% extends "base.html" %}
+
+{% block title %}Manage Voices - MyBella{% endblock %}
+
+{% block styles %}
+<style>
+    .manage-container {
+        max-width: 1200px;
+        margin: 40px auto;
+        padding: 20px;
+    }
+
+    .manage-header {
+        text-align: center;
+        margin-bottom: 40px;
+    }
+
+    .manage-header h1 {
+        font-size: 2.5rem;
+        color: #2c3e50;
+        margin-bottom: 15px;
+    }
+
+    .manage-header p {
+        font-size: 1.2rem;
+        color: #7f8c8d;
+    }
+
+    .voice-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+        gap: 25px;
+    }
+
+    .voice-card {
+        background: white;
+        border-radius: 20px;
+        padding: 30px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        transition: all 0.3s ease;
+        position: relative;
+    }
+
+    .voice-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+    }
+
+    .voice-card.has-custom {
+        border: 3px solid #4caf50;
+        background: linear-gradient(135deg, #ffffff 0%, #e8f5e9 100%);
+    }
+
+    .voice-card.no-custom {
+        border: 3px solid #e0e0e0;
+    }
+
+    .voice-header {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        margin-bottom: 20px;
+    }
+
+    .voice-avatar {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        overflow: hidden;
+        border: 3px solid #667eea;
+    }
+
+    .voice-avatar img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .voice-info h3 {
+        color: #2c3e50;
+        font-size: 1.5rem;
+        margin-bottom: 5px;
+    }
+
+    .voice-status {
+        padding: 5px 15px;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        display: inline-block;
+    }
+
+    .voice-status.custom {
+        background: #4caf50;
+        color: white;
+    }
+
+    .voice-status.default {
+        background: #ff9800;
+        color: white;
+    }
+
+    .voice-details {
+        margin: 20px 0;
+        padding: 15px;
+        background: #f8f9fa;
+        border-radius: 12px;
+    }
+
+    .voice-detail-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 8px 0;
+        border-bottom: 1px solid #e0e0e0;
+    }
+
+    .voice-detail-row:last-child {
+        border-bottom: none;
+    }
+
+    .voice-detail-label {
+        color: #7f8c8d;
+        font-size: 0.9rem;
+    }
+
+    .voice-detail-value {
+        color: #2c3e50;
+        font-weight: 600;
+    }
+
+    .test-section {
+        margin: 20px 0;
+    }
+
+    .test-input {
+        width: 100%;
+        padding: 12px;
+        border: 2px solid #e0e0e0;
+        border-radius: 10px;
+        font-size: 0.95rem;
+        margin-bottom: 10px;
+        resize: vertical;
+        min-height: 60px;
+    }
+
+    .test-input:focus {
+        outline: none;
+        border-color: #667eea;
+    }
+
+    .voice-actions {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+    }
+
+    .btn {
+        padding: 10px 20px;
+        border: none;
+        border-radius: 8px;
+        font-size: 0.95rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        flex: 1;
+        min-width: 120px;
+    }
+
+    .btn-test {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+    }
+
+    .btn-test:hover:not(:disabled) {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+    }
+
+    .btn-upload {
+        background: linear-gradient(135deg, #4caf50 0%, #45a049 100%);
+        color: white;
+    }
+
+    .btn-upload:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(76, 175, 80, 0.4);
+    }
+
+    .btn-delete {
+        background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
+        color: white;
+    }
+
+    .btn-delete:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(238, 90, 111, 0.4);
+    }
+
+    .btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+
+    .audio-player-section {
+        margin: 15px 0;
+        display: none;
+    }
+
+    .audio-player-section.active {
+        display: block;
+    }
+
+    .audio-player-section audio {
+        width: 100%;
+    }
+
+    .loading-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(255, 255, 255, 0.95);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        border-radius: 20px;
+        z-index: 10;
+    }
+
+    .loading-overlay.active {
+        display: flex;
+    }
+
+    .loading-spinner {
+        border: 5px solid #f3f3f3;
+        border-top: 5px solid #667eea;
+        border-radius: 50%;
+        width: 50px;
+        height: 50px;
+        animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
+    .no-voices {
+        text-align: center;
+        padding: 60px 20px;
+        background: white;
+        border-radius: 20px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    }
+
+    .no-voices h2 {
+        color: #2c3e50;
+        margin-bottom: 15px;
+    }
+
+    .no-voices p {
+        color: #7f8c8d;
+        margin-bottom: 25px;
+    }
+
+    .btn-primary {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 12px 35px;
+        border: none;
+        border-radius: 25px;
+        font-size: 1rem;
+        font-weight: 600;
+        text-decoration: none;
+        display: inline-block;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        color: white;
+        text-decoration: none;
+    }
+
+    .action-buttons {
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+        margin-top: 40px;
+    }
+
+    @media (max-width: 768px) {
+        .voice-grid {
+            grid-template-columns: 1fr;
+        }
+        
+        .manage-header h1 {
+            font-size: 1.8rem;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="manage-container">
+    <div class="manage-header">
+        <h1> Voice Management</h1>
+        <p>Test, manage, and customize your persona voices</p>
+    </div>
+
+    {% if voice_data %}
+    <div class="voice-grid">
+        {% for voice in voice_data %}
+        <div class="voice-card {% if voice.has_custom_voice %}has-custom{% else %}no-custom{% endif %}" id="card-{{ voice.persona_name }}">
+            <div class="loading-overlay" id="loading-{{ voice.persona_name }}">
+                <div class="loading-spinner"></div>
+            </div>
+
+            <div class="voice-header">
+                <div class="voice-avatar">
+                    {% if voice.persona_avatar %}
+                    <img src="{{ url_for('static', filename='uploads/persona_pics/' + voice.persona_avatar) }}" alt="{{ voice.persona_name }}">
+                    {% else %}
+                    <div style="width: 100%; height: 100%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center; color: white; font-size: 2rem; font-weight: 700;">
+                        {{ voice.persona_name[0] }}
+                    </div>
+                    {% endif %}
+                </div>
+                
+                <div class="voice-info">
+                    <h3>{{ voice.persona_name }}</h3>
+                    <span class="voice-status {% if voice.has_custom_voice %}custom{% else %}default{% endif %}">
+                        {% if voice.has_custom_voice %} Custom Voice{% else %}Default Voice{% endif %}
+                    </span>
+                </div>
+            </div>
+
+            <div class="voice-details">
+                <div class="voice-detail-row">
+                    <span class="voice-detail-label">Voice Type</span>
+                    <span class="voice-detail-value">
+                        {% if voice.has_custom_voice %}Custom Cloned{% else %}{{ voice.default_voice }}{% endif %}
+                    </span>
+                </div>
+                {% if voice.voice_id %}
+                <div class="voice-detail-row">
+                    <span class="voice-detail-label">Voice ID</span>
+                    <span class="voice-detail-value" style="font-size: 0.75rem; font-family: monospace;">
+                        {{ voice.voice_id[:20] }}...
+                    </span>
+                </div>
+                {% endif %}
+            </div>
+
+            {% if voice.has_custom_voice %}
+            <!-- Test Section for Custom Voices -->
+            <div class="test-section">
+                <textarea 
+                    class="test-input" 
+                    id="testText-{{ voice.persona_name }}"
+                    placeholder="Enter text to test your custom voice..."
+                >Hello! This is {{ voice.persona_name }} speaking with your custom voice.</textarea>
+                
+                <div class="audio-player-section" id="audioSection-{{ voice.persona_name }}">
+                    <audio controls id="audioPlayer-{{ voice.persona_name }}"></audio>
+                </div>
+            </div>
+
+            <div class="voice-actions">
+                <button class="btn btn-test" onclick="testVoice('{{ voice.persona_name }}', '{{ voice.voice_id }}')">
+                     Test Voice
+                </button>
+                <button class="btn btn-delete" onclick="deleteVoice('{{ voice.persona_name }}')">
+                     Remove
+                </button>
+            </div>
+            {% else %}
+            <!-- Upload Section for Default Voices -->
+            <div class="voice-actions">
+                <button class="btn btn-upload" onclick="window.location.href='{{ url_for('voice.upload') }}'">
+                     Upload Voice
+                </button>
+            </div>
+            {% endif %}
+        </div>
+        {% endfor %}
+    </div>
+
+    <div class="action-buttons">
+        <a href="{{ url_for('voice.upload') }}" class="btn-primary"> Upload New Voice</a>
+        <a href="{{ url_for('user_views.dashboard') }}" class="btn-primary">Back to Dashboard</a>
+    </div>
+    {% else %}
+    <div class="no-voices">
+        <div style="font-size: 4rem; margin-bottom: 20px;"></div>
+        <h2>No Personas Found</h2>
+        <p>Create personas to start uploading custom voices.</p>
+        <a href="{{ url_for('user_views.dashboard') }}" class="btn-primary">Back to Dashboard</a>
+    </div>
+    {% endif %}
+</div>
+
+<script>
+async function testVoice(personaName, voiceId) {
+    const textArea = document.getElementById(`testText-${personaName}`);
+    const text = textArea.value.trim();
+    
+    if (!text) {
+        alert('Please enter some text to test the voice.');
+        return;
+    }
+    
+    // Show loading
+    document.getElementById(`loading-${personaName}`).classList.add('active');
+    
+    try {
+        const response = await fetch('/voice/test', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                voice_id: voiceId,
+                text: text
+            })
+        });
+        
+        const result = await response.json();
+        
+        if (result.audio_b64) {
+            // Show audio player
+            const audioSection = document.getElementById(`audioSection-${personaName}`);
+            const audioPlayer = document.getElementById(`audioPlayer-${personaName}`);
+            
+            audioPlayer.src = 'data:audio/mpeg;base64,' + result.audio_b64;
+            audioSection.classList.add('active');
+            
+            // Auto play
+            audioPlayer.play();
+        } else {
+            alert('Could not generate audio: ' + (result.error || result.note || 'Unknown error'));
+        }
+        
+    } catch (error) {
+        alert('Failed to test voice: ' + error.message);
+    } finally {
+        document.getElementById(`loading-${personaName}`).classList.remove('active');
+    }
+}
+
+async function deleteVoice(personaName) {
+    if (!confirm(`Are you sure you want to remove the custom voice from ${personaName}?`)) {
+        return;
+    }
+    
+    // Show loading
+    document.getElementById(`loading-${personaName}`).classList.add('active');
+    
+    try {
+        const response = await fetch('/voice/delete', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                persona: personaName
+            })
+        });
+        
+        const result = await response.json();
+        
+        if (result.ok) {
+            alert(`Custom voice removed from ${personaName}`);
+            location.reload(); // Refresh to show updated state
+        } else {
+            alert('Failed to remove voice: ' + result.error);
+        }
+        
+    } catch (error) {
+        alert('Failed to remove voice: ' + error.message);
+    } finally {
+        document.getElementById(`loading-${personaName}`).classList.remove('active');
+    }
+}
+</script>
+{% endblock %}

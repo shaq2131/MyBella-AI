@@ -1,0 +1,205 @@
+{% extends "base.html" %}
+
+{% block title %}Wellness Hub - MyBella{% endblock %}
+
+{% block content %}
+<div class="wellness-hub-container">
+    <div class="hub-header">
+        <h1> Wellness Hub</h1>
+        <p class="subtitle">Your complete toolkit for mental health and personal growth</p>
+    </div>
+
+    <div class="tools-grid">
+        <!-- Reframe Puzzle -->
+        <a href="/wellness/games/reframe-puzzle" class="tool-card">
+            <div class="tool-icon"></div>
+            <h3>Reframe Puzzle</h3>
+            <p>Challenge negative thoughts and practice cognitive reframing</p>
+            <div class="tool-badge">Game</div>
+        </a>
+
+        <!-- Memory Match -->
+        <a href="/wellness/games/memory-match" class="tool-card">
+            <div class="tool-icon"></div>
+            <h3>Memory Match</h3>
+            <p>Match emotions with coping strategies while having fun</p>
+            <div class="tool-badge">Game</div>
+        </a>
+
+        <!-- Daily Notes -->
+        <a href="/wellness/games/daily-notes" class="tool-card">
+            <div class="tool-icon"></div>
+            <h3>Daily Notes</h3>
+            <p>Guided journaling with CBT prompts and AI insights</p>
+            <div class="tool-badge">Journal</div>
+        </a>
+
+        <!-- Check-In -->
+        <a href="/wellness/games/checkin" class="tool-card">
+            <div class="tool-icon"></div>
+            <h3>Check-In</h3>
+            <p>Start and end your day with intention and reflection</p>
+            <div class="tool-badge">Daily</div>
+        </a>
+
+        <!-- Achievements -->
+        <a href="/wellness/games/achievements" class="tool-card">
+            <div class="tool-icon"></div>
+            <h3>Achievements</h3>
+            <p>Track your progress and celebrate your milestones</p>
+            <div class="tool-badge">Progress</div>
+        </a>
+
+        <!-- Mood Tracking -->
+        <a href="/wellness/mood" class="tool-card">
+            <div class="tool-icon"></div>
+            <h3>Mood Tracker</h3>
+            <p>Monitor your emotional wellbeing over time</p>
+            <div class="tool-badge">Track</div>
+        </a>
+
+        <!-- Goals -->
+        <a href="/wellness/goals" class="tool-card">
+            <div class="tool-icon"></div>
+            <h3>Wellness Goals</h3>
+            <p>Set and achieve your personal wellness objectives</p>
+            <div class="tool-badge">Plan</div>
+        </a>
+
+        <!-- Finance -->
+        <a href="/wellness/finance" class="tool-card">
+            <div class="tool-icon"></div>
+            <h3>Finance Wellness</h3>
+            <p>Track spending, reduce financial stress</p>
+            <div class="tool-badge">Money</div>
+        </a>
+
+        <!-- CBT Sessions -->
+        <a href="/wellness/cbt" class="tool-card">
+            <div class="tool-icon"></div>
+            <h3>CBT Sessions</h3>
+            <p>Guided cognitive behavioral therapy exercises</p>
+            <div class="tool-badge">Therapy</div>
+        </a>
+
+        <!-- Social Connections -->
+        <a href="/wellness/social" class="tool-card">
+            <div class="tool-icon"></div>
+            <h3>Social Network</h3>
+            <p>Nurture meaningful relationships</p>
+            <div class="tool-badge">Connect</div>
+        </a>
+
+        <!-- Coping Strategies -->
+        <a href="/wellness/coping" class="tool-card">
+            <div class="tool-icon"></div>
+            <h3>Coping Toolkit</h3>
+            <p>Build your personalized coping strategies library</p>
+            <div class="tool-badge">Skills</div>
+        </a>
+
+        <!-- Insights -->
+        <a href="/wellness/insights" class="tool-card">
+            <div class="tool-icon"></div>
+            <h3>AI Insights</h3>
+            <p>Get personalized wellness recommendations</p>
+            <div class="tool-badge">AI</div>
+        </a>
+    </div>
+</div>
+
+<style>
+.wellness-hub-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+.hub-header {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.hub-header h1 {
+    font-size: 3rem;
+    color: var(--primary-color, #6C63FF);
+    margin-bottom: 1rem;
+}
+
+.subtitle {
+    font-size: 1.2rem;
+    color: #666;
+}
+
+.tools-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 2rem;
+}
+
+.tool-card {
+    background: white;
+    border-radius: 15px;
+    padding: 2rem;
+    text-decoration: none;
+    color: inherit;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+}
+
+.tool-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--primary-color, #6C63FF) 0%, #764ba2 100%);
+    transform: scaleX(0);
+    transition: transform 0.3s;
+}
+
+.tool-card:hover::before {
+    transform: scaleX(1);
+}
+
+.tool-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 8px 16px rgba(108,99,255,0.2);
+}
+
+.tool-icon {
+    font-size: 3.5rem;
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+.tool-card h3 {
+    font-size: 1.5rem;
+    color: #333;
+    margin-bottom: 0.8rem;
+    text-align: center;
+}
+
+.tool-card p {
+    color: #666;
+    line-height: 1.6;
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+.tool-badge {
+    display: inline-block;
+    padding: 0.4rem 1rem;
+    background: #f0edff;
+    color: var(--primary-color, #6C63FF);
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-align: center;
+    width: 100%;
+}
+</style>
+{% endblock %}

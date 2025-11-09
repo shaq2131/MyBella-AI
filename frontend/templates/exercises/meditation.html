@@ -1,0 +1,451 @@
+{% extends "base.html" %}
+
+{% block title %}Meditation - MyBella{% endblock %}
+
+{% block styles %}
+<style>
+    body {
+        background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        min-height: 100vh;
+    }
+
+    .meditation-container {
+        max-width: 800px;
+        margin: 40px auto;
+        padding: 20px;
+    }
+
+    .meditation-card {
+        background: white;
+        border-radius: 30px;
+        padding: 40px;
+        box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+    }
+
+    .meditation-header {
+        text-align: center;
+        margin-bottom: 40px;
+    }
+
+    .meditation-header h1 {
+        font-size: 2.5rem;
+        color: #2c3e50;
+        margin-bottom: 15px;
+    }
+
+    .meditation-header p {
+        font-size: 1.1rem;
+        color: #7f8c8d;
+    }
+
+    .duration-selector {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+        margin-bottom: 40px;
+        flex-wrap: wrap;
+    }
+
+    .duration-option {
+        background: white;
+        border: 3px solid #e0e0e0;
+        border-radius: 20px;
+        padding: 25px 35px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-align: center;
+        min-width: 150px;
+    }
+
+    .duration-option:hover {
+        border-color: #f093fb;
+        transform: translateY(-5px);
+    }
+
+    .duration-option.selected {
+        border-color: #f093fb;
+        background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        color: white;
+        transform: scale(1.05);
+    }
+
+    .duration-time {
+        font-size: 2rem;
+        font-weight: 700;
+        margin-bottom: 5px;
+    }
+
+    .duration-label {
+        font-size: 0.9rem;
+        opacity: 0.8;
+    }
+
+    .meditation-player {
+        text-align: center;
+        padding: 40px 20px;
+        display: none;
+    }
+
+    .meditation-player.active {
+        display: block;
+    }
+
+    .meditation-visual {
+        width: 250px;
+        height: 250px;
+        margin: 0 auto 30px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 10px 40px rgba(240, 147, 251, 0.4);
+        position: relative;
+        animation: pulse 4s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+        0%, 100% { transform: scale(1); opacity: 1; }
+        50% { transform: scale(1.1); opacity: 0.8; }
+    }
+
+    .meditation-visual-icon {
+        font-size: 5rem;
+        color: white;
+    }
+
+    .meditation-timer {
+        font-size: 3rem;
+        font-weight: 700;
+        color: #2c3e50;
+        margin-bottom: 20px;
+    }
+
+    .meditation-stage {
+        font-size: 1.3rem;
+        color: #7f8c8d;
+        margin-bottom: 30px;
+        font-style: italic;
+    }
+
+    .meditation-guidance {
+        max-width: 600px;
+        margin: 0 auto 30px;
+        padding: 20px;
+        background: #f8f9fa;
+        border-radius: 15px;
+        color: #555;
+        line-height: 1.8;
+    }
+
+    .control-buttons {
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+        flex-wrap: wrap;
+        margin-top: 30px;
+    }
+
+    .btn {
+        padding: 15px 35px;
+        border: none;
+        border-radius: 25px;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .btn-start {
+        background: linear-gradient(135deg, #4caf50 0%, #45a049 100%);
+        color: white;
+    }
+
+    .btn-start:hover {
+        transform: scale(1.05);
+        box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4);
+    }
+
+    .btn-pause {
+        background: linear-gradient(135deg, #ff9800 0%, #f57c00 100%);
+        color: white;
+        display: none;
+    }
+
+    .btn-pause:hover {
+        transform: scale(1.05);
+        box-shadow: 0 6px 20px rgba(255, 152, 0, 0.4);
+    }
+
+    .btn-stop {
+        background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
+        color: white;
+        display: none;
+    }
+
+    .btn-stop:hover {
+        transform: scale(1.05);
+        box-shadow: 0 6px 20px rgba(238, 90, 111, 0.4);
+    }
+
+    .btn-back {
+        background: white;
+        color: #f093fb;
+        border: 2px solid #f093fb;
+    }
+
+    .btn-back:hover {
+        background: #f093fb;
+        color: white;
+    }
+
+    .completion-message {
+        text-align: center;
+        padding: 30px;
+        display: none;
+    }
+
+    .completion-message.show {
+        display: block;
+    }
+
+    .completion-icon {
+        font-size: 4rem;
+        margin-bottom: 20px;
+    }
+
+    .completion-text {
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: #2c3e50;
+        margin-bottom: 20px;
+    }
+
+    @media (max-width: 768px) {
+        .meditation-header h1 {
+            font-size: 1.8rem;
+        }
+
+        .duration-selector {
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .meditation-visual {
+            width: 200px;
+            height: 200px;
+        }
+
+        .meditation-timer {
+            font-size: 2.5rem;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="meditation-container">
+    <div class="meditation-card">
+        <div id="selectScreen">
+            <div class="meditation-header">
+                <h1> Guided Meditation</h1>
+                <p>Choose your meditation duration and find inner peace</p>
+            </div>
+
+            <div class="duration-selector">
+                <div class="duration-option" onclick="selectDuration(5)">
+                    <div class="duration-time">5</div>
+                    <div class="duration-label">minutes</div>
+                </div>
+                <div class="duration-option" onclick="selectDuration(10)">
+                    <div class="duration-time">10</div>
+                    <div class="duration-label">minutes</div>
+                </div>
+                <div class="duration-option" onclick="selectDuration(15)">
+                    <div class="duration-time">15</div>
+                    <div class="duration-label">minutes</div>
+                </div>
+            </div>
+
+            <div class="control-buttons">
+                <button id="beginBtn" class="btn btn-start" onclick="beginMeditation()" disabled style="opacity: 0.5;">
+                    Begin Meditation
+                </button>
+                <a href="{{ url_for('exercises.index') }}" class="btn btn-back">← Back to Exercises</a>
+            </div>
+        </div>
+
+        <div id="meditationPlayer" class="meditation-player">
+            <div class="meditation-visual">
+                <div class="meditation-visual-icon"></div>
+            </div>
+
+            <div class="meditation-timer" id="timer">00:00</div>
+            <div class="meditation-stage" id="stage">Settling in...</div>
+            <div class="meditation-guidance" id="guidance">
+                Find a comfortable position. Close your eyes or soften your gaze. Take a deep breath in... and out.
+            </div>
+
+            <div class="control-buttons">
+                <button id="pauseBtn" class="btn btn-pause" onclick="pauseMeditation()"> Pause</button>
+                <button id="stopBtn" class="btn btn-stop" onclick="stopMeditation()"> End Session</button>
+            </div>
+        </div>
+
+        <div id="completionScreen" class="completion-message">
+            <div class="completion-icon"></div>
+            <div class="completion-text">Meditation Complete</div>
+            <p style="color: #7f8c8d; margin-bottom: 30px;">
+                You've successfully completed your meditation session. Well done!
+            </p>
+            <div class="control-buttons">
+                <button class="btn btn-start" onclick="location.reload()">Meditate Again</button>
+                <a href="{{ url_for('exercises.index') }}" class="btn btn-back">Back to Exercises</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+let selectedDuration = 0;
+let remainingTime = 0;
+let isPaused = false;
+let timerInterval = null;
+let currentStage = 0;
+
+const meditationStages = [
+    {
+        time: 0,
+        stage: "Settling in...",
+        guidance: "Find a comfortable position. Close your eyes or soften your gaze. Take a deep breath in... and out."
+    },
+    {
+        time: 30,
+        stage: "Finding your breath",
+        guidance: "Notice the natural rhythm of your breathing. There's no need to change it. Simply observe each inhale and exhale."
+    },
+    {
+        time: 90,
+        stage: "Deepening awareness",
+        guidance: "If your mind wanders, that's okay. Gently bring your attention back to your breath. This is the practice."
+    },
+    {
+        time: 180,
+        stage: "Present moment",
+        guidance: "Notice any sensations in your body. Feel the ground beneath you. Be fully present in this moment."
+    },
+    {
+        time: 300,
+        stage: "Releasing tension",
+        guidance: "Scan your body for any tension. With each exhale, imagine releasing that tension and letting it go."
+    },
+    {
+        time: 600,
+        stage: "Deep meditation",
+        guidance: "Rest in this peaceful state. You are exactly where you need to be. Continue to breathe naturally."
+    }
+];
+
+function selectDuration(minutes) {
+    selectedDuration = minutes;
+    remainingTime = minutes * 60;
+    
+    document.querySelectorAll('.duration-option').forEach(option => {
+        option.classList.remove('selected');
+    });
+    event.target.closest('.duration-option').classList.add('selected');
+    
+    document.getElementById('beginBtn').disabled = false;
+    document.getElementById('beginBtn').style.opacity = '1';
+}
+
+function beginMeditation() {
+    if (selectedDuration === 0) return;
+    
+    document.getElementById('selectScreen').style.display = 'none';
+    document.getElementById('meditationPlayer').classList.add('active');
+    document.getElementById('pauseBtn').style.display = 'inline-block';
+    document.getElementById('stopBtn').style.display = 'inline-block';
+    
+    startTimer();
+}
+
+function startTimer() {
+    updateTimerDisplay();
+    updateStage();
+    
+    timerInterval = setInterval(() => {
+        if (!isPaused) {
+            remainingTime--;
+            updateTimerDisplay();
+            updateStage();
+            
+            if (remainingTime <= 0) {
+                completeMeditation();
+            }
+        }
+    }, 1000);
+}
+
+function updateTimerDisplay() {
+    const minutes = Math.floor(remainingTime / 60);
+    const seconds = remainingTime % 60;
+    document.getElementById('timer').textContent = 
+        `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+}
+
+function updateStage() {
+    const elapsed = (selectedDuration * 60) - remainingTime;
+    
+    for (let i = meditationStages.length - 1; i >= 0; i--) {
+        if (elapsed >= meditationStages[i].time) {
+            if (currentStage !== i) {
+                currentStage = i;
+                document.getElementById('stage').textContent = meditationStages[i].stage;
+                document.getElementById('guidance').textContent = meditationStages[i].guidance;
+            }
+            break;
+        }
+    }
+}
+
+function pauseMeditation() {
+    isPaused = !isPaused;
+    document.getElementById('pauseBtn').textContent = isPaused ? '▶ Resume' : ' Pause';
+}
+
+function stopMeditation() {
+    if (confirm('Are you sure you want to end your meditation session?')) {
+        clearInterval(timerInterval);
+        saveCompletion();
+    }
+}
+
+function completeMeditation() {
+    clearInterval(timerInterval);
+    document.getElementById('meditationPlayer').classList.remove('active');
+    document.getElementById('completionScreen').classList.add('show');
+    saveCompletion();
+}
+
+async function saveCompletion() {
+    const completedMinutes = Math.ceil((selectedDuration * 60 - remainingTime) / 60);
+    
+    try {
+        await fetch('/exercises/api/complete', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                exercise_type: 'meditation',
+                exercise_name: `${selectedDuration}-Minute Meditation`,
+                duration_minutes: completedMinutes
+            })
+        });
+    } catch (error) {
+        console.error('Error saving completion:', error);
+    }
+}
+</script>
+{% endblock %}

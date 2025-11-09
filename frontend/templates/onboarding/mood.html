@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block title %}Your Mood Today{% endblock %}
+
+{% block extra_css %}
+<style>
+.onboarding-container{min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);padding:var(--spacing-xl)}
+.onboarding-card{background:#fff;border-radius:var(--radius-2xl);padding:var(--spacing-3xl);max-width:700px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.3)}
+.progress-bar{height:4px;background:var(--border-color);border-radius:999px;margin-bottom:var(--spacing-2xl);overflow:hidden}
+.progress-fill{height:100%;background:linear-gradient(90deg,#667eea 0%,#764ba2 100%);width:66%;transition:width .3s}
+.mood-scale{margin:var(--spacing-2xl) 0}
+.mood-labels{display:flex;justify-content:space-between;font-size:var(--font-size-sm);color:var(--text-secondary)}
+.range{width:100%}
+.value{font-weight:700}
+.btn-container{display:flex;gap:var(--spacing-md);margin-top:var(--spacing-2xl)}
+.btn{padding:var(--spacing-md) var(--spacing-xl);border-radius:var(--radius-lg);font-weight:600;cursor:pointer;transition:all .2s;flex:1}
+.btn-primary{background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:#fff;border:none}
+.btn-secondary{background:#fff;border:2px solid var(--border-color);color:var(--text-primary)}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="onboarding-container">
+  <div class="onboarding-card">
+    <div class="progress-bar"><div class="progress-fill" style="width:66%"></div></div>
+    <h2 class="onboarding-title">How are you feeling today?</h2>
+    <p class="onboarding-subtitle">This sets your starting point so we can track progress.</p>
+
+    <div class="mood-scale">
+      <div class="mood-labels"><span>Very low</span><span>Outstanding</span></div>
+      <input id="moodRange" class="range" type="range" min="1" max="10" step="1" value="6"/>
+      <div>Current selection: <span class="value" id="moodValue">6</span>/10</div>
+    </div>
+
+    <div class="btn-container">
+  <a href="{{ url_for('onboarding.persona') }}" class="btn btn-secondary">Back</a>
+  <button id="nextBtn" class="btn btn-primary">Next</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const range = document.getElementById('moodRange');
+const value = document.getElementById('moodValue');
+range.addEventListener('input', () => value.textContent = range.value);
+
+document.getElementById('nextBtn').addEventListener('click', () => {
+  sessionStorage.setItem('baseline_mood', String(range.value));
+  window.location.href = '{{ url_for("onboarding.goals") }}';
+});
+</script>
+{% endblock %}

@@ -1,0 +1,424 @@
+{% extends "base.html" %}
+
+{% block title %}Settings • MyBella{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="settings-page">
+        <div class="page-header">
+            <h1>Settings</h1>
+            <p class="text-muted">Customize your MyBella experience</p>
+        </div>
+
+        <div class="settings-grid">
+            <!-- Persona Settings -->
+            <div class="card settings-card">
+                <div class="card-header">
+                    <h3> AI Companion Preferences</h3>
+                </div>
+                <div class="card-content">
+                    <form class="settings-form" onsubmit="savePersonaSettings(event)">
+                        <div class="form-group">
+                            <label class="form-label">Default Companion</label>
+                            <select class="form-input" name="default_persona">
+                                <option value="Bella" {{ 'selected' if prefs.current_persona == 'Bella' else '' }}>Bella - Friendly & Supportive</option>
+                                <option value="Alex" {{ 'selected' if prefs.current_persona == 'Alex' else '' }}>Alex - Professional & Insightful</option>
+                                <option value="Sam" {{ 'selected' if prefs.current_persona == 'Sam' else '' }}>Sam - Creative & Playful</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Conversation Style</label>
+                            <select class="form-input" name="conversation_style">
+                                <option value="casual" {{ 'selected' if prefs.conversation_style == 'casual' else '' }}>Casual & Relaxed</option>
+                                <option value="formal" {{ 'selected' if prefs.conversation_style == 'formal' else '' }}>Professional & Formal</option>
+                                <option value="friendly" {{ 'selected' if prefs.conversation_style == 'friendly' else '' }}>Warm & Friendly</option>
+                                <option value="supportive" {{ 'selected' if prefs.conversation_style == 'supportive' else '' }}>Supportive & Caring</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Response Length</label>
+                            <select class="form-input" name="response_length">
+                                <option value="short" {{ 'selected' if prefs.response_length == 'short' else '' }}>Short & Concise</option>
+                                <option value="medium" {{ 'selected' if prefs.response_length == 'medium' else '' }}>Balanced</option>
+                                <option value="detailed" {{ 'selected' if prefs.response_length == 'detailed' else '' }}>Detailed & Thorough</option>
+                            </select>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary">Save Preferences</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Privacy Settings -->
+            <div class="card settings-card">
+                <div class="card-header">
+                    <h3> Privacy & Security</h3>
+                </div>
+                <div class="card-content">
+                    <form class="settings-form" onsubmit="savePrivacySettings(event)">
+                        <div class="form-group">
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="save_history" name="save_history" {{ 'checked' if prefs.save_chat_history else '' }}>
+                                <label for="save_history" class="checkbox-label">Save chat history</label>
+                            </div>
+                            <small class="form-help">Keep a record of your conversations for future reference</small>
+                        </div>
+                        
+                        <div class="form-group">
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="analytics_sharing" name="analytics_sharing" {{ 'checked' if prefs.analytics_sharing else '' }}>
+                                <label for="analytics_sharing" class="checkbox-label">Share analytics for improvement</label>
+                            </div>
+                            <small class="form-help">Help us improve MyBella by sharing anonymous usage data</small>
+                        </div>
+                        
+                        <div class="form-group">
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="marketing_emails" name="marketing_emails" {{ 'checked' if prefs.marketing_emails else '' }}>
+                                <label for="marketing_emails" class="checkbox-label">Receive marketing emails</label>
+                            </div>
+                            <small class="form-help">Get updates about new features and improvements</small>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary">Update Privacy Settings</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Notification Settings -->
+            <div class="card settings-card">
+                <div class="card-header">
+                    <h3>Notifications</h3>
+                </div>
+                <div class="card-content">
+                    <form class="settings-form" onsubmit="saveNotificationSettings(event)">
+                        <div class="form-group">
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="browser_notifications" name="browser_notifications" {{ 'checked' if prefs.browser_notifications else '' }}>
+                                <label for="browser_notifications" class="checkbox-label">Browser notifications</label>
+                            </div>
+                            <small class="form-help">Get notified when your AI companion responds</small>
+                        </div>
+                        
+                        <div class="form-group">
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="email_notifications" name="email_notifications" {{ 'checked' if prefs.email_notifications else '' }}>
+                                <label for="email_notifications" class="checkbox-label">Email notifications</label>
+                            </div>
+                            <small class="form-help">Receive important updates via email</small>
+                        </div>
+                        
+                        <div class="form-group">
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="daily_summary" name="daily_summary" {{ 'checked' if prefs.daily_summary else '' }}>
+                                <label for="daily_summary" class="checkbox-label">Daily conversation summary</label>
+                            </div>
+                            <small class="form-help">Get a daily email with your conversation highlights</small>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary">Save Notification Settings</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Voice Settings -->
+            <div class="card settings-card">
+                <div class="card-header">
+                    <h3>Voice & Audio</h3>
+                </div>
+                <div class="card-content">
+                    <form class="settings-form" onsubmit="saveVoiceSettings(event)">
+                        <div class="form-group">
+                            <label class="form-label">Voice Speed</label>
+                            <input type="range" 
+                                   class="range-input" 
+                                   name="voice_speed" 
+                                   min="0.5" 
+                                   max="2" 
+                                   step="0.1" 
+                                   value="{{ prefs.voice_speed or 1 }}"
+                                   oninput="updateSpeedDisplay(this.value)">
+                            <div class="range-display">
+                                <span>Slow</span>
+                                <span id="speedValue">{{ prefs.voice_speed or 1 }}x</span>
+                                <span>Fast</span>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Voice Type</label>
+                            <select class="form-input" name="voice_type">
+                                <option value="female1" {{ 'selected' if prefs.voice_type == 'female1' else '' }}>Female Voice 1</option>
+                                <option value="female2" {{ 'selected' if prefs.voice_type == 'female2' else '' }}>Female Voice 2</option>
+                                <option value="male1" {{ 'selected' if prefs.voice_type == 'male1' else '' }}>Male Voice 1</option>
+                                <option value="male2" {{ 'selected' if prefs.voice_type == 'male2' else '' }}>Male Voice 2</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <button type="button" class="btn btn-secondary" onclick="testVoice()">Test Voice</button>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary">Save Voice Settings</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Data Management -->
+            <div class="card settings-card">
+                <div class="card-header">
+                    <h3>Data Management</h3>
+                </div>
+                <div class="card-content">
+                    <div class="data-actions">
+                        <div class="action-item">
+                            <div class="action-info">
+                                <h4>Export Your Data</h4>
+                                <p>Download all your conversation history and settings</p>
+                            </div>
+                            <a href="{{ url_for('user_views.export_data') }}" class="btn btn-secondary">Export</a>
+                        </div>
+                        
+                        <div class="action-item">
+                            <div class="action-info">
+                                <h4>Clear Chat History</h4>
+                                <p>Permanently delete all your conversation history</p>
+                            </div>
+                            <button class="btn btn-warning" onclick="clearAllHistory()">Clear History</button>
+                        </div>
+                        
+                        <div class="action-item">
+                            <div class="action-info">
+                                <h4>Delete Account</h4>
+                                <p>Permanently delete your account and all associated data</p>
+                            </div>
+                            <a href="{{ url_for('user_views.delete_account') }}" class="btn btn-error">Delete Account</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.settings-page {
+    padding: 2rem 0;
+}
+
+.page-header {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.settings-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 2rem;
+}
+
+.settings-card {
+    height: fit-content;
+}
+
+.card-header {
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.card-header h3 {
+    margin: 0;
+    color: var(--primary);
+    font-size: 1.1rem;
+}
+
+.settings-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.checkbox-group {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.checkbox-label {
+    margin: 0;
+    font-weight: 500;
+}
+
+.form-help {
+    color: var(--text-muted);
+    margin-top: 0.25rem;
+    display: block;
+}
+
+.range-input {
+    width: 100%;
+    margin: 0.5rem 0;
+}
+
+.range-display {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+
+#speedValue {
+    background: var(--primary);
+    color: white;
+    padding: 0.25rem 0.5rem;
+    border-radius: var(--radius-sm);
+    font-weight: 500;
+}
+
+.data-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.action-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+}
+
+.action-info h4 {
+    margin: 0 0 0.25rem 0;
+    color: var(--text-primary);
+}
+
+.action-info p {
+    margin: 0;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
+
+.btn-warning {
+    background: var(--warning-color);
+    color: white;
+}
+
+.btn-warning:hover {
+    background: #d97706;
+}
+
+.btn-error {
+    background: var(--error-color);
+    color: white;
+}
+
+.btn-error:hover {
+    background: #dc2626;
+}
+
+@media (max-width: 768px) {
+    .settings-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+    
+    .action-item {
+        flex-direction: column;
+        text-align: center;
+        gap: 1rem;
+    }
+}
+</style>
+
+<script>
+function updateSpeedDisplay(value) {
+    document.getElementById('speedValue').textContent = value + 'x';
+}
+
+function savePersonaSettings(event) {
+    event.preventDefault();
+    const formData = new FormData(event.target);
+    
+    // Simulate API call
+    setTimeout(() => {
+        myBella.showAlert('Persona preferences saved successfully!', 'success');
+    }, 500);
+}
+
+function savePrivacySettings(event) {
+    event.preventDefault();
+    const formData = new FormData(event.target);
+    
+    // Simulate API call
+    setTimeout(() => {
+        myBella.showAlert('Privacy settings updated successfully!', 'success');
+    }, 500);
+}
+
+function saveNotificationSettings(event) {
+    event.preventDefault();
+    const formData = new FormData(event.target);
+    
+    // Check if browser notifications are enabled and request permission
+    const browserNotifications = formData.get('browser_notifications');
+    if (browserNotifications && 'Notification' in window) {
+        Notification.requestPermission();
+    }
+    
+    // Simulate API call
+    setTimeout(() => {
+        myBella.showAlert('Notification settings saved successfully!', 'success');
+    }, 500);
+}
+
+function saveVoiceSettings(event) {
+    event.preventDefault();
+    const formData = new FormData(event.target);
+    
+    // Simulate API call
+    setTimeout(() => {
+        myBella.showAlert('Voice settings updated successfully!', 'success');
+    }, 500);
+}
+
+function testVoice() {
+    if ('speechSynthesis' in window) {
+        const utterance = new SpeechSynthesisUtterance('Hello! This is how your AI companion will sound.');
+        const voiceType = document.querySelector('[name="voice_type"]').value;
+        const voiceSpeed = document.querySelector('[name="voice_speed"]').value;
+        
+        utterance.rate = parseFloat(voiceSpeed);
+        
+        // Set voice based on selection (simplified)
+        const voices = speechSynthesis.getVoices();
+        if (voices.length > 0) {
+            if (voiceType.includes('female')) {
+                utterance.voice = voices.find(voice => voice.name.includes('female')) || voices[0];
+            } else {
+                utterance.voice = voices.find(voice => voice.name.includes('male')) || voices[1] || voices[0];
+            }
+        }
+        
+        speechSynthesis.speak(utterance);
+    } else {
+        myBella.showAlert('Voice synthesis not supported in this browser', 'error');
+    }
+}
+
+function clearAllHistory() {
+    if (confirm('Are you sure you want to clear all your chat history? This action cannot be undone.')) {
+        // Simulate API call
+        setTimeout(() => {
+            myBella.showAlert('Chat history cleared successfully!', 'success');
+        }, 500);
+    }
+}
+</script>
+{% endblock %}

@@ -1,0 +1,739 @@
+{% extends "base.html" %}
+
+{% block title %}Edit Profile • MyBella{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="profile-edit-page">
+        <div class="page-header">
+            <h1> Edit Profile</h1>
+            <p class="text-muted">Update your personal information and preferences</p>
+        </div>
+
+        {% if success_message %}
+        <div class="alert alert-success">
+            <span class="alert-icon"></span>
+            <span>{{ success_message }}</span>
+        </div>
+        {% endif %}
+
+        {% if error_message %}
+        <div class="alert alert-error">
+            <span class="alert-icon"></span>
+            <span>{{ error_message }}</span>
+        </div>
+        {% endif %}
+
+        <div class="profile-edit-container">
+            <!-- Profile Picture Section -->
+            <div class="profile-picture-section">
+                <h3>Profile Picture</h3>
+                <div class="picture-upload-area">
+                    <div class="current-picture">
+                        {% if current_user.profile_picture %}
+                            <img src="{{ url_for('static', filename='uploads/profile_pics/' + current_user.profile_picture) }}" 
+                                 alt="{{ current_user.name }}" 
+                                 id="profilePreview"
+                                 class="profile-img">
+                        {% else %}
+                            <div class="avatar avatar-xl bg-primary" id="profilePreview">
+                                {{ current_user.name[0].upper() }}
+                            </div>
+                        {% endif %}
+                        <div class="upload-overlay" onclick="triggerFileInput()">
+                             Change Photo
+                        </div>
+                    </div>
+                    <input type="file" id="profilePictureInput" accept="image/*" style="display: none;" onchange="previewImage(this)">
+                    <div class="upload-info">
+                        <p>Click to upload a new profile picture</p>
+                        <small>Recommended: Square image, max 5MB (JPG, PNG, GIF)</small>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Personal Information Form -->
+            <form class="profile-form" method="POST" enctype="multipart/form-data" onsubmit="return validateForm(event)">
+                {{ form.hidden_tag() if form }}
+                
+                <div class="form-section">
+                    <h3>Personal Information</h3>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="name" class="form-label">Full Name *</label>
+                            <input 
+                                type="text" 
+                                id="name" 
+                                name="name" 
+                                class="form-control"
+                                value="{{ form.name.data if form else current_user.name }}"
+                                placeholder="Enter your full name"
+                                required
+                                maxlength="100"
+                            >
+                            {% if form and form.name.errors %}
+                                <div class="form-error">{{ form.name.errors[0] }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="form-group">
+                            <label for="email" class="form-label">Email Address *</label>
+                            <input 
+                                type="email" 
+                                id="email" 
+                                name="email" 
+                                class="form-control"
+                                value="{{ form.email.data if form else current_user.email }}"
+                                placeholder="Enter your email address"
+                                required
+                            >
+                            {% if form and form.email.errors %}
+                                <div class="form-error">{{ form.email.errors[0] }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h3>AI Companion Preferences</h3>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="preferred_persona" class="form-label">Preferred Companion</label>
+                            <select id="preferred_persona" name="preferred_persona" class="form-control">
+                                <option value="Bella" {{ 'selected' if (form and form.preferred_persona.data == 'Bella') or (not form and current_user.settings and current_user.settings.preferred_persona == 'Bella') else '' }}>Bella - Friendly & Supportive</option>
+                                <option value="Alex" {{ 'selected' if (form and form.preferred_persona.data == 'Alex') or (not form and current_user.settings and current_user.settings.preferred_persona == 'Alex') else '' }}>Alex - Creative & Inspiring</option>
+                                <option value="Sam" {{ 'selected' if (form and form.preferred_persona.data == 'Sam') or (not form and current_user.settings and current_user.settings.preferred_persona == 'Sam') else '' }}>Sam - Calm & Thoughtful</option>
+                                <option value="Maya" {{ 'selected' if (form and form.preferred_persona.data == 'Maya') or (not form and current_user.settings and current_user.settings.preferred_persona == 'Maya') else '' }}>Maya - Energetic & Fun</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="conversation_style" class="form-label">Conversation Style</label>
+                            <select id="conversation_style" name="conversation_style" class="form-control">
+                                <option value="casual" {{ 'selected' if (form and form.conversation_style.data == 'casual') or (not form and current_user.settings and current_user.settings.conversation_style == 'casual') else '' }}>Casual & Relaxed</option>
+                                <option value="supportive" {{ 'selected' if (form and form.conversation_style.data == 'supportive') or (not form and current_user.settings and current_user.settings.conversation_style == 'supportive') else '' }}>Supportive & Encouraging</option>
+                                <option value="professional" {{ 'selected' if (form and form.conversation_style.data == 'professional') or (not form and current_user.settings and current_user.settings.conversation_style == 'professional') else '' }}>Professional & Focused</option>
+                                <option value="creative" {{ 'selected' if (form and form.conversation_style.data == 'creative') or (not form and current_user.settings and current_user.settings.conversation_style == 'creative') else '' }}>Creative & Imaginative</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h3>Communication Preferences</h3>
+                    <div class="checkbox-group">
+                        <label class="checkbox-label">
+                            <input 
+                                type="checkbox" 
+                                name="email_notifications" 
+                                {{ 'checked' if (form and form.email_notifications.data) or (not form and current_user.settings and current_user.settings.email_notifications) else '' }}
+                            >
+                            <span class="checkmark"></span>
+                            <span class="label-text">Email notifications for important updates</span>
+                        </label>
+
+                        <label class="checkbox-label">
+                            <input 
+                                type="checkbox" 
+                                name="voice_enabled" 
+                                {{ 'checked' if (form and form.voice_enabled.data) or (not form and current_user.settings and current_user.settings.voice_enabled) else '' }}
+                            >
+                            <span class="checkmark"></span>
+                            <span class="label-text">Enable voice conversations</span>
+                        </label>
+
+                        <label class="checkbox-label">
+                            <input 
+                                type="checkbox" 
+                                name="save_chat_history" 
+                                {{ 'checked' if (form and form.save_chat_history.data) or (not form and current_user.settings and current_user.settings.save_chat_history) else '' }}
+                            >
+                            <span class="checkmark"></span>
+                            <span class="label-text">Save conversation history</span>
+                        </label>
+
+                        <label class="checkbox-label">
+                            <input 
+                                type="checkbox" 
+                                name="analytics_enabled" 
+                                {{ 'checked' if (form and form.analytics_enabled.data) or (not form and current_user.settings and current_user.settings.analytics_enabled) else '' }}
+                            >
+                            <span class="checkmark"></span>
+                            <span class="label-text">Allow usage analytics for service improvement</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h3>Privacy Settings</h3>
+                    <div class="privacy-settings">
+                        <div class="privacy-item">
+                            <div class="privacy-info">
+                                <h4>Data Sharing</h4>
+                                <p>Control how your data is used to improve our AI models</p>
+                            </div>
+                            <label class="toggle-switch">
+                                <input 
+                                    type="checkbox" 
+                                    name="data_sharing" 
+                                    {{ 'checked' if (form and form.data_sharing.data) or (not form and current_user.settings and current_user.settings.data_sharing) else '' }}
+                                >
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+
+                        <div class="privacy-item">
+                            <div class="privacy-info">
+                                <h4>Personalization</h4>
+                                <p>Allow AI to learn from your conversations for better responses</p>
+                            </div>
+                            <label class="toggle-switch">
+                                <input 
+                                    type="checkbox" 
+                                    name="personalization" 
+                                    {{ 'checked' if (form and form.personalization.data) or (not form and current_user.settings and current_user.settings.personalization) else '' }}
+                                >
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">
+                        <span class="btn-icon"></span>
+                        Save Changes
+                    </button>
+                    <a href="{{ url_for('user_views.profile') }}" class="btn btn-secondary">
+                        Cancel
+                    </a>
+                    <button type="button" class="btn btn-outline-danger" onclick="confirmReset()">
+                        Reset to Defaults
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <div class="danger-zone">
+            <h3> Danger Zone</h3>
+            <div class="danger-actions">
+                <div class="danger-item">
+                    <div class="danger-info">
+                        <h4>Change Password</h4>
+                        <p>Update your account password for security</p>
+                    </div>
+                    <a href="{{ url_for('user_views.change_password') }}" class="btn btn-outline-warning">
+                        Change Password
+                    </a>
+                </div>
+                
+                <div class="danger-item">
+                    <div class="danger-info">
+                        <h4>Delete Account</h4>
+                        <p>Permanently delete your account and all associated data</p>
+                    </div>
+                    <a href="{{ url_for('user_views.delete_account') }}" class="btn btn-outline-danger">
+                        Delete Account
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.profile-edit-page {
+    padding: 2rem 0;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.page-header {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.alert {
+    padding: 1rem;
+    border-radius: var(--radius-md);
+    margin-bottom: 2rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-weight: 500;
+}
+
+.alert-success {
+    background: rgba(var(--success-rgb), 0.1);
+    border: 1px solid var(--success);
+    color: var(--success);
+}
+
+.alert-error {
+    background: rgba(var(--danger-rgb), 0.1);
+    border: 1px solid var(--danger);
+    color: var(--danger);
+}
+
+.profile-edit-container {
+    background: var(--surface-color);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    margin-bottom: 2rem;
+}
+
+.profile-picture-section {
+    padding: 2rem;
+    border-bottom: 1px solid var(--border-color);
+    background: var(--background-color);
+}
+
+.profile-picture-section h3 {
+    color: var(--text-primary);
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+.picture-upload-area {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+
+.current-picture {
+    position: relative;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.current-picture:hover {
+    transform: scale(1.05);
+}
+
+.current-picture:hover .upload-overlay {
+    opacity: 1;
+}
+
+.profile-img {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 4px solid var(--border-color);
+}
+
+.avatar.avatar-xl {
+    width: 120px;
+    height: 120px;
+    font-size: 3rem;
+    border: 4px solid var(--border-color);
+}
+
+.upload-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+    font-size: 0.875rem;
+    font-weight: 600;
+}
+
+.upload-info {
+    text-align: center;
+}
+
+.upload-info p {
+    color: var(--text-primary);
+    margin-bottom: 0.25rem;
+}
+
+.upload-info small {
+    color: var(--text-muted);
+}
+
+.profile-form {
+    padding: 2rem;
+}
+
+.form-section {
+    margin-bottom: 2.5rem;
+}
+
+.form-section h3 {
+    color: var(--primary);
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-label {
+    margin-bottom: 0.5rem;
+    color: var(--text-primary);
+    font-weight: 600;
+}
+
+.form-control {
+    padding: 0.875rem;
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius-md);
+    background: var(--background-color);
+    color: var(--text-primary);
+    font-size: 1rem;
+    transition: all 0.2s ease;
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: var(--primary);
+    background: var(--surface-color);
+    box-shadow: 0 0 0 3px rgba(var(--primary-rgb), 0.1);
+}
+
+.form-error {
+    color: var(--danger);
+    font-size: 0.875rem;
+    margin-top: 0.5rem;
+}
+
+.checkbox-group {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    cursor: pointer;
+    padding: 0.75rem;
+    border-radius: var(--radius-md);
+    transition: background-color 0.2s ease;
+}
+
+.checkbox-label:hover {
+    background: var(--background-color);
+}
+
+.checkbox-label input[type="checkbox"] {
+    display: none;
+}
+
+.checkmark {
+    width: 20px;
+    height: 20px;
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    position: relative;
+    transition: all 0.2s ease;
+}
+
+.checkbox-label input[type="checkbox"]:checked + .checkmark {
+    background: var(--primary);
+    border-color: var(--primary);
+}
+
+.checkbox-label input[type="checkbox"]:checked + .checkmark::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-size: 0.875rem;
+    font-weight: bold;
+}
+
+.label-text {
+    color: var(--text-primary);
+    font-weight: 500;
+}
+
+.privacy-settings {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.privacy-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem;
+    background: var(--background-color);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-color);
+}
+
+.privacy-info h4 {
+    color: var(--text-primary);
+    margin-bottom: 0.25rem;
+}
+
+.privacy-info p {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    margin: 0;
+}
+
+.toggle-switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 24px;
+}
+
+.toggle-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.toggle-slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: var(--text-muted);
+    transition: 0.3s;
+    border-radius: 24px;
+}
+
+.toggle-slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: 0.3s;
+    border-radius: 50%;
+}
+
+input:checked + .toggle-slider {
+    background-color: var(--primary);
+}
+
+input:checked + .toggle-slider:before {
+    transform: translateX(26px);
+}
+
+.form-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--border-color);
+}
+
+.btn-icon {
+    margin-right: 0.5rem;
+}
+
+.danger-zone {
+    background: var(--surface-color);
+    border: 2px solid var(--danger);
+    border-radius: var(--radius-lg);
+    padding: 2rem;
+}
+
+.danger-zone h3 {
+    color: var(--danger);
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+.danger-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.danger-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem;
+    background: var(--background-color);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-color);
+}
+
+.danger-info h4 {
+    color: var(--text-primary);
+    margin-bottom: 0.25rem;
+}
+
+.danger-info p {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    margin: 0;
+}
+
+@media (max-width: 768px) {
+    .profile-edit-page {
+        padding: 1rem 0;
+    }
+    
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .privacy-item,
+    .danger-item {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 1rem;
+        text-align: center;
+    }
+    
+    .form-actions {
+        flex-direction: column;
+    }
+    
+    .profile-form {
+        padding: 1.5rem;
+    }
+}
+</style>
+
+<script>
+function triggerFileInput() {
+    document.getElementById('profilePictureInput').click();
+}
+
+function previewImage(input) {
+    if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const preview = document.getElementById('profilePreview');
+            preview.innerHTML = `<img src="${e.target.result}" alt="Profile Preview" class="profile-img">`;
+        };
+        reader.readAsDataURL(input.files[0]);
+    }
+}
+
+function validateForm(event) {
+    const name = document.getElementById('name').value.trim();
+    const email = document.getElementById('email').value.trim();
+    
+    if (!name) {
+        showError('Please enter your full name.');
+        return false;
+    }
+    
+    if (name.length < 2) {
+        showError('Name must be at least 2 characters long.');
+        return false;
+    }
+    
+    if (!email) {
+        showError('Please enter your email address.');
+        return false;
+    }
+    
+    if (!isValidEmail(email)) {
+        showError('Please enter a valid email address.');
+        return false;
+    }
+    
+    return true;
+}
+
+function confirmReset() {
+    if (confirm('Are you sure you want to reset all settings to their default values? This action cannot be undone.')) {
+        // Reset form to defaults
+        document.getElementById('preferred_persona').value = 'Bella';
+        document.getElementById('conversation_style').value = 'casual';
+        
+        // Reset checkboxes
+        document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+            checkbox.checked = false;
+        });
+        
+        // Reset toggles
+        document.querySelectorAll('.toggle-switch input').forEach(toggle => {
+            toggle.checked = true; // Default to enabled for privacy settings
+        });
+        
+        showSuccess('Settings reset to defaults. Don\'t forget to save your changes.');
+    }
+}
+
+function isValidEmail(email) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+}
+
+function showError(message) {
+    removeAlerts();
+    const alert = createAlert(message, 'error');
+    insertAlert(alert);
+}
+
+function showSuccess(message) {
+    removeAlerts();
+    const alert = createAlert(message, 'success');
+    insertAlert(alert);
+}
+
+function removeAlerts() {
+    const existingAlerts = document.querySelectorAll('.alert');
+    existingAlerts.forEach(alert => alert.remove());
+}
+
+function createAlert(message, type) {
+    const alert = document.createElement('div');
+    alert.className = `alert alert-${type}`;
+    alert.innerHTML = `
+        <span class="alert-icon">${type === 'success' ? '' : ''}</span>
+        <span>${message}</span>
+    `;
+    return alert;
+}
+
+function insertAlert(alert) {
+    const container = document.querySelector('.profile-edit-container');
+    container.parentNode.insertBefore(alert, container);
+    
+    // Auto-remove after 5 seconds
+    setTimeout(() => {
+        if (alert.parentNode) {
+            alert.remove();
+        }
+    }, 5000);
+}
+
+// Initialize page
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('Edit Profile page loaded');
+});
+</script>
+{% endblock %}

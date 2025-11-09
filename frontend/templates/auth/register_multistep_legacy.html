@@ -1,0 +1,3847 @@
+{% extends "base.html" %}{% extends "base.html" %}{% extends "base.html" %}{% extends "base.html" %}{% extends "base.html" %}
+
+
+
+{% block title %}Join MyBella{% endblock %}
+
+
+
+{% block extra_css %}{% block title %}Join MyBella{% endblock %}
+
+<style>
+
+:root {
+
+    --onboard-bg: linear-gradient(140deg, #f7f9ff 0%, #eef2fb 45%, #ffffff 100%);
+
+    --onboard-panel: #ffffff;{% block extra_css %}{% block title %}Join MyBella{% endblock %}
+
+    --onboard-border: rgba(15, 23, 42, 0.08);
+
+    --onboard-shadow: 0 40px 70px rgba(15, 23, 42, 0.08);<style>
+
+    --onboard-radius: 28px;
+
+    --onboard-radius-sm: 18px;:root {
+
+    --onboard-text: #0b1120;
+
+    --onboard-muted: rgba(11, 17, 32, 0.55);    --onboard-bg: linear-gradient(140deg, #f7f9ff 0%, #eef2fb 45%, #ffffff 100%);
+
+    --onboard-accent: #111827;
+
+    --onboard-accent-soft: #172235;    --onboard-panel: #ffffff;{% block header %}{% block title %}Join MyBella{% endblock %}{% block title %}Join MyBella - AI Wellness Companion{% endblock %}
+
+    --onboard-highlight: rgba(16, 22, 35, 0.08);
+
+    --onboard-transition: 0.35s cubic-bezier(0.4, 0, 0.2, 1);    --onboard-border: rgba(15, 23, 42, 0.08);
+
+}
+
+    --onboard-shadow: 0 40px 70px rgba(15, 23, 42, 0.08);<header class="auth-header-minimal">
+
+body {
+
+    background: var(--onboard-bg);    --onboard-radius: 28px;
+
+    color: var(--onboard-text);
+
+    font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;    --onboard-radius-sm: 18px;    <a href="{{ url_for('main.home') }}" class="auth-brand">MyBella</a>
+
+}
+
+    --onboard-text: #0b1120;
+
+.main {
+
+    min-height: 100vh;    --onboard-muted: rgba(11, 17, 32, 0.55);</header>
+
+    display: flex;
+
+    align-items: center;    --onboard-accent: #111827;
+
+    justify-content: center;
+
+    padding: clamp(2.5rem, 6vw, 4rem);    --onboard-accent-soft: #172235;{% endblock %}{% block header %}{% block header %}
+
+}
+
+    --onboard-highlight: rgba(16, 22, 35, 0.08);
+
+.onboarding-shell {
+
+    width: min(1180px, 100%);    --onboard-transition: 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+
+    background: var(--onboard-panel);
+
+    border-radius: var(--onboard-radius);}
+
+    border: 1px solid var(--onboard-border);
+
+    box-shadow: var(--onboard-shadow);{% block footer %}{% endblock %}<header class="auth-header-minimal"><header class="auth-header-minimal">
+
+    display: grid;
+
+    grid-template-columns: 1.05fr 0.95fr;body {
+
+    overflow: hidden;
+
+}    background: var(--onboard-bg);
+
+
+
+.onboarding-hero {    color: var(--onboard-text);
+
+    padding: clamp(3rem, 5vw, 3.8rem);
+
+    display: grid;    font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;{% block extra_css %}    <a href="{{ url_for('main.home') }}" class="auth-brand">MyBella</a>    <a href="{{ url_for('main.home') }}" class="auth-brand">MyBella</a>
+
+    gap: clamp(2rem, 4vw, 2.8rem);
+
+    background: radial-gradient(circle at 20% 20%, rgba(148, 163, 184, 0.12), transparent 55%), #f8fafc;}
+
+}
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+.hero-header {
+
+    display: grid;.main {
+
+    gap: 1.2rem;
+
+}    min-height: 100vh;<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet"></header></header>
+
+
+
+.hero-badge {    display: flex;
+
+    display: inline-flex;
+
+    align-items: center;    align-items: center;<style>
+
+    gap: 0.65rem;
+
+    padding: 0.6rem 1.1rem;    justify-content: center;
+
+    border-radius: 999px;
+
+    background: rgba(255, 255, 255, 0.7);    padding: clamp(2.5rem, 6vw, 4rem);body {{% endblock %}{% endblock %}
+
+    border: 1px solid rgba(15, 23, 42, 0.12);
+
+    font-weight: 600;}
+
+    font-size: 0.86rem;
+
+    backdrop-filter: blur(18px);    margin: 0;
+
+    width: fit-content;
+
+}.onboarding-shell {
+
+
+
+.hero-badge::before {    width: min(1180px, 100%);    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+
+    content: "";
+
+    width: 6px;    background: var(--onboard-panel);
+
+    height: 6px;
+
+    border-radius: 50%;    border-radius: var(--onboard-radius);}
+
+    background: var(--onboard-accent);
+
+}    border: 1px solid var(--onboard-border);
+
+
+
+.hero-heading {    box-shadow: var(--onboard-shadow);{% block footer %}{% endblock %}{% block footer %}{% endblock %}
+
+    display: grid;
+
+    gap: 1rem;    display: grid;
+
+}
+
+    grid-template-columns: 1.05fr 0.95fr;.main {
+
+.hero-heading h1 {
+
+    font-size: clamp(2.6rem, 4vw, 3.3rem);    overflow: hidden;
+
+    font-weight: 400;
+
+    letter-spacing: -0.035em;}    min-height: 100vh;
+
+    margin: 0;
+
+}
+
+
+
+.hero-heading p {.onboarding-hero {    display: flex;
+
+    margin: 0;
+
+    font-size: 1.1rem;    padding: clamp(3rem, 5vw, 3.8rem);
+
+    line-height: 1.75;
+
+    color: var(--onboard-muted);    display: grid;    align-items: center;{% block extra_css %}{% block extra_css %}
+
+    max-width: 30rem;
+
+}    gap: clamp(2rem, 4vw, 2.8rem);
+
+
+
+.hero-promise {    background: radial-gradient(circle at 20% 20%, rgba(148, 163, 184, 0.12), transparent 55%), #f8fafc;    justify-content: center;
+
+    display: grid;
+
+    gap: 1.25rem;}
+
+}
+
+    background: linear-gradient(135deg, #f9fafe 0%, #f2f7ff 100%);<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"><style>
+
+.hero-promise li {
+
+    list-style: none;.hero-header {
+
+    display: flex;
+
+    gap: 0.75rem;    display: grid;    padding: 2.5rem 1.5rem;
+
+    align-items: flex-start;
+
+    color: var(--onboard-muted);    gap: 1.2rem;
+
+    font-size: 0.96rem;
+
+    line-height: 1.6;}}<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">:root {
+
+}
+
+
+
+.hero-promise li::before {
+
+    content: "";.hero-badge {
+
+    flex-shrink: 0;
+
+    width: 8px;    display: inline-flex;
+
+    height: 8px;
+
+    border-radius: 50%;    align-items: center;.register-card {<style>    --gradient-1: linear-gradient(180deg, #f9fbff 0%, #edf2f8 100%);
+
+    background: rgba(16, 22, 35, 0.45);
+
+    margin-top: 0.45rem;    gap: 0.65rem;
+
+}
+
+    padding: 0.6rem 1.1rem;    background: #ffffff;
+
+.hero-footer {
+
+    display: flex;    border-radius: 999px;
+
+    flex-wrap: wrap;
+
+    gap: 1.5rem;    background: rgba(255, 255, 255, 0.7);    border-radius: 18px;body {    --gradient-accent: linear-gradient(135deg, #101623 0%, #172235 100%);
+
+    font-size: 0.92rem;
+
+    color: var(--onboard-muted);    border: 1px solid rgba(15, 23, 42, 0.12);
+
+}
+
+    font-weight: 600;    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+
+.hero-footer span {
+
+    display: flex;    font-size: 0.86rem;
+
+    align-items: center;
+
+    gap: 0.55rem;    backdrop-filter: blur(18px);    width: 100%;    margin: 0;    --surface: #ffffff;
+
+}
+
+    width: fit-content;
+
+.hero-footer span::before {
+
+    content: "";}    max-width: 480px;
+
+    width: 6px;
+
+    height: 6px;
+
+    border-radius: 50%;
+
+    background: rgba(16, 22, 35, 0.4);.hero-badge::before {    padding: 40px 35px;    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;    --surface-elevated: #f6f8fb;
+
+}
+
+    content: "";
+
+.wizard-panel {
+
+    padding: clamp(3rem, 5vw, 4rem);    width: 6px;    animation: fadeIn 0.7s ease;
+
+    display: grid;
+
+    gap: clamp(2rem, 4vw, 2.8rem);    height: 6px;
+
+}
+
+    border-radius: 50%;}}    --border-subtle: rgba(15, 23, 42, 0.06);
+
+.wizard-header {
+
+    display: grid;    background: var(--onboard-accent);
+
+    gap: 1.2rem;
+
+}}
+
+
+
+.brand-link {
+
+    font-weight: 600;
+
+    font-size: 1.4rem;.hero-heading {@keyframes fadeIn {    --text-main: #0b1120;
+
+    color: var(--onboard-accent);
+
+    text-decoration: none;    display: grid;
+
+    letter-spacing: -0.02em;
+
+}    gap: 1rem;    from {
+
+
+
+.progress-track {}
+
+    display: grid;
+
+    gap: 0.75rem;        opacity: 0;.main {    --text-soft: #42526b;
+
+}
+
+.hero-heading h1 {
+
+.progress-labels {
+
+    display: flex;    font-size: clamp(2.6rem, 4vw, 3.3rem);        transform: translateY(10px);
+
+    justify-content: space-between;
+
+    font-size: 0.85rem;    font-weight: 400;
+
+    color: var(--onboard-muted);
+
+}    letter-spacing: -0.035em;    }    min-height: 100vh;    --text-muted: #93a0b8;
+
+
+
+.progress-meter {    margin: 0;
+
+    height: 6px;
+
+    background: rgba(15, 23, 42, 0.08);}    to {
+
+    border-radius: 999px;
+
+    overflow: hidden;
+
+}
+
+.hero-heading p {        opacity: 1;    display: flex;    --accent: #101623;
+
+.progress-fill {
+
+    height: 100%;    margin: 0;
+
+    width: 25%;
+
+    background: linear-gradient(135deg, var(--onboard-accent), var(--onboard-accent-soft));    font-size: 1.1rem;        transform: translateY(0);
+
+    border-radius: inherit;
+
+    transition: width 0.4s ease;    line-height: 1.75;
+
+}
+
+    color: var(--onboard-muted);    }    align-items: center;    --accent-light: #172235;
+
+.step-context {
+
+    display: grid;    max-width: 30rem;
+
+    gap: 0.4rem;
+
+}}}
+
+
+
+.step-context span {
+
+    font-size: 0.82rem;
+
+    color: var(--onboard-muted);.hero-promise {    justify-content: center;    --success: #0f766e;
+
+    letter-spacing: 0.12em;
+
+    text-transform: uppercase;    display: grid;
+
+}
+
+    gap: 1.25rem;.progress-bar {
+
+.step-context h2 {
+
+    margin: 0;}
+
+    font-size: clamp(1.8rem, 3vw, 2.1rem);
+
+    font-weight: 450;    height: 6px;    background: linear-gradient(135deg, #f9fafe 0%, #f2f7ff 100%);    --focus-ring: rgba(16, 22, 35, 0.08);
+
+    letter-spacing: -0.025em;
+
+}.hero-promise li {
+
+
+
+.wizard-body {    list-style: none;    background-color: #0066ff;
+
+    display: grid;
+
+    gap: clamp(2rem, 4vw, 2.6rem);    display: flex;
+
+}
+
+    gap: 0.75rem;    border-radius: 10px;    padding: 2.5rem 1.5rem;    --shadow-sm: 0 4px 18px rgba(15, 23, 42, 0.04);
+
+.step-panel {
+
+    display: none;    align-items: flex-start;
+
+    animation: fadeSlide var(--onboard-transition) ease;
+
+}    color: var(--onboard-muted);}
+
+
+
+.step-panel.active {    font-size: 0.96rem;
+
+    display: grid;
+
+    gap: clamp(1.5rem, 3.5vw, 2.2rem);    line-height: 1.6;}    --shadow-md: 0 28px 48px rgba(15, 23, 42, 0.06);
+
+}
+
+}
+
+.step-heading {
+
+    display: grid;.btn-primary {
+
+    gap: 0.65rem;
+
+}.hero-promise li::before {
+
+
+
+.step-heading h3 {    content: "";    background-color: #0066ff;}
+
+    margin: 0;
+
+    font-size: clamp(1.6rem, 2.8vw, 1.9rem);    flex-shrink: 0;
+
+    font-weight: 500;
+
+}    width: 8px;    border: none;
+
+
+
+.step-heading p {    height: 8px;
+
+    margin: 0;
+
+    color: var(--onboard-muted);    border-radius: 50%;    border-radius: 10px;.register-card {
+
+    line-height: 1.6;
+
+    max-width: 28rem;    background: rgba(16, 22, 35, 0.45);
+
+}
+
+    margin-top: 0.45rem;    padding: 10px;
+
+.form-grid {
+
+    display: grid;}
+
+    gap: clamp(1.5rem, 3vw, 1.9rem);
+
+}    font-size: 17px;    background: #ffffff;* {
+
+
+
+.form-grid.double {.hero-footer {
+
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+
+    gap: clamp(1.4rem, 3vw, 1.8rem);    display: flex;    font-weight: 600;
+
+}
+
+    flex-wrap: wrap;
+
+@media (max-width: 780px) {
+
+    .onboarding-shell {    gap: 1.5rem;    transition: all 0.25s ease;    border-radius: 18px;    box-sizing: border-box;
+
+        grid-template-columns: 1fr;
+
+    }    font-size: 0.92rem;
+
+
+
+    .onboarding-hero {    color: var(--onboard-muted);}
+
+        order: 1;
+
+        text-align: center;}
+
+    }
+
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);}
+
+    .hero-badge {
+
+        margin-inline: auto;.hero-footer span {
+
+    }
+
+    display: flex;.btn-primary:hover {
+
+    .hero-heading p,
+
+    .hero-promise li,    align-items: center;
+
+    .hero-footer {
+
+        margin-inline: auto;    gap: 0.55rem;    background-color: #0050d6;    width: 100%;
+
+    }
+
+}
+
+    .wizard-panel {
+
+        order: 2;    transform: scale(1.02);
+
+        padding: clamp(2.4rem, 8vw, 3rem);
+
+    }.hero-footer span::before {
+
+
+
+    .form-grid.double {    content: "";}    max-width: 480px;body {
+
+        grid-template-columns: 1fr;
+
+    }    width: 6px;
+
+}
+
+    height: 6px;
+
+.form-group {
+
+    display: grid;    border-radius: 50%;
+
+    gap: 0.65rem;
+
+}    background: rgba(16, 22, 35, 0.4);.input-group-text {    padding: 40px 35px;    margin: 0;
+
+
+
+.form-group label {}
+
+    font-weight: 600;
+
+    font-size: 0.95rem;    background-color: #f8f9fa;
+
+}
+
+.wizard-panel {
+
+.required {
+
+    color: rgba(16, 22, 35, 0.6);    padding: clamp(3rem, 5vw, 4rem);    border-right: none;    animation: fadeIn 0.7s ease;    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+
+    margin-left: 0.3rem;
+
+}    display: grid;
+
+
+
+.input-field,    gap: clamp(2rem, 4vw, 2.8rem);}
+
+select {
+
+    width: 100%;}
+
+    padding: 0.9rem 1rem;
+
+    border-radius: 14px;}    -webkit-font-smoothing: antialiased;
+
+    border: 1px solid rgba(15, 23, 42, 0.12);
+
+    background: rgba(255, 255, 255, 0.9);.wizard-header {
+
+    font-size: 1rem;
+
+    transition: border-color var(--onboard-transition), box-shadow var(--onboard-transition);    display: grid;input.form-control {
+
+}
+
+    gap: 1.2rem;
+
+.input-field:focus,
+
+select:focus {}    border-left: none;    -moz-osx-font-smoothing: grayscale;
+
+    border-color: rgba(16, 22, 35, 0.32);
+
+    box-shadow: 0 0 0 3px rgba(16, 22, 35, 0.08);
+
+    outline: none;
+
+}.brand-link {}
+
+
+
+.dob-selectors {    font-weight: 600;
+
+    display: grid;
+
+    grid-template-columns: repeat(3, minmax(0, 1fr));    font-size: 1.4rem;@keyframes fadeIn {}
+
+    gap: 0.8rem;
+
+}    color: var(--onboard-accent);
+
+
+
+.option-row,    text-decoration: none;.logo {
+
+.option-grid,
+
+.chip-group {    letter-spacing: -0.02em;
+
+    display: grid;
+
+    gap: 0.85rem;}    text-align: center;    from {
+
+}
+
+
+
+.option-row {
+
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));.progress-track {    margin-bottom: 20px;
+
+}
+
+    display: grid;
+
+.option-grid {
+
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));    gap: 0.75rem;}        opacity: 0;.main {
+
+}
+
+}
+
+.chip {
+
+    position: relative;
+
+    display: inline-flex;
+
+    align-items: center;.progress-labels {
+
+    justify-content: center;
+
+    padding: 0.85rem 1.05rem;    display: flex;.logo h2 {        transform: translateY(10px);    padding: 0;
+
+    border-radius: 14px;
+
+    border: 1px solid rgba(15, 23, 42, 0.12);    justify-content: space-between;
+
+    background: rgba(255, 255, 255, 0.9);
+
+    font-weight: 500;    font-size: 0.85rem;    color: #0066ff;
+
+    cursor: pointer;
+
+    transition: border-color var(--onboard-transition), background var(--onboard-transition), color var(--onboard-transition);    color: var(--onboard-muted);
+
+}
+
+}    font-weight: 700;    }    background: var(--gradient-1);
+
+.chip input {
+
+    position: absolute;
+
+    inset: 0;
+
+    opacity: 0;.progress-meter {}
+
+    cursor: pointer;
+
+}    height: 6px;
+
+
+
+.chip span {    background: rgba(15, 23, 42, 0.08);    to {    position: relative;
+
+    pointer-events: none;
+
+}    border-radius: 999px;
+
+
+
+.chip input:checked + span,    overflow: hidden;.logo small {
+
+.chip input:checked ~ span {
+
+    color: var(--onboard-accent);}
+
+}
+
+    color: #6c757d;        opacity: 1;    overflow: hidden;
+
+.chip input:checked,
+
+.option-chip input:checked {.progress-fill {
+
+    border-color: transparent;
+
+}    height: 100%;}
+
+
+
+.option-chip {    width: 25%;
+
+    position: relative;
+
+    display: inline-flex;    background: linear-gradient(135deg, var(--onboard-accent), var(--onboard-accent-soft));        transform: translateY(0);}
+
+    align-items: center;
+
+    justify-content: center;    border-radius: inherit;
+
+    border-radius: 14px;
+
+    padding: 0.85rem 1.05rem;    transition: width 0.4s ease;@media (max-width: 576px) {
+
+    border: 1px solid rgba(15, 23, 42, 0.12);
+
+    background: rgba(255, 255, 255, 0.9);}
+
+    font-weight: 500;
+
+    cursor: pointer;    .register-card {    }
+
+    transition: border-color var(--onboard-transition), background var(--onboard-transition), color var(--onboard-transition);
+
+}.step-context {
+
+
+
+.option-chip input {    display: grid;        padding: 32px 24px;
+
+    position: absolute;
+
+    inset: 0;    gap: 0.4rem;
+
+    opacity: 0;
+
+}}    }}.main::before,
+
+
+
+.option-chip input:checked ~ span {
+
+    color: var(--onboard-accent);
+
+}.step-context span {}
+
+
+
+.option-chip:has(input:checked),    font-size: 0.82rem;
+
+.chip:has(input:checked) {
+
+    border-color: rgba(16, 22, 35, 0.3);    color: var(--onboard-muted);</style>.main::after {
+
+    background: rgba(16, 22, 35, 0.06);
+
+}    letter-spacing: 0.12em;
+
+
+
+.inline-feedback {    text-transform: uppercase;{% endblock %}
+
+    min-height: 1.25rem;
+
+    font-size: 0.82rem;}
+
+    color: #b91c1c;
+
+}.progress-bar {    content: '';
+
+
+
+.checkbox-label {.step-context h2 {
+
+    display: inline-flex;
+
+    gap: 0.7rem;    margin: 0;{% block content %}
+
+    align-items: center;
+
+    font-size: 0.9rem;    font-size: clamp(1.8rem, 3vw, 2.1rem);
+
+    color: var(--onboard-muted);
+
+}    font-weight: 450;<div class="register-card">    height: 6px;    position: absolute;
+
+
+
+.wizard-footer {    letter-spacing: -0.025em;
+
+    display: flex;
+
+    justify-content: space-between;}    <div class="logo">
+
+    align-items: center;
+
+    gap: 1rem;
+
+    border-top: 1px solid rgba(15, 23, 42, 0.08);
+
+    padding-top: 1.8rem;.wizard-body {        <h2>MyBella 💙</h2>    background-color: #0066ff;    inset: 0;
+
+}
+
+    display: grid;
+
+.nav-buttons {
+
+    display: flex;    gap: clamp(2rem, 4vw, 2.6rem);        <small>Your AI Partner &amp; Wellness Companion</small>
+
+    gap: 0.8rem;
+
+}}
+
+
+
+button {    </div>    border-radius: 10px;    background: transparent;
+
+    font-family: inherit;
+
+}.step-panel {
+
+
+
+.btn-ghost,    display: none;
+
+.btn-primary {
+
+    display: inline-flex;    animation: fadeSlide var(--onboard-transition) ease;
+
+    align-items: center;
+
+    justify-content: center;}    <div class="mb-4">}}
+
+    padding: 0.9rem 1.4rem;
+
+    border-radius: 14px;
+
+    font-weight: 600;
+
+    border: 1px solid transparent;.step-panel.active {        <div class="progress">
+
+    cursor: pointer;
+
+    transition: transform var(--onboard-transition), box-shadow var(--onboard-transition), border-color var(--onboard-transition), color var(--onboard-transition);    display: grid;
+
+}
+
+    gap: clamp(1.5rem, 3.5vw, 2.2rem);            <div class="progress-bar" style="width:25%"></div>
+
+.btn-ghost {
+
+    background: rgba(255, 255, 255, 0.7);}
+
+    border-color: rgba(15, 23, 42, 0.12);
+
+    color: var(--onboard-accent);        </div>
+
+}
+
+.step-heading {
+
+.btn-ghost:disabled {
+
+    opacity: 0.35;    display: grid;    </div>.btn-primary {.onboarding-shell {
+
+    cursor: default;
+
+}    gap: 0.65rem;
+
+
+
+.btn-ghost:not(:disabled):hover {}
+
+    border-color: rgba(15, 23, 42, 0.4);
+
+}
+
+
+
+.btn-primary {.step-heading h3 {    <h5 class="text-center mb-3">Step 1 of 4: Start with your name</h5>    background-color: #0066ff;    min-height: 100vh;
+
+    background: linear-gradient(135deg, var(--onboard-accent), var(--onboard-accent-soft));
+
+    color: #ffffff;    margin: 0;
+
+    box-shadow: 0 22px 34px rgba(17, 24, 39, 0.18);
+
+}    font-size: clamp(1.6rem, 2.8vw, 1.9rem);    <p class="text-center text-muted mb-4">Let's get to know you 👋</p>
+
+
+
+.btn-primary:disabled {    font-weight: 500;
+
+    opacity: 0.45;
+
+    cursor: default;}    border: none;    width: min(1200px, 100%);
+
+    box-shadow: none;
+
+}
+
+
+
+.btn-primary:not(:disabled):hover {.step-heading p {    <form method="POST" action="{{ url_for('user_auth.register') }}">
+
+    transform: translateY(-2px);
+
+    box-shadow: 0 30px 40px rgba(17, 24, 39, 0.2);    margin: 0;
+
+}
+
+    color: var(--onboard-muted);        <div class="input-group mb-3">    border-radius: 10px;    margin: 0 auto;
+
+@keyframes fadeSlide {
+
+    from {    line-height: 1.6;
+
+        opacity: 0;
+
+        transform: translateY(12px);    max-width: 28rem;            <span class="input-group-text"><i class="bi bi-person-fill"></i></span>
+
+    }
+
+    to {}
+
+        opacity: 1;
+
+        transform: translateY(0);            <input type="text" name="display_name" class="form-control" placeholder="Enter your name" required>    padding: 10px;    display: grid;
+
+    }
+
+}.form-grid {
+
+
+
+.existing-account {    display: grid;        </div>
+
+    text-align: center;
+
+    font-size: 0.9rem;    gap: clamp(1.5rem, 3vw, 1.9rem);
+
+    color: var(--onboard-muted);
+
+}}    font-size: 17px;    grid-template-columns: 1.1fr 0.9fr;
+
+
+
+.existing-account a {
+
+    color: var(--onboard-accent);
+
+    text-decoration: none;.form-grid.double {        <button type="submit" class="btn btn-primary w-100 mt-3">Next →</button>
+
+    font-weight: 600;
+
+}    grid-template-columns: repeat(2, minmax(0, 1fr));
+
+
+
+@media (max-width: 1080px) {    gap: clamp(1.4rem, 3vw, 1.8rem);    </form>    font-weight: 600;    gap: 3rem;
+
+    .wizard-footer {
+
+        flex-direction: column;}
+
+        align-items: stretch;
+
+    }
+
+
+
+    .nav-buttons {@media (max-width: 780px) {
+
+        justify-content: space-between;
+
+    }    .onboarding-shell {    <p class="text-center mt-4 mb-0">    transition: all 0.25s ease;    align-items: center;
+
+}
+
+</style>        grid-template-columns: 1fr;
+
+{% endblock %}
+
+    }        Already have an account? <a href="{{ url_for('user_auth.login') }}" class="text-decoration-none">Sign in</a>
+
+{% block content %}
+
+<div class="onboarding-shell">
+
+    <aside class="onboarding-hero">
+
+        <div class="hero-header">    .onboarding-hero {    </p>}    padding: 3rem clamp(1.5rem, 4vw, 3.5rem);
+
+            <span class="hero-badge">Quietly personal</span>
+
+            <div class="hero-heading">        order: 1;
+
+                <h1>Let’s prepare a companion that feels intentional.</h1>
+
+                <p>Every answer sharpens MyBella’s presence—just enough context to deliver grounded calm, accountability, and memory you can trust.</p>        text-align: center;</div>
+
+            </div>
+
+        </div>    }
+
+        <ul class="hero-promise">
+
+            <li>Thoughtful setup in under two minutes. We only ask what guides your conversations.</li>{% endblock %}    position: relative;
+
+            <li>Your preferences stay encrypted and in your control. MyBella never resells or trains on your reflections.</li>
+
+            <li>Switch personas without losing context. Each brings its own cadence while honoring your rituals.</li>    .hero-badge {
+
+        </ul>
+
+        <div class="hero-footer">        margin-inline: auto;
+
+            <span>Private by design</span>
+
+            <span>Rooted in CBT and mindful coaching</span>    }
+
+            <span>Designed for evening resets</span>
+
+        </div>{% block extra_js %}.btn-primary:hover {    z-index: 1;
+
+    </aside>
+
+    .hero-heading p,
+
+    <section class="wizard-panel">
+
+        <div class="wizard-header">    .hero-promise li,<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+            <a href="{{ url_for('main.home') }}" class="brand-link">MyBella</a>
+
+            <div class="progress-track">    .hero-footer {
+
+                <div class="progress-labels">
+
+                    <span id="progressLabel">Step 1 of 4</span>        margin-inline: auto;{% endblock %}    background-color: #0050d6;}
+
+                    <span id="progressHint">Start with your name</span>
+
+                </div>    }
+
+                <div class="progress-meter" role="presentation" aria-hidden="true">
+
+                    <div class="progress-fill" id="progressFill"></div>
+
+                </div>
+
+            </div>    .wizard-panel {    transform: scale(1.02);
+
+            <div class="step-context">
+
+                <span id="stepTag">Identity</span>        order: 2;
+
+                <h2 id="stepTitle">Start with your name</h2>
+
+            </div>        padding: clamp(2.4rem, 8vw, 3rem);}.onboarding-hero {
+
+        </div>
+
+    }
+
+        <form method="POST" action="{{ url_for('user_auth.register') }}" id="onboardingForm" class="wizard-body">
+
+            {{ form.csrf_token() if form is defined and form.csrf_token is defined }}    color: var(--text-main);
+
+
+
+            <section class="step-panel active" data-step="1">    .form-grid.double {
+
+                <div class="step-heading">
+
+                    <h3>Start with your name</h3>        grid-template-columns: 1fr;.input-group-text {    display: grid;
+
+                    <p>We’ll use this in every conversation so it always feels personal.</p>
+
+                </div>    }
+
+                <div class="form-grid">
+
+                    <div class="form-group">}    background-color: #f8f9fa;    gap: 2.5rem;
+
+                        <label for="display_name">Display name<span class="required">*</span></label>
+
+                        <input type="text" id="display_name" name="display_name" class="input-field" placeholder="Enter your name" autocomplete="name" required>
+
+                        <div class="inline-feedback" id="displayNameFeedback"></div>
+
+                    </div>.form-group {    border-right: none;    position: relative;
+
+                    <input type="hidden" id="nickname" name="nickname" value="">
+
+                </div>    display: grid;
+
+            </section>
+
+    gap: 0.65rem;}    align-content: start;
+
+            <section class="step-panel" data-step="2">
+
+                <div class="step-heading">}
+
+                    <h3>Your basics</h3>
+
+                    <p>A little structure helps the conversations land just right.</p>}
+
+                </div>
+
+                <div class="form-grid">.form-group label {
+
+                    <div class="form-group">
+
+                        <label>Date of birth<span class="required">*</span></label>    font-weight: 600;input.form-control {
+
+                        <div class="dob-selectors">
+
+                            <select id="birth_month" class="input-field" required>    font-size: 0.95rem;
+
+                                <option value="">Month</option>
+
+                                {% for value, label in [("01","January"),("02","February"),("03","March"),("04","April"),("05","May"),("06","June"),("07","July"),("08","August"),("09","September"),("10","October"),("11","November"),("12","December")] %}}    border-left: none;.hero-nav {
+
+                                <option value="{{ value }}">{{ label }}</option>
+
+                                {% endfor %}
+
+                            </select>
+
+                            <select id="birth_day" class="input-field" required>.required {}    display: flex;
+
+                                <option value="">Day</option>
+
+                                {% for day in range(1, 32) %}    color: rgba(16, 22, 35, 0.6);
+
+                                <option value="{{ "%02d"|format(day) }}">{{ day }}</option>
+
+                                {% endfor %}    margin-left: 0.3rem;    align-items: center;
+
+                            </select>
+
+                            <select id="birth_year" class="input-field" required>}
+
+                                <option value="">Year</option>
+
+                                {% for year in range(1925, 2026) | reverse %}.logo {    gap: 0.85rem;
+
+                                <option value="{{ year }}">{{ year }}</option>
+
+                                {% endfor %}.input-field,
+
+                            </select>
+
+                        </div>select {    text-align: center;    padding: 0.75rem 1.15rem;
+
+                        <input type="hidden" id="date_of_birth" name="date_of_birth" required>
+
+                        <div class="inline-feedback" id="ageFeedback"></div>    width: 100%;
+
+                    </div>
+
+    padding: 0.9rem 1rem;    margin-bottom: 20px;    border-radius: 999px;
+
+                    <div class="form-group">
+
+                        <label>How should we refer to you?<span class="required">*</span></label>    border-radius: 14px;
+
+                        <div class="option-row" id="genderGroup">
+
+                            <label class="option-chip" data-label="Female">    border: 1px solid rgba(15, 23, 42, 0.12);}    background: rgba(255, 255, 255, 0.72);
+
+                                <input type="radio" name="gender" value="female" required>
+
+                                <span>Female</span>    background: rgba(255, 255, 255, 0.9);
+
+                            </label>
+
+                            <label class="option-chip" data-label="Male">    font-size: 1rem;    border: 1px solid rgba(148, 163, 184, 0.24);
+
+                                <input type="radio" name="gender" value="male">
+
+                                <span>Male</span>    transition: border-color var(--onboard-transition), box-shadow var(--onboard-transition);
+
+                            </label>
+
+                            <label class="option-chip" data-label="Non-binary / Other">}.logo h2 {    width: fit-content;
+
+                                <input type="radio" name="gender" value="other">
+
+                                <span>Non-binary / Other</span>
+
+                            </label>
+
+                            <label class="option-chip" data-label="Prefer not to say">.input-field:focus,    color: #0066ff;    backdrop-filter: blur(18px);
+
+                                <input type="radio" name="gender" value="prefer_not_to_say">
+
+                                <span>Prefer not to say</span>select:focus {
+
+                            </label>
+
+                        </div>    border-color: rgba(16, 22, 35, 0.32);    font-weight: 700;}
+
+                        <div class="inline-feedback" id="genderFeedback"></div>
+
+                    </div>    box-shadow: 0 0 0 3px rgba(16, 22, 35, 0.08);
+
+
+
+                    <div class="form-group">    outline: none;}
+
+                        <label for="pronouns">Pronouns</label>
+
+                        <select id="pronouns" name="pronouns" class="input-field">}
+
+                            <option value="">Select pronouns</option>
+
+                            <option value="she/her">She / Her</option>.brand-mark {
+
+                            <option value="he/him">He / Him</option>
+
+                            <option value="they/them">They / Them</option>.dob-selectors {
+
+                            <option value="he/they">He / They</option>
+
+                            <option value="she/they">She / They</option>    display: grid;.logo small {    width: 36px;
+
+                            <option value="custom">I'll share in chat</option>
+
+                        </select>    grid-template-columns: repeat(3, minmax(0, 1fr));
+
+                    </div>
+
+                </div>    gap: 0.8rem;    color: #6c757d;    height: 36px;
+
+            </section>
+
+}
+
+            <section class="step-panel" data-step="3">
+
+                <div class="step-heading">}    border-radius: 50%;
+
+                    <h3>Support preferences</h3>
+
+                    <p>Pick the focus and cadence that feels right today.</p>.option-row,
+
+                </div>
+
+                <div class="form-grid">.option-grid,    display: inline-flex;
+
+                    <div class="form-group">
+
+                        <label>Primary focus<span class="required">*</span></label>.chip-group {
+
+                        <div class="option-grid" id="focusGroup">
+
+                            <label class="option-chip" data-label="Emotional support">    display: grid;@media (max-width: 576px) {    align-items: center;
+
+                                <input type="radio" name="support_focus" value="emotional_support" required>
+
+                                <span>Steady emotional support</span>    gap: 0.85rem;
+
+                            </label>
+
+                            <label class="option-chip" data-label="Motivation">}    .register-card {    justify-content: center;
+
+                                <input type="radio" name="support_focus" value="motivation">
+
+                                <span>Motivation &amp; progress</span>
+
+                            </label>
+
+                            <label class="option-chip" data-label="Calm">.option-row {        padding: 32px 24px;    background: #ffffff;
+
+                                <input type="radio" name="support_focus" value="calm">
+
+                                <span>Calm &amp; mindfulness</span>    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+
+                            </label>
+
+                            <label class="option-chip" data-label="Productivity">}    }    border: 1px solid rgba(148, 163, 184, 0.28);
+
+                                <input type="radio" name="support_focus" value="productivity">
+
+                                <span>Focus &amp; productivity</span>
+
+                            </label>
+
+                        </div>.option-grid {}    font-weight: 600;
+
+                        <div class="inline-feedback" id="focusFeedback"></div>
+
+                    </div>    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+
+
+
+                    <div class="form-group">}</style>    color: var(--accent);
+
+                        <label>Extra topics (optional)</label>
+
+                        <div class="chip-group" id="supportTopics">
+
+                            {% for value, label in [
+
+                                ("stress_relief", "Stress relief"),.chip {{% endblock %}    letter-spacing: -0.01em;
+
+                                ("confidence", "Confidence"),
+
+                                ("habits", "Habits"),    position: relative;
+
+                                ("relationships", "Relationships"),
+
+                                ("focus", "Focus"),    display: inline-flex;}
+
+                                ("mood", "Mood tracking")
+
+                            ] %}    align-items: center;
+
+                            <label class="chip" data-label="{{ label }}">
+
+                                <input type="checkbox" name="support_topics[]" value="{{ value }}">    justify-content: center;{% block content %}
+
+                                <span>{{ label }}</span>
+
+                            </label>    padding: 0.85rem 1.05rem;
+
+                            {% endfor %}
+
+                        </div>    border-radius: 14px;<div class="register-card">.hero-nav span {
+
+                    </div>
+
+    border: 1px solid rgba(15, 23, 42, 0.12);
+
+                    <div class="form-group">
+
+                        <label>Conversation tone<span class="required">*</span></label>    background: rgba(255, 255, 255, 0.9);    <div class="logo">    font-size: 0.83rem;
+
+                        <div class="chip-group" id="conversationStyleGroup">
+
+                            <label class="chip" data-label="Gentle &amp; grounding">    font-weight: 500;
+
+                                <input type="radio" name="conversation_style" value="gentle" required>
+
+                                <span>Gentle &amp; grounding</span>    cursor: pointer;        <h2>MyBella 💙</h2>    color: var(--text-soft);
+
+                            </label>
+
+                            <label class="chip" data-label="Cheerleader energy">    transition: border-color var(--onboard-transition), background var(--onboard-transition), color var(--onboard-transition);
+
+                                <input type="radio" name="conversation_style" value="cheerleader">
+
+                                <span>Cheerleader energy</span>}        <small>Your AI Partner &amp; Wellness Companion</small>    font-weight: 600;
+
+                            </label>
+
+                            <label class="chip" data-label="Direct &amp; practical">
+
+                                <input type="radio" name="conversation_style" value="direct">
+
+                                <span>Direct &amp; practical</span>.chip input {    </div>}
+
+                            </label>
+
+                        </div>    position: absolute;
+
+                        <div class="inline-feedback" id="supportStyleFeedback"></div>
+
+                    </div>    inset: 0;
+
+
+
+                    <div class="form-group">    opacity: 0;
+
+                        <label>Check-in rhythm</label>
+
+                        <div class="chip-group" id="checkInGroup">    cursor: pointer;    <div class="mb-4">.hero-rating {
+
+                            <label class="chip" data-label="Daily pulse">
+
+                                <input type="radio" name="check_in_preference" value="daily">}
+
+                                <span>Daily pulse</span>
+
+                            </label>        <div class="progress">    display: flex;
+
+                            <label class="chip" data-label="Weekly planning">
+
+                                <input type="radio" name="check_in_preference" value="weekly">.chip span {
+
+                                <span>Weekly planning</span>
+
+                            </label>    pointer-events: none;            <div class="progress-bar" style="width:25%"></div>    align-items: center;
+
+                            <label class="chip" data-label="Only when I ask">
+
+                                <input type="radio" name="check_in_preference" value="as_needed">}
+
+                                <span>Only when I ask</span>
+
+                            </label>        </div>    gap: 0.35rem;
+
+                        </div>
+
+                    </div>.chip input:checked + span,
+
+                </div>
+
+            </section>.chip input:checked ~ span {    </div>    margin-left: auto;
+
+
+
+            <section class="step-panel" data-step="4">    color: var(--onboard-accent);
+
+                <div class="step-heading">
+
+                    <h3>Create your account</h3>}    font-size: 0.8rem;
+
+                    <p>Everything you share is encrypted. This is the final step.</p>
+
+                </div>
+
+                <div class="form-grid double">
+
+                    <div class="form-group">.chip input:checked ~ span,    <h5 class="text-center mb-3">Step 1 of 4: Start with your name</h5>    color: var(--text-muted);
+
+                        <label for="email">Email address<span class="required">*</span></label>
+
+                        <input type="email" id="email" name="email" class="input-field" placeholder="you@example.com" autocomplete="email" required>.option-chip input:checked ~ span {
+
+                        <div class="inline-feedback" id="emailFeedback"></div>
+
+                    </div>    color: var(--onboard-accent);    <p class="text-center text-muted mb-4">Let's get to know you 👋</p>}
+
+                    <div class="form-group">
+
+                        <label for="password">Password<span class="required">*</span></label>}
+
+                        <input type="password" id="password" name="password" class="input-field" placeholder="Create a strong password" autocomplete="new-password" required>
+
+                        <div class="inline-feedback" id="passwordFeedback"></div>
+
+                    </div>
+
+                    <div class="form-group">.chip input:checked,
+
+                        <label for="confirm_password">Confirm password<span class="required">*</span></label>
+
+                        <input type="password" id="confirm_password" name="confirm_password" class="input-field" placeholder="Repeat your password" autocomplete="new-password" required>.option-chip input:checked {    <form method="POST" action="{{ url_for('user_auth.register') }}">.hero-rating svg {
+
+                        <div class="inline-feedback" id="confirmPasswordFeedback"></div>
+
+                    </div>    border-color: transparent;
+
+                    <div class="form-group">
+
+                        <label class="checkbox-label">}        <div class="input-group mb-3">    width: 16px;
+
+                            <input type="checkbox" id="terms" name="terms" required>
+
+                            I agree to the <a href="{{ url_for('legal.terms_of_service') if url_for is defined else '/terms' }}" target="_blank">Terms of Service</a> and <a href="{{ url_for('legal.privacy_policy') if url_for is defined else '/privacy' }}" target="_blank">Privacy Policy</a>.
+
+                        </label>
+
+                        <div class="inline-feedback" id="termsFeedback"></div>.option-chip {            <span class="input-group-text"><i class="bi bi-person-fill"></i></span>    height: 16px;
+
+                    </div>
+
+                </div>    position: relative;
+
+            </section>
+
+    display: inline-flex;            <input type="text" name="display_name" class="form-control" placeholder="Enter your name" required>    fill: currentColor;
+
+            <div class="wizard-footer">
+
+                <p class="existing-account">Already have an account? <a href="{{ url_for('user_auth.login') }}">Sign in</a></p>    align-items: center;
+
+                <div class="nav-buttons">
+
+                    <button type="button" class="btn-ghost" id="backButton" disabled>Back</button>    justify-content: center;        </div>}
+
+                    <button type="button" class="btn-primary" id="nextButton">Continue</button>
+
+                    <button type="submit" class="btn-primary" id="submitButton" hidden>Create account</button>    border-radius: 14px;
+
+                </div>
+
+            </div>    padding: 0.85rem 1.05rem;
+
+        </form>
+
+    </section>    border: 1px solid rgba(15, 23, 42, 0.12);
+
+</div>
+
+{% endblock %}    background: rgba(255, 255, 255, 0.9);        <button type="submit" class="btn btn-primary w-100 mt-3">Next →</button>.hero-rating span {
+
+
+
+{% block extra_js %}    font-weight: 500;
+
+<script>
+
+(function () {    cursor: pointer;    </form>    font-weight: 600;
+
+    const form = document.getElementById('onboardingForm');
+
+    if (!form) { return; }    transition: border-color var(--onboard-transition), background var(--onboard-transition), color var(--onboard-transition);
+
+
+
+    const stepPanels = Array.from(form.querySelectorAll('.step-panel'));}    color: var(--text-main);
+
+    const progressFill = document.getElementById('progressFill');
+
+    const progressLabel = document.getElementById('progressLabel');
+
+    const progressHint = document.getElementById('progressHint');
+
+    const stepTag = document.getElementById('stepTag');.option-chip input {    <p class="text-center mt-4 mb-0">}
+
+    const stepTitle = document.getElementById('stepTitle');
+
+    const backButton = document.getElementById('backButton');    position: absolute;
+
+    const nextButton = document.getElementById('nextButton');
+
+    const submitButton = document.getElementById('submitButton');    inset: 0;        Already have an account? <a href="{{ url_for('user_auth.login') }}" class="text-decoration-none">Sign in</a>
+
+
+
+    const displayNameInput = document.getElementById('display_name');    opacity: 0;
+
+    const nicknameInput = document.getElementById('nickname');
+
+    const birthMonth = document.getElementById('birth_month');}    </p>.hero-badge {
+
+    const birthDay = document.getElementById('birth_day');
+
+    const birthYear = document.getElementById('birth_year');
+
+    const dobHidden = document.getElementihiin
+.option-chip input:checked ~ span {</div>    display: inline-flex;
+
+    color: var(--onboard-accent);
+
+}{% endblock %}    align-items: center;
+
+
+
+.option-chip:has(input:checked),    gap: 0.6rem;
+
+.chip:has(input:checked) {
+
+    border-color: rgba(16, 22, 35, 0.3);{% block extra_js %}    padding: 0.55rem 0.95rem;
+
+    background: rgba(16, 22, 35, 0.06);
+
+}<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>    border-radius: 999px;
+
+
+
+.inline-feedback {{% endblock %}    background: rgba(255, 255, 255, 0.78);
+
+    min-height: 1.25rem;
+
+    font-size: 0.82rem;    font-size: 0.88rem;
+
+    color: #b91c1c;    font-weight: 600;
+
+}    color: var(--text-soft);
+
+    border: 1px solid rgba(148, 163, 184, 0.22);
+
+.checkbox-label {    backdrop-filter: blur(18px);
+
+    display: inline-flex;}
+
+    gap: 0.7rem;
+
+    align-items: center;
+
+    font-size: 0.9rem;.hero-badge .pulse-dot {
+
+    color: var(--onboard-muted);    width: 10px;
+
+}    height: 10px;
+
+    border-radius: 50%;
+
+.wizard-footer {    background: #10b981;
+
+    display: flex;    position: relative;
+
+    justify-content: space-between;}
+
+    align-items: center;
+
+    gap: 1rem;.hero-badge .pulse-dot::after {
+
+    border-top: 1px solid rgba(15, 23, 42, 0.08);    content: '';
+
+    padding-top: 1.8rem;    position: absolute;
+
+}    inset: -4px;
+
+    border-radius: 50%;
+
+.nav-buttons {    border: 2px solid rgba(52, 211, 153, 0.6);
+
+    display: flex;    animation: pulse 1.8s ease-out infinite;
+
+    gap: 0.8rem;}
+
+}
+
+@keyframes pulse {
+
+button {    0% { transform: scale(0.8); opacity: 0.8; }
+
+    font-family: inherit;    70% { transform: scale(1.35); opacity: 0; }
+
+}    100% { transform: scale(1.35); opacity: 0; }
+
+}
+
+.btn-ghost,
+
+.btn-primary {.hero-title {
+
+    display: inline-flex;    margin: 0;
+
+    align-items: center;    font-size: clamp(2.8rem, 5vw, 3.8rem);
+
+    justify-content: center;    font-weight: 400;
+
+    padding: 0.9rem 1.4rem;    line-height: 1.04;
+
+    border-radius: 14px;    letter-spacing: -0.04em;
+
+    font-weight: 600;    color: var(--text-main);
+
+    border: 1px solid transparent;}
+
+    cursor: pointer;
+
+    transition: transform var(--onboard-transition), box-shadow var(--onboard-transition), border-color var(--onboard-transition), color var(--onboard-transition);.hero-title span {
+
+}    color: var(--accent);
+
+}
+
+.btn-ghost {
+
+    background: rgba(255, 255, 255, 0.7);.hero-subtext {
+
+    border-color: rgba(15, 23, 42, 0.12);    margin: 0;
+
+    color: var(--onboard-accent);    font-size: 1.05rem;
+
+}    line-height: 1.75;
+
+    max-width: 30rem;
+
+.btn-ghost:disabled {    color: rgba(11, 17, 32, 0.68);
+
+    opacity: 0.35;}
+
+    cursor: default;
+
+}.hero-points {
+
+    list-style: none;
+
+.btn-ghost:not(:disabled):hover {    margin: 0;
+
+    border-color: rgba(15, 23, 42, 0.4);    padding: 0;
+
+}    display: grid;
+
+    gap: 0.9rem;
+
+.btn-primary {}
+
+    background: linear-gradient(135deg, var(--onboard-accent), var(--onboard-accent-soft));
+
+    color: #ffffff;.hero-points li {
+
+    box-shadow: 0 22px 34px rgba(17, 24, 39, 0.18);    display: flex;
+
+}    align-items: center;
+
+    gap: 0.75rem;
+
+.btn-primary:disabled {    font-weight: 500;
+
+    opacity: 0.45;    font-size: 0.95rem;
+
+    cursor: default;    color: rgba(11, 17, 32, 0.85);
+
+    box-shadow: none;}
+
+}
+
+.hero-points li::before {
+
+.btn-primary:not(:disabled):hover {    content: '';
+
+    transform: translateY(-2px);    width: 12px;
+
+    box-shadow: 0 30px 40px rgba(17, 24, 39, 0.2);    height: 12px;
+
+}    border-radius: 50%;
+
+    background: rgba(16, 22, 35, 0.6);
+
+@keyframes fadeSlide {    display: inline-flex;
+
+    from {    margin-right: 0.75rem;
+
+        opacity: 0;    opacity: 0.7;
+
+        transform: translateY(12px);}
+
+    }
+
+    to {.hero-metrics {
+
+        opacity: 1;    display: flex;
+
+        transform: translateY(0);    flex-wrap: wrap;
+
+    }    gap: clamp(1rem, 2vw, 1.5rem);
+
+}}
+
+
+
+.existing-account {.trust-logos {
+
+    text-align: center;    display: flex;
+
+    font-size: 0.9rem;    align-items: center;
+
+    color: var(--onboard-muted);    gap: clamp(1.5rem, 3vw, 2.5rem);
+
+}    opacity: 0.75;
+
+    color: var(--text-muted);
+
+.existing-account a {}
+
+    color: var(--onboard-accent);
+
+    text-decoration: none;.trust-logos span {
+
+    font-weight: 600;    font-size: 0.75rem;
+
+}    text-transform: uppercase;
+
+    letter-spacing: 0.28em;
+
+@media (max-width: 1080px) {    color: var(--text-muted);
+
+    .wizard-footer {}
+
+        flex-direction: column;
+
+        align-items: stretch;.trust-logos::before,
+
+    }.trust-logos::after {
+
+    content: '';
+
+    .nav-buttons {    flex: 1;
+
+        justify-content: space-between;    height: 1px;
+
+    }    background: linear-gradient(90deg, rgba(148, 163, 184, 0.3), rgba(148, 163, 184, 0));
+
+}}
+
+</style>
+
+{% endblock %}.metric-card {
+
+    min-width: 150px;
+
+{% block content %}    padding: 1.1rem 1.4rem;
+
+<div class="onboarding-shell">    border-radius: 16px;
+
+    <aside class="onboarding-hero">    background: rgba(255, 255, 255, 0.9);
+
+        <div class="hero-header">    border: 1px solid rgba(148, 163, 184, 0.22);
+
+            <span class="hero-badge">Quietly personal</span>    display: grid;
+
+            <div class="hero-heading">    gap: 0.45rem;
+
+                <h1>Let’s prepare a companion that feels intentional.</h1>    box-shadow: var(--shadow-sm);
+
+                <p>Every answer sharpens MyBella’s presence—just enough context to deliver grounded calm, accountability, and memory you can trust.</p>}
+
+            </div>
+
+        </div>.metric-value {
+
+        <ul class="hero-promise">    font-size: clamp(1.55rem, 3vw, 1.85rem);
+
+            <li>Thoughtful setup in under two minutes. We only ask what guides your conversations.</li>    font-weight: 600;
+
+            <li>Your preferences stay encrypted and in your control. MyBella never resells or trains on your reflections.</li>    letter-spacing: -0.015em;
+
+            <li>Switch personas without losing context. Each brings its own cadence while honoring your rituals.</li>    color: var(--text-main);
+
+        </ul>}
+
+        <div class="hero-footer">
+
+            <span>Private by design</span>.metric-label {
+
+            <span>Rooted in CBT and mindful coaching</span>    font-size: 0.85rem;
+
+            <span>Designed for evening resets</span>    color: var(--text-muted);
+
+        </div>    font-weight: 500;
+
+    </aside>}
+
+
+
+    <section class="wizard-panel">.hero-preview {
+
+        <div class="wizard-header">    position: relative;
+
+            <a href="{{ url_for('main.home') }}" class="brand-link">MyBella</a>    border-radius: 26px;
+
+            <div class="progress-track">    padding: 1.85rem;
+
+                <div class="progress-labels">    background: rgba(255, 255, 255, 0.9);
+
+                    <span id="progressLabel">Step 1 of 4</span>    border: 1px solid rgba(148, 163, 184, 0.22);
+
+                    <span id="progressHint">Start with your name</span>    display: grid;
+
+                </div>    gap: 1.25rem;
+
+                <div class="progress-meter" role="presentation" aria-hidden="true">    overflow: hidden;
+
+                    <div class="progress-fill" id="progressFill"></div>    box-shadow: var(--shadow-sm);
+
+                </div>}
+
+            </div>
+
+            <div class="step-context">.hero-preview::before {
+
+                <span id="stepTag">Identity</span>    content: '';
+
+                <h2 id="stepTitle">Start with your name</h2>    position: absolute;
+
+            </div>    inset: 0;
+
+        </div>    background: transparent;
+
+    pointer-events: none;
+
+        <form method="POST" action="{{ url_for('user_auth.register') }}" id="onboardingForm" class="wizard-body">}
+
+            {{ form.csrf_token() if form is defined and form.csrf_token is defined }}
+
+.hero-preview-header {
+
+            <section class="step-panel active" data-step="1">    display: flex;
+
+                <div class="step-heading">    align-items: flex-start;
+
+                    <h3>Start with your name</h3>    justify-content: space-between;
+
+                    <p>We’ll use this in every conversation so it always feels personal.</p>    gap: 1rem;
+
+                </div>}
+
+                <div class="form-grid">
+
+                    <div class="form-group">.hero-preview h3 {
+
+                        <label for="display_name">Display name<span class="required">*</span></label>    margin: 0;
+
+                        <input type="text" id="display_name" name="display_name" class="input-field" placeholder="Enter your name" autocomplete="name" required>    font-size: 1.05rem;
+
+                        <div class="inline-feedback" id="displayNameFeedback"></div>    font-weight: 600;
+
+                    </div>    color: var(--text-main);
+
+                    <input type="hidden" id="nickname" name="nickname" value="">}
+
+                </div>
+
+            </section>.upload-badge {
+
+    padding: 0.35rem 0.75rem;
+
+            <section class="step-panel" data-step="2">    border-radius: 999px;
+
+                <div class="step-heading">    background: rgba(226, 232, 240, 0.7);
+
+                    <h3>Your basics</h3>    color: var(--accent);
+
+                    <p>A little structure helps the conversations land just right.</p>    font-size: 0.78rem;
+
+                </div>    font-weight: 600;
+
+                <div class="form-grid">    border: 1px solid rgba(148, 163, 184, 0.35);
+
+                    <div class="form-group">}
+
+                        <label>Date of birth<span class="required">*</span></label>
+
+                        <div class="dob-selectors">.hero-avatar-stack {
+
+                            <select id="birth_month" class="input-field" required>    display: flex;
+
+                                <option value="">Month</option>    align-items: center;
+
+                                {% for value, label in [("01","January"),("02","February"),("03","March"),("04","April"),("05","May"),("06","June"),("07","July"),("08","August"),("09","September"),("10","October"),("11","November"),("12","December")] %}}
+
+                                <option value="{{ value }}">{{ label }}</option>
+
+                                {% endfor %}.hero-avatar-stack img,
+
+                            </select>.hero-avatar-stack .avatar-bubble {
+
+                            <select id="birth_day" class="input-field" required>    width: 34px;
+
+                                <option value="">Day</option>    height: 34px;
+
+                                {% for day in range(1, 32) %}    border-radius: 50%;
+
+                                <option value="{{ "%02d"|format(day) }}">{{ day }}</option>    border: 2px solid rgba(255, 255, 255, 0.9);
+
+                                {% endfor %}    margin-left: -10px;
+
+                            </select>}
+
+                            <select id="birth_year" class="input-field" required>
+
+                                <option value="">Year</option>.hero-avatar-stack img:first-child,
+
+                                {% for year in range(1925, 2026) | reverse %}.hero-avatar-stack .avatar-bubble:first-child {
+
+                                <option value="{{ year }}">{{ year }}</option>    margin-left: 0;
+
+                                {% endfor %}}
+
+                            </select>
+
+                        </div>.hero-avatar-stack .avatar-bubble {
+
+                        <input type="hidden" id="date_of_birth" name="date_of_birth" required>    display: inline-flex;
+
+                        <div class="inline-feedback" id="ageFeedback"></div>    align-items: center;
+
+                    </div>    justify-content: center;
+
+    font-size: 0.8rem;
+
+                    <div class="form-group">    font-weight: 700;
+
+                        <label>How should we refer to you?<span class="required">*</span></label>    color: var(--accent);
+
+                        <div class="option-row" id="genderGroup">    background: radial-gradient(circle at 30% 30%, #ffffff 0%, #e2e8f0 100%);
+
+                            <label class="option-chip" data-label="Female">}
+
+                                <input type="radio" name="gender" value="female" required>
+
+                                <span>Female</span>.hero-avatar-stack span {
+
+                            </label>    margin-left: 0.75rem;
+
+                            <label class="option-chip" data-label="Male">    font-size: 0.75rem;
+
+                                <input type="radio" name="gender" value="male">    font-weight: 500;
+
+                                <span>Male</span>    color: var(--text-muted);
+
+                            </label>}
+
+                            <label class="option-chip" data-label="Non-binary / Other">
+
+                                <input type="radio" name="gender" value="other">.hero-preview-list {
+
+                                <span>Non-binary / Other</span>    list-style: none;
+
+                            </label>    margin: 0;
+
+                            <label class="option-chip" data-label="Prefer not to say">    padding: 0.5rem 0 0 0;
+
+                                <input type="radio" name="gender" value="prefer_not_to_say">    display: grid;
+
+                                <span>Prefer not to say</span>    gap: 0.6rem;
+
+                            </label>}
+
+                        </div>
+
+                        <div class="inline-feedback" id="genderFeedback"></div>.hero-preview-list li {
+
+                    </div>    display: flex;
+
+    align-items: center;
+
+                    <div class="form-group">    font-size: 0.85rem;
+
+                        <label for="pronouns">Pronouns</label>    font-weight: 500;
+
+                        <select id="pronouns" name="pronouns" class="input-field">    color: var(--text-soft);
+
+                            <option value="">Select pronouns</option>}
+
+                            <option value="she/her">She / Her</option>
+
+                            <option value="he/him">He / Him</option>.hero-preview-list li::before {
+
+                            <option value="they/them">They / Them</option>    content: '';
+
+                            <option value="he/they">He / They</option>    display: inline-block;
+
+                            <option value="she/they">She / They</option>    width: 8px;
+
+                            <option value="custom">I'll share in chat</option>    height: 8px;
+
+                        </select>    border-radius: 50%;
+
+                    </div>    background: rgba(16, 22, 35, 0.55);
+
+                </div>    flex-shrink: 0;
+
+            </section>    margin-right: 0.75rem;
+
+    opacity: 0.65;
+
+            <section class="step-panel" data-step="3">}
+
+                <div class="step-heading">
+
+                    <h3>Support preferences</h3>.hero-progress {
+
+                    <p>Pick the focus and cadence that feels right today.</p>    display: grid;
+
+                </div>    gap: 0.75rem;
+
+                <div class="form-grid">}
+
+                    <div class="form-group">
+
+                        <label>Primary focus<span class="required">*</span></label>.hero-progress-row {
+
+                        <div class="option-grid" id="focusGroup">    display: flex;
+
+                            <label class="option-chip" data-label="Emotional support">    align-items: center;
+
+                                <input type="radio" name="support_focus" value="emotional_support" required>    justify-content: space-between;
+
+                                <span>Steady emotional support</span>    font-size: 0.85rem;
+
+                            </label>    color: var(--text-soft);
+
+                            <label class="option-chip" data-label="Motivation">}
+
+                                <input type="radio" name="support_focus" value="motivation">
+
+                                <span>Motivation &amp; progress</span>.hero-progress-bar {
+
+                            </label>    height: 6px;
+
+                            <label class="option-chip" data-label="Calm">    border-radius: 999px;
+
+                                <input type="radio" name="support_focus" value="calm">    background: rgba(148, 163, 184, 0.25);
+
+                                <span>Calm &amp; mindfulness</span>    overflow: hidden;
+
+                            </label>}
+
+                            <label class="option-chip" data-label="Productivity">
+
+                                <input type="radio" name="support_focus" value="productivity">.hero-progress-fill {
+
+                                <span>Focus &amp; productivity</span>    height: 100%;
+
+                            </label>    border-radius: inherit;
+
+                        </div>    background: linear-gradient(90deg, rgba(15, 23, 42, 0.85) 0%, rgba(30, 41, 59, 1) 100%);
+
+                        <div class="inline-feedback" id="focusFeedback"></div>    box-shadow: 0 0 12px rgba(15, 23, 42, 0.18);
+
+                    </div>    width: 78%;
+
+}
+
+                    <div class="form-group">
+
+                        <label>Extra topics (optional)</label>.floating-shape,
+
+                        <div class="chip-group" id="supportTopics">.shape-one,
+
+                            {% for value, label in [.shape-two {
+
+                                ("stress_relief", "Stress relief"),    display: none;
+
+                                ("confidence", "Confidence"),}
+
+                                ("habits", "Habits"),
+
+                                ("relationships", "Relationships"),.card-frame {
+
+                                ("focus", "Focus"),    background: rgba(255, 255, 255, 0.65);
+
+                                ("mood", "Mood tracking")    padding: 2px;
+
+                            ] %}    border-radius: 28px;
+
+                            <label class="chip" data-label="{{ label }}">    border: 1px solid rgba(148, 163, 184, 0.2);
+
+                                <input type="checkbox" name="support_topics[]" value="{{ value }}">    backdrop-filter: blur(14px);
+
+                                <span>{{ label }}</span>}
+
+                            </label>
+
+                            {% endfor %}.onboarding-card {
+
+                        </div>    width: 100%;
+
+                    </div>    max-width: 600px;
+
+    background: rgba(255, 255, 255, 0.95);
+
+                    <div class="form-group">    backdrop-filter: blur(26px);
+
+                        <label>Conversation tone<span class="required">*</span></label>    border-radius: 26px;
+
+                        <div class="chip-group" id="conversationStyleGroup">    border: 1px solid rgba(148, 163, 184, 0.2);
+
+                            <label class="chip" data-label="Gentle &amp; grounding">    box-shadow: var(--shadow-md);
+
+                                <input type="radio" name="conversation_style" value="gentle" required>    overflow: hidden;
+
+                                <span>Gentle &amp; grounding</span>    display: flex;
+
+                            </label>    flex-direction: column;
+
+                            <label class="chip" data-label="Cheerleader energy">    animation: cardEnter 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+
+                                <input type="radio" name="conversation_style" value="cheerleader">    position: relative;
+
+                                <span>Cheerleader energy</span>}
+
+                            </label>
+
+                            <label class="chip" data-label="Direct &amp; practical">.onboarding-card::after {
+
+                                <input type="radio" name="conversation_style" value="direct">    content: '';
+
+                                <span>Direct &amp; practical</span>    position: absolute;
+
+                            </label>    inset: 0;
+
+                        </div>    border-radius: inherit;
+
+                        <div class="inline-feedback" id="supportStyleFeedback"></div>    background: radial-gradient(circle at 18% -20%, rgba(148, 163, 184, 0.18), transparent 65%);
+
+                    </div>    pointer-events: none;
+
+}
+
+                    <div class="form-group">
+
+                        <label>Check-in rhythm</label>@keyframes cardEnter {
+
+                        <div class="chip-group" id="checkInGroup">    from {
+
+                            <label class="chip" data-label="Daily pulse">        opacity: 0;
+
+                                <input type="radio" name="check_in_preference" value="daily">        transform: translateY(30px) scale(0.96);
+
+                                <span>Daily pulse</span>    }
+
+                            </label>    to {
+
+                            <label class="chip" data-label="Weekly planning">        opacity: 1;
+
+                                <input type="radio" name="check_in_preference" value="weekly">        transform: translateY(0) scale(1);
+
+                                <span>Weekly planning</span>    }
+
+                            </label>}
+
+                            <label class="chip" data-label="Only when I ask">
+
+                                <input type="radio" name="check_in_preference" value="as_needed">.onboarding-card.transitioning {
+
+                                <span>Only when I ask</span>    animation: cardPulse 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+
+                            </label>}
+
+                        </div>
+
+                    </div>@keyframes cardPulse {
+
+                </div>    0%, 100% { transform: scale(1); }
+
+            </section>    50% { transform: scale(0.99); }
+
+}
+
+            <section class="step-panel" data-step="4">
+
+                <div class="step-heading">.wizard-progress {
+
+                    <h3>Create your account</h3>    position: relative;
+
+                    <p>Everything you share is encrypted. This is the final step.</p>    display: flex;
+
+                </div>    justify-content: space-between;
+
+                <div class="form-grid double">    gap: 1rem;
+
+                    <div class="form-group">    padding: 2rem clamp(2rem, 5vw, 3rem) 1.5rem;
+
+                        <label for="email">Email address<span class="required">*</span></label>    background: rgba(255, 255, 255, 0.88);
+
+                        <input type="email" id="email" name="email" class="input-field" placeholder="you@example.com" autocomplete="email" required>    border-bottom: 1px solid var(--border-subtle);
+
+                        <div class="inline-feedback" id="emailFeedback"></div>    backdrop-filter: blur(18px);
+
+                    </div>}
+
+                    <div class="form-group">
+
+                        <label for="password">Password<span class="required">*</span></label>.wizard-progress::before {
+
+                        <input type="password" id="password" name="password" class="input-field" placeholder="Create a strong password" autocomplete="new-password" required>    content: "";
+
+                        <div class="inline-feedback" id="passwordFeedback"></div>    position: absolute;
+
+                    </div>    left: clamp(2rem, 5vw, 3rem);
+
+                    <div class="form-group">    right: clamp(2rem, 5vw, 3rem);
+
+                        <label for="confirm_password">Confirm password<span class="required">*</span></label>    top: 3rem;
+
+                        <input type="password" id="confirm_password" name="confirm_password" class="input-field" placeholder="Repeat your password" autocomplete="new-password" required>    height: 2px;
+
+                        <div class="inline-feedback" id="confirmPasswordFeedback"></div>    background: rgba(203, 213, 225, 0.38);
+
+                    </div>    border-radius: 999px;
+
+                    <div class="form-group">    z-index: 0;
+
+                        <label class="checkbox-label">}
+
+                            <input type="checkbox" id="terms" name="terms" required>
+
+                            I agree to the <a href="{{ url_for('legal.terms_of_service') if url_for is defined else '/terms' }}" target="_blank">Terms of Service</a> and <a href="{{ url_for('legal.privacy_policy') if url_for is defined else '/privacy' }}" target="_blank">Privacy Policy</a>..wizard-progress-line {
+
+                        </label>    position: absolute;
+
+                        <div class="inline-feedback" id="termsFeedback"></div>    left: clamp(2rem, 5vw, 3rem);
+
+                    </div>    right: clamp(2rem, 5vw, 3rem);
+
+                </div>    top: 3rem;
+
+            </section>    height: 2px;
+
+    background: var(--gradient-accent);
+
+            <div class="wizard-footer">    border-radius: 999px;
+
+                <p class="existing-account">Already have an account? <a href="{{ url_for('user_auth.login') }}">Sign in</a></p>    transform-origin: left center;
+
+                <div class="nav-buttons">    transform: scaleX(0);
+
+                    <button type="button" class="btn-ghost" id="backButton" disabled>Back</button>    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+
+                    <button type="button" class="btn-primary" id="nextButton">Continue</button>    z-index: 1;
+
+                    <button type="submit" class="btn-primary" id="submitButton" hidden>Create account</button>    box-shadow: 0 0 18px rgba(16, 22, 35, 0.16);
+
+                </div>}
+
+            </div>
+
+        </form>.wizard-step {
+
+    </section>    position: relative;
+
+</div>    z-index: 2;
+
+{% endblock %}    display: flex;
+
+    flex-direction: column;
+
+{% block extra_js %}    align-items: center;
+
+<script>    gap: 0.5rem;
+
+(function () {    flex: 1;
+
+    const form = document.getElementById('onboardingForm');}
+
+    if (!form) { return; }
+
+.step-circle {
+
+    const stepPanels = Array.from(form.querySelectorAll('.step-panel'));    width: 38px;
+
+    const progressFill = document.getElementById('progressFill');    height: 38px;
+
+    const progressLabel = document.getElementById('progressLabel');    border-radius: 50%;
+
+    const progressHint = document.getElementById('progressHint');    border: 1.5px solid rgba(148, 163, 184, 0.38);
+
+    const stepTag = document.getElementById('stepTag');    background: #ffffff;
+
+    const stepTitle = document.getElementById('stepTitle');    display: flex;
+
+    const backButton = document.getElementById('backButton');    align-items: center;
+
+    const nextButton = document.getElementById('nextButton');    justify-content: center;
+
+    const submitButton = document.getElementById('submitButton');    font-weight: 500;
+
+    font-size: 1rem;
+
+    const displayNameInput = document.getElementById('display_name');    color: var(--text-muted);
+
+    const nicknameInput = document.getElementById('nickname');    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+    const birthMonth = document.getElementById('birth_month');}
+
+    const birthDay = document.getElementById('birth_day');
+
+    const birthYear = document.getElementById('birth_year');.wizard-step.active .step-circle {
+
+    const dobHidden = document.getElementById('date_of_birth');    border-color: var(--accent);
+
+    const termsCheckbox = document.getElementById('terms');    background: #ffffff;
+
+    color: var(--accent);
+
+    const feedback = {    box-shadow: inset 0 0 0 6px rgba(16, 22, 35, 0.05);
+
+        displayName: document.getElementById('displayNameFeedback'),}
+
+        age: document.getElementById('ageFeedback'),
+
+        gender: document.getElementById('genderFeedback'),.wizard-step.complete .step-circle {
+
+        focus: document.getElementById('focusFeedback'),    border-color: var(--success);
+
+        supportStyle: document.getElementById('supportStyleFeedback'),    background: #f0fdfa;
+
+        email: document.getElementById('emailFeedback'),    color: var(--success);
+
+        password: document.getElementById('passwordFeedback'),    box-shadow: inset 0 0 0 3px rgba(15, 118, 110, 0.12);
+
+        confirmPassword: document.getElementById('confirmPasswordFeedback'),}
+
+        terms: document.getElementById('termsFeedback')
+
+    };.wizard-step.complete .step-circle::after {
+
+    content: '✓';
+
+    const stepMeta = [    position: absolute;
+
+        { tag: 'Identity', title: 'Start with your name', hint: 'Start with your name' },    font-size: 1.1rem;
+
+        { tag: 'Profile', title: 'Your basics', hint: 'Age, pronouns, and how we address you' },}
+
+        { tag: 'Support', title: 'Support preferences', hint: 'Focus areas and tone' },
+
+        { tag: 'Security', title: 'Create your account', hint: 'Wrap up with login details' }.step-label {
+
+    ];    font-size: 0.8rem;
+
+    font-weight: 600;
+
+    let currentStep = 0;    letter-spacing: 0.02em;
+
+    color: var(--text-muted);
+
+    const storedName = sessionStorage.getItem('mybella.display_name');    transition: color 0.3s ease;
+
+    if (storedName && !displayNameInput.value) {}
+
+        displayNameInput.value = storedName;
+
+        nicknameInput.value = storedName;.wizard-step.active .step-label {
+
+    }    color: var(--accent);
+
+}
+
+    function updateProgress(step) {
+
+        const progress = ((step + 1) / stepPanels.length) * 100;.wizard-step.complete .step-label {
+
+        progressFill.style.width = progress + '%';    color: var(--success);
+
+        progressLabel.textContent = `Step ${step + 1} of ${stepPanels.length}`;}
+
+        progressHint.textContent = stepMeta[step].hint;
+
+        stepTag.textContent = stepMeta[step].tag;.wizard-body {
+
+        stepTitle.textContent = stepMeta[step].title;    padding: clamp(2.6rem, 5vw, 3.4rem);
+
+        backButton.disabled = step === 0;    display: grid;
+
+        nextButton.hidden = step === stepPanels.length - 1;    gap: 2.25rem;
+
+        submitButton.hidden = step !== stepPanels.length - 1;    background: rgba(255, 255, 255, 0.94);
+
+    }    scroll-margin-top: 3rem;
+
+    position: relative;
+
+    function showStep(step) {}
+
+        stepPanels.forEach((panel, index) => {
+
+            panel.classList.toggle('active', index === step);.step-panel {
+
+        });    display: none;
+
+        updateProgress(step);}
+
+    }
+
+.step-panel.active {
+
+    function clearFeedback(keys) {    display: grid;
+
+        keys.forEach(key => {    gap: 2rem;
+
+            if (feedback[key]) {    animation: stepSlideIn 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+
+                feedback[key].textContent = '';}
+
+            }
+
+        });@keyframes stepSlideIn {
+
+    }    from {
+
+        opacity: 0;
+
+    function validateStep(step) {        transform: translateX(30px);
+
+        let valid = true;    }
+
+        switch (step) {    to {
+
+            case 0: {        opacity: 1;
+
+                clearFeedback(['displayName']);        transform: translateX(0);
+
+                const value = displayNameInput.value.trim();    }
+
+                nicknameInput.value = value;}
+
+                if (!value) {
+
+                    feedback.displayName.textContent = 'Please share the name you’d like us to use.';.step-heading {
+
+                    valid = false;    text-align: center;
+
+                }    margin-bottom: 1.5rem;
+
+                break;}
+
+            }
+
+            case 1: {.step-heading h2 {
+
+                clearFeedback(['age', 'gender']);    margin: 0 0 0.5rem 0;
+
+                const month = birthMonth.value;    font-size: clamp(1.8rem, 4vw, 2.25rem);
+
+                const day = birthDay.value;    font-weight: 400;
+
+                const year = birthYear.value;    letter-spacing: -0.02em;
+
+                if (!month || !day || !year) {    color: var(--text-main);
+
+                    feedback.age.textContent = 'Please select your full date of birth.';}
+
+                    valid = false;
+
+                } else {.step-heading p {
+
+                    const composed = `${year}-${month}-${day}`;    margin: 0;
+
+                    dobHidden.value = composed;    color: var(--text-soft);
+
+                    const parsed = new Date(`${year}-${month}-${day}T00:00:00`);    font-size: 1rem;
+
+                    const isValidDate = parsed && parsed.getMonth() + 1 === parseInt(month, 10) && parsed.getDate() === parseInt(day, 10);    line-height: 1.5;
+
+                    if (!isValidDate) {}
+
+                        feedback.age.textContent = 'That date doesn’t look valid. Try again?';
+
+                        valid = false;.form-group {
+
+                    } else {    display: flex;
+
+                        const age = new Date().getFullYear() - parseInt(year, 10);    flex-direction: column;
+
+                        if (age < 13) {    gap: 0.5rem;
+
+                            feedback.age.textContent = 'MyBella is available for those 13 and older.';    position: relative;
+
+                            valid = false;}
+
+                        }
+
+                    }.floating-label {
+
+                }    font-weight: 500;
+
+    font-size: 0.9rem;
+
+                if (!form.querySelector('input[name="gender"]:checked')) {    color: var(--text-muted);
+
+                    feedback.gender.textContent = 'Let us know how to address you.';    position: absolute;
+
+                    valid = false;    top: 1.05rem;
+
+                }    left: 1.1rem;
+
+                break;    transition: all 0.2s ease;
+
+            }    pointer-events: none;
+
+            case 2: {}
+
+                clearFeedback(['focus', 'supportStyle']);
+
+                if (!form.querySelector('input[name="support_focus"]:checked')) {.input-field:focus + .floating-label,
+
+                    feedback.focus.textContent = 'Pick what you want MyBella to center on first.';.input-field:not(:placeholder-shown) + .floating-label,
+
+                    valid = false;.form-group select:focus + .floating-label,
+
+                }.form-group select:not([value=""]) + .floating-label {
+
+                if (!form.querySelector('input[name="conversation_style"]:checked')) {    transform: translateY(-1.6rem) scale(0.9);
+
+                    feedback.supportStyle.textContent = 'Choose the tone that fits you best.';    color: var(--accent);
+
+                    valid = false;}
+
+                }
+
+                break;.required {
+
+            }    color: #ef4444;
+
+            case 3: {    font-weight: 700;
+
+                clearFeedback(['email', 'password', 'confirmPassword', 'terms']);}
+
+                const email = form.email.value.trim();
+
+                const password = form.password.value;.input-field {
+
+                const confirmPassword = form.confirm_password.value;    width: 100%;
+
+    border-radius: 12px;
+
+                if (!email || !/^\S+@\S+\.\S+$/.test(email)) {    border: 1.5px solid rgba(148, 163, 184, 0.42);
+
+                    feedback.email.textContent = 'Enter a valid email so we can keep your account secure.';    background: var(--surface-elevated);
+
+                    valid = false;    padding: 0.95rem 1.1rem;
+
+                }    font-size: 1rem;
+
+                if (password.length < 8) {    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+
+                    feedback.password.textContent = 'Use at least 8 characters for a strong password.';    color: var(--text-main);
+
+                    valid = false;    font-family: inherit;
+
+                }}
+
+                if (password && confirmPassword && password !== confirmPassword) {
+
+                    feedback.confirmPassword.textContent = 'Those passwords don’t match yet.';.input-field:hover {
+
+                    valid = false;    border-color: rgba(16, 22, 35, 0.45);
+
+                }    background: #ffffff;
+
+                if (!termsCheckbox.checked) {}
+
+                    feedback.terms.textContent = 'We need your agreement before continuing.';
+
+                    valid = false;.input-field:focus {
+
+                }    outline: none;
+
+                break;    border-color: var(--accent);
+
+            }    background: #ffffff;
+
+        }    box-shadow: 0 0 0 4px var(--focus-ring);
+
+        return valid;}
+
+    }
+
+.input-field::placeholder {
+
+    backButton.addEventListener('click', () => {    color: var(--text-muted);
+
+        if (currentStep === 0) { return; }}
+
+        currentStep -= 1;
+
+        showStep(currentStep);.dob-selectors {
+
+    });    display: grid;
+
+    gap: 0.75rem;
+
+    nextButton.addEventListener('click', () => {    grid-template-columns: 1.5fr 1fr 1fr;
+
+        if (!validateStep(currentStep)) { return; }}
+
+        if (currentStep < stepPanels.length - 1) {
+
+            currentStep += 1;.dob-selectors select {
+
+            showStep(currentStep);    appearance: none;
+
+        }    -webkit-appearance: none;
+
+    });    -moz-appearance: none;
+
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'%3E%3Cpath fill='%230f172a' d='M4 6l4 4 4-4'/%3E%3C/svg%3E");
+
+    form.addEventListener('submit', (event) => {    background-repeat: no-repeat;
+
+        if (!validateStep(currentStep)) {    background-position: right 0.75rem center;
+
+            event.preventDefault();    background-size: 16px;
+
+            return;    padding-right: 2.5rem;
+
+        }}
+
+        sessionStorage.removeItem('mybella.display_name');
+
+    });.option-row,
+
+.option-grid {
+
+    [birthMonth, birthDay, birthYear].forEach(select => {    display: grid;
+
+        if (!select) { return; }    gap: 0.75rem;
+
+        select.addEventListener('change', () => {    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+
+            clearFeedback(['age']);}
+
+        });
+
+    });.option-chip {
+
+    position: relative;
+
+    form.querySelectorAll('input, select').forEach(input => {    cursor: pointer;
+
+        input.addEventListener('input', () => {    border-radius: 12px;
+
+            const feedbackKey = input.id?.replace(/-[a-z]/g, match => match.slice(1).toUpperCase());    border: 1.5px solid rgba(148, 163, 184, 0.42);
+
+            if (feedbackKey && feedback[feedbackKey]) {    background: rgba(255, 255, 255, 0.92);
+
+                feedback[feedbackKey].textContent = '';    padding: 1rem 1.25rem;
+
+            }    font-size: 0.95rem;
+
+        });    font-weight: 500;
+
+    });    color: var(--text-main);
+
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+
+    showStep(currentStep);    text-align: center;
+
+})();    display: flex;
+
+</script>    align-items: center;
+
+{% endblock %}    justify-content: center;
+
+}
+
+.option-chip:hover {
+    border-color: rgba(16, 22, 35, 0.48);
+    background: #ffffff;
+    box-shadow: 0 14px 26px rgba(15, 23, 42, 0.06);
+}
+
+.option-chip input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.option-chip.active {
+    border-color: var(--accent);
+    background: rgba(16, 22, 35, 0.06);
+    color: var(--accent);
+    box-shadow: none;
+}
+
+.option-chip.active::before {
+    content: '✓';
+    position: absolute;
+    top: 0.55rem;
+    right: 0.55rem;
+    width: 18px;
+    height: 18px;
+    background: var(--accent);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.7rem;
+    font-weight: 700;
+}
+
+.chip-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+}
+
+.chip {
+    position: relative;
+    cursor: pointer;
+    border-radius: 999px;
+    border: 1.5px solid rgba(148, 163, 184, 0.42);
+    background: rgba(255, 255, 255, 0.92);
+    padding: 0.7rem 1.25rem;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--text-main);
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.chip:hover {
+    border-color: rgba(16, 22, 35, 0.48);
+    background: #ffffff;
+    box-shadow: 0 14px 26px rgba(15, 23, 42, 0.06);
+}
+
+.chip input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.chip.active {
+    border-color: var(--accent);
+    background: rgba(16, 22, 35, 0.06);
+    color: var(--accent);
+    box-shadow: none;
+}
+
+.form-grid {
+    display: grid;
+    gap: 1.25rem;
+}
+
+.inline-feedback {
+    display: none;
+    font-size: 0.875rem;
+    font-weight: 500;
+    margin-top: 0.25rem;
+    padding: 0.5rem 0.75rem;
+    border-radius: 8px;
+}
+
+.inline-feedback.success {
+    color: var(--success);
+    background: rgba(15, 118, 110, 0.12);
+    display: block;
+}
+
+.inline-feedback.error {
+    color: #ef4444;
+    background: rgba(239, 68, 68, 0.1);
+    display: block;
+}
+
+.inline-feedback.info {
+    color: var(--accent);
+    background: rgba(15, 23, 42, 0.08);
+    display: block;
+}
+
+.wizard-controls {
+    display: flex;
+    gap: 1rem;
+    padding: 1.85rem clamp(2rem, 5vw, 3rem) 2.1rem;
+    background: rgba(255, 255, 255, 0.88);
+    border-top: 1px solid var(--border-subtle);
+    backdrop-filter: blur(18px);
+}
+
+.btn {
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 1rem;
+    padding: 1rem 1.5rem;
+    cursor: pointer;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    border: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    font-family: inherit;
+    position: relative;
+}
+
+.btn.ghost {
+    background: #ffffff;
+    color: var(--accent);
+    border: 1.5px solid rgba(148, 163, 184, 0.22);
+    box-shadow: var(--shadow-sm);
+}
+
+.btn.ghost:hover {
+    background: rgba(255, 255, 255, 0.95);
+    border-color: rgba(16, 22, 35, 0.32);
+}
+
+.btn.primary {
+    background: var(--gradient-accent);
+    color: #ffffff;
+    flex: 1;
+    box-shadow: 0 24px 32px rgba(16, 22, 35, 0.14);
+}
+
+.btn.primary:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 30px 38px rgba(16, 22, 35, 0.16);
+}
+
+.btn.primary:active {
+    transform: translateY(0);
+}
+
+.btn.primary:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+.btn.loading {
+    position: relative;
+    color: transparent;
+    pointer-events: none;
+}
+
+.btn.loading::after {
+    content: "";
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    border-radius: 999px;
+    border: 2px solid white;
+    border-top-color: transparent;
+    animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+.wizard-footer {
+    text-align: center;
+    padding: 1.5rem 1rem 2.5rem;
+    font-size: 0.95rem;
+    color: var(--text-soft);
+    background: transparent;
+}
+
+.wizard-footer a {
+    color: var(--accent);
+    font-weight: 600;
+    text-decoration: none;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    background: rgba(15, 23, 42, 0.05);
+    transition: all 0.25s ease;
+    display: inline-block;
+}
+
+.wizard-footer a:hover {
+    background: rgba(15, 23, 42, 0.08);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(15, 23, 42, 0.1);
+}
+
+.checkbox-label {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    cursor: pointer;
+    font-size: 0.95rem;
+    color: var(--text-main);
+    line-height: 1.6;
+}
+
+.checkbox-label input[type="checkbox"] {
+    margin-top: 0.25rem;
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    accent-color: var(--accent);
+}
+
+.checkbox-label a {
+    color: var(--accent);
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.checkbox-label a:hover {
+    text-decoration: underline;
+}
+
+@media (max-width: 1024px) {
+    .onboarding-shell {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+        padding: 2.5rem clamp(1.25rem, 6vw, 2rem);
+    }
+
+    .onboarding-hero {
+        text-align: center;
+        justify-items: center;
+    }
+
+    .hero-subtext {
+        max-width: 28rem;
+    }
+
+    .hero-points li {
+        justify-content: center;
+    }
+
+    .hero-metrics {
+        justify-content: center;
+    }
+
+    .hero-preview {
+        justify-items: center;
+        text-align: left;
+    }
+
+    .hero-preview-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
+
+@media (max-width: 768px) {
+    .wizard-progress {
+        padding: 1.5rem 1.5rem 1rem;
+    }
+
+    .wizard-body {
+        padding: 1.75rem 1.5rem;
+    }
+
+    .wizard-controls {
+        flex-direction: column;
+        padding: 1.5rem 1.5rem 1.75rem;
+    }
+
+    .btn.ghost,
+    .btn.primary {
+        width: 100%;
+    }
+
+    .option-row,
+    .option-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .dob-selectors {
+        grid-template-columns: 1fr;
+    }
+
+    .step-circle {
+        width: 36px;
+        height: 36px;
+        font-size: 0.9rem;
+    }
+
+    .step-label {
+        font-size: 0.7rem;
+    }
+
+    .step-heading h2 {
+        font-size: 1.5rem;
+    }
+}
+
+@media (max-width: 640px) {
+    .hero-title {
+        font-size: 2.1rem;
+    }
+
+    .hero-points {
+        gap: 0.75rem;
+    }
+
+    .wizard-step {
+        gap: 0.35rem;
+    }
+
+    .step-label {
+        font-size: 0.65rem;
+    }
+
+    .chip-group {
+        flex-direction: column;
+    }
+
+    .chip {
+        text-align: center;
+    }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="onboarding-shell">
+    <div class="onboarding-hero">
+        <span class="floating-shape shape-one"></span>
+        <span class="floating-shape shape-two"></span>
+
+        <div class="hero-nav">
+            <span class="brand-mark">MB</span>
+            <span>Intentional evenings, on autopilot</span>
+            <div class="hero-rating">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l2.9 6 6.6.9-4.8 4.6 1.1 6.5L12 17.8 6.2 20.5l1.1-6.5-4.8-4.6 6.6-.9z"/></svg>
+                <span>4.9 · 48k reflections</span>
+            </div>
+        </div>
+
+        <div class="hero-badge">
+            <span class="pulse-dot"></span>
+            Quietly guiding 250k+ nightly resets
+        </div>
+
+        <h1 class="hero-title">
+            Design your nightly reset with <span>MyBella</span>
+        </h1>
+
+        <p class="hero-subtext">
+            MyBella shapes each conversation around your energy, context, and rituals so unwinding feels calm, focused, and unmistakably yours.
+        </p>
+
+        <ul class="hero-points">
+            <li>Glanceable rituals designed for deep breathing space</li>
+            <li>Elegant progress overviews with just-in-time nudges</li>
+            <li>Adaptive tone that stays human, never performative</li>
+        </ul>
+
+        <div class="hero-metrics">
+            <div class="metric-card">
+                <span class="metric-value">98%</span>
+                <span class="metric-label">feel more composed by week two</span>
+            </div>
+            <div class="metric-card">
+                <span class="metric-value">14m</span>
+                <span class="metric-label">avg. focused reflection</span>
+            </div>
+        </div>
+
+        <div class="hero-preview">
+            <div class="hero-preview-header">
+                <h3>Tonight's reset flow</h3>
+                <span class="upload-badge">Synchronized</span>
+            </div>
+            <div class="hero-avatar-stack">
+                <span class="avatar-bubble">AM</span>
+                <span class="avatar-bubble">JS</span>
+                <span class="avatar-bubble">LT</span>
+                <span>Focus mode in progress - 14 min remaining</span>
+            </div>
+            <div class="hero-progress">
+                <div class="hero-progress-row">
+                    <span>Evening clarity</span>
+                    <span>78%</span>
+                </div>
+                <div class="hero-progress-bar">
+                    <div class="hero-progress-fill"></div>
+                </div>
+            </div>
+            <ul class="hero-preview-list">
+                <li>Breathing cadence locked in - 4 cycles</li>
+                <li>Reflection capture scheduled for 21:30</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="card-frame">
+        <div class="onboarding-card">
+            <div class="wizard-progress">
+                <div class="wizard-progress-line" id="progressLine"></div>
+                <div class="wizard-step active" data-step="1">
+                    <span class="step-circle">1</span>
+                    <span class="step-label">Name</span>
+                </div>
+                <div class="wizard-step" data-step="2">
+                    <span class="step-circle">2</span>
+                    <span class="step-label">Basics</span>
+                </div>
+                <div class="wizard-step" data-step="3">
+                    <span class="step-circle">3</span>
+                    <span class="step-label">Support</span>
+                </div>
+                <div class="wizard-step" data-step="4">
+                    <span class="step-circle">4</span>
+                    <span class="step-label">Account</span>
+                </div>
+            </div>
+
+            <form id="registerForm" method="POST" action="{{ url_for('user_auth.register') }}">
+                <div class="wizard-body">
+                    <section class="step-panel active" data-step="1">
+                        <div class="step-heading">
+                            <h2>Start with your name</h2>
+                            <p>We'll use this in every conversation.</p>
+                        </div>
+
+                        <div class="form-group">
+                            <input type="text" id="display_name" name="display_name" class="input-field" placeholder=" " autocomplete="name" required>
+                            <label for="display_name" class="floating-label">Display name<span class="required">*</span></label>
+                            <div class="inline-feedback" id="displayNameFeedback"></div>
+                        </div>
+
+                        <input type="hidden" id="nickname" name="nickname">
+                    </section>
+
+                    <section class="step-panel" data-step="2">
+                        <div class="step-heading">
+                            <h2>Your basics</h2>
+                            <p>This helps us tailor the experience.</p>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Date of birth<span class="required">*</span></label>
+                            <div class="dob-selectors">
+                                <select id="birth_month" class="input-field" required>
+                                    <option value="">Month</option>
+                                    <option value="01">January</option>
+                                    <option value="02">February</option>
+                                    <option value="03">March</option>
+                                    <option value="04">April</option>
+                                    <option value="05">May</option>
+                                    <option value="06">June</option>
+                                    <option value="07">July</option>
+                                    <option value="08">August</option>
+                                    <option value="09">September</option>
+                                    <option value="10">October</option>
+                                    <option value="11">November</option>
+                                    <option value="12">December</option>
+                                </select>
+                                <select id="birth_day" class="input-field" required>
+                                    <option value="">Day</option>
+                                </select>
+                                <select id="birth_year" class="input-field" required>
+                                    <option value="">Year</option>
+                                </select>
+                            </div>
+                            <input type="hidden" id="date_of_birth" name="date_of_birth" required>
+                            <div class="inline-feedback" id="ageFeedback"></div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>How should we refer to you?<span class="required">*</span></label>
+                            <div class="option-row">
+                                <label class="option-chip" data-label="Female">
+                                    <input type="radio" name="gender" value="female" required>
+                                    <span>Female</span>
+                                </label>
+                                <label class="option-chip" data-label="Male">
+                                    <input type="radio" name="gender" value="male">
+                                    <span>Male</span>
+                                </label>
+                                <label class="option-chip" data-label="Non-binary / Other">
+                                    <input type="radio" name="gender" value="other">
+                                    <span>Non-binary / Other</span>
+                                </label>
+                                <label class="option-chip" data-label="Prefer not to say">
+                                    <input type="radio" name="gender" value="prefer_not_to_say">
+                                    <span>Prefer not to say</span>
+                                </label>
+                            </div>
+                            <div class="inline-feedback" id="genderFeedback"></div>
+                        </div>
+
+                        <div class="form-group">
+                            <select id="pronouns" name="pronouns" class="input-field">
+                                <option value="" selected>Select pronouns</option>
+                                <option value="she/her">She / Her</option>
+                                <option value="he/him">He / Him</option>
+                                <option value="they/them">They / Them</option>
+                                <option value="he/they">He / They</option>
+                                <option value="she/they">She / They</option>
+                                <option value="custom">I'll share in chat</option>
+                            </select>
+                            <label for="pronouns" class="floating-label">Pronouns</label>
+                        </div>
+                    </section>
+
+                    <section class="step-panel" data-step="3">
+                        <div class="step-heading">
+                            <h2>Support preferences</h2>
+                            <p>Choose what you need right now.</p>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Primary focus<span class="required">*</span></label>
+                            <div class="option-grid" id="focusGroup">
+                                <label class="option-chip" data-label="Emotional support">
+                                    <input type="radio" name="support_focus" value="emotional_support" required>
+                                    <span>Steady emotional support</span>
+                                </label>
+                                <label class="option-chip" data-label="Motivation">
+                                    <input type="radio" name="support_focus" value="motivation">
+                                    <span>Motivation & progress</span>
+                                </label>
+                                <label class="option-chip" data-label="Calm">
+                                    <input type="radio" name="support_focus" value="calm">
+                                    <span>Calm & mindfulness</span>
+                                </label>
+                                <label class="option-chip" data-label="Productivity">
+                                    <input type="radio" name="support_focus" value="productivity">
+                                    <span>Focus & productivity</span>
+                                </label>
+                            </div>
+                            <div class="inline-feedback" id="focusFeedback"></div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Extra topics (optional)</label>
+                            <div class="chip-group" id="supportTopics">
+                                <label class="chip" data-label="Stress relief">
+                                    <input type="checkbox" name="support_topics[]" value="stress_relief">
+                                    <span>Stress relief</span>
+                                </label>
+                                <label class="chip" data-label="Confidence">
+                                    <input type="checkbox" name="support_topics[]" value="confidence">
+                                    <span>Confidence</span>
+                                </label>
+                                <label class="chip" data-label="Habits">
+                                    <input type="checkbox" name="support_topics[]" value="habits">
+                                    <span>Habits</span>
+                                </label>
+                                <label class="chip" data-label="Relationships">
+                                    <input type="checkbox" name="support_topics[]" value="relationships">
+                                    <span>Relationships</span>
+                                </label>
+                                <label class="chip" data-label="Focus">
+                                    <input type="checkbox" name="support_topics[]" value="focus">
+                                    <span>Focus</span>
+                                </label>
+                                <label class="chip" data-label="Mood tracking">
+                                    <input type="checkbox" name="support_topics[]" value="mood">
+                                    <span>Mood tracking</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Conversation tone<span class="required">*</span></label>
+                            <div class="chip-group" id="conversationStyleGroup">
+                                <label class="chip" data-label="Gentle & grounding">
+                                    <input type="radio" name="conversation_style" value="gentle" required>
+                                    <span>Gentle & grounding</span>
+                                </label>
+                                <label class="chip" data-label="Cheerleader energy">
+                                    <input type="radio" name="conversation_style" value="cheerleader">
+                                    <span>Cheerleader energy</span>
+                                </label>
+                                <label class="chip" data-label="Direct & practical">
+                                    <input type="radio" name="conversation_style" value="direct">
+                                    <span>Direct & practical</span>
+                                </label>
+                            </div>
+                            <div class="inline-feedback" id="supportStyleFeedback"></div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Check-in rhythm</label>
+                            <div class="chip-group" id="checkInGroup">
+                                <label class="chip" data-label="Daily pulse">
+                                    <input type="radio" name="check_in_preference" value="daily">
+                                    <span>Daily pulse</span>
+                                </label>
+                                <label class="chip" data-label="Weekly planning">
+                                    <input type="radio" name="check_in_preference" value="weekly">
+                                    <span>Weekly planning</span>
+                                </label>
+                                <label class="chip" data-label="Only when I ask">
+                                    <input type="radio" name="check_in_preference" value="as_needed">
+                                    <span>Only when I ask</span>
+                                </label>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section class="step-panel" data-step="4">
+                        <div class="step-heading">
+                            <h2>Create your account</h2>
+                            <p>We keep your info private and secure.</p>
+                        </div>
+
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <input type="email" id="email" name="email" class="input-field" placeholder=" " autocomplete="email" required>
+                                <label for="email" class="floating-label">Email address<span class="required">*</span></label>
+                                <div class="inline-feedback" id="emailFeedback"></div>
+                            </div>
+                            <div class="form-group">
+                                <input type="password" id="password" name="password" class="input-field" placeholder=" " autocomplete="new-password" required>
+                                <label for="password" class="floating-label">Password<span class="required">*</span></label>
+                                <div class="inline-feedback" id="passwordFeedback"></div>
+                            </div>
+                            <div class="form-group">
+                                <input type="password" id="confirm_password" name="confirm_password" class="input-field" placeholder=" " autocomplete="new-password" required>
+                                <label for="confirm_password" class="floating-label">Confirm password<span class="required">*</span></label>
+                                <div class="inline-feedback" id="confirmPasswordFeedback"></div>
+                            </div>
+                            <div class="form-group">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" id="terms" name="terms" style="margin-right: 0.6rem;" required>
+                                    I agree to the <a href="/terms" target="_blank">Terms of Service</a> and <a href="/privacy" target="_blank">Privacy Policy</a>.
+                                </label>
+                                <div class="inline-feedback" id="termsFeedback"></div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+
+                <div class="wizard-controls">
+                    <button type="button" class="btn ghost" id="prevBtn" style="display: none;">Back</button>
+                    <button type="button" class="btn primary" id="nextBtn">Next</button>
+                    <button type="submit" class="btn primary" id="submitBtn" style="display: none;">Create account</button>
+                </div>
+            </form>
+
+            <div class="wizard-footer">
+                Already have an account? <a href="{{ url_for('user_auth.login') }}">Sign in</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+let currentStep = 1;
+const totalSteps = 4;
+
+document.addEventListener('DOMContentLoaded', function () {
+    initializeWizard();
+    initDateSelector();
+    prefillIntroName();
+    syncNickname();
+});
+
+function initializeWizard() {
+    document.getElementById('nextBtn').addEventListener('click', nextStep);
+    document.getElementById('prevBtn').addEventListener('click', prevStep);
+
+    const displayNameInput = document.getElementById('display_name');
+    displayNameInput.addEventListener('blur', validateNameStep);
+    displayNameInput.addEventListener('input', () => {
+        syncNickname();
+    });
+
+    ['birth_month', 'birth_day', 'birth_year'].forEach(id => {
+        document.getElementById(id).addEventListener('change', () => {
+            updateHiddenDob();
+            validateDobStep();
+        });
+    });
+
+    document.querySelectorAll('input[name="gender"]').forEach(input => {
+        input.addEventListener('change', () => {
+            handleOptionActivation(input);
+            validateIdentityStep();
+        });
+    });
+
+    document.querySelectorAll('input[name="support_focus"]').forEach(input => {
+        input.addEventListener('change', () => {
+            handleOptionActivation(input);
+            validateFocusStep();
+        });
+    });
+
+    document.querySelectorAll('#supportTopics input[type="checkbox"]').forEach(input => {
+        input.addEventListener('change', () => {
+            handleOptionActivation(input);
+        });
+    });
+
+    document.querySelectorAll('#conversationStyleGroup input[type="radio"]').forEach(input => {
+        input.addEventListener('change', () => {
+            handleOptionActivation(input);
+            validateSupportStep();
+        });
+    });
+
+    document.querySelectorAll('#checkInGroup input[type="radio"]').forEach(input => {
+        input.addEventListener('change', () => {
+            handleOptionActivation(input);
+        });
+    });
+
+    document.getElementById('email').addEventListener('blur', validateAccountStep);
+    document.getElementById('email').addEventListener('input', validateAccountStep);
+    document.getElementById('password').addEventListener('input', validateAccountStep);
+    document.getElementById('confirm_password').addEventListener('input', validateAccountStep);
+    document.getElementById('terms').addEventListener('change', validateAccountStep);
+
+    document.querySelectorAll('.form-group select').forEach(select => {
+        select.setAttribute('value', select.value);
+        select.addEventListener('change', () => {
+            select.setAttribute('value', select.value);
+        });
+    });
+}
+
+function nextStep() {
+    if (!validateCurrentStep()) {
+        return;
+    }
+    if (currentStep < totalSteps) {
+        currentStep += 1;
+        updateStepDisplay();
+    }
+}
+
+function prevStep() {
+    if (currentStep > 1) {
+        currentStep -= 1;
+        updateStepDisplay();
+    }
+}
+
+function updateStepDisplay() {
+    document.querySelectorAll('.step-panel').forEach(panel => {
+        panel.classList.toggle('active', parseInt(panel.dataset.step, 10) === currentStep);
+    });
+
+    document.querySelectorAll('.wizard-step').forEach(step => {
+        const stepNum = parseInt(step.dataset.step, 10);
+        step.classList.remove('active', 'complete');
+        if (stepNum === currentStep) {
+            step.classList.add('active');
+        } else if (stepNum < currentStep) {
+            step.classList.add('complete');
+        }
+    });
+
+    const progress = (currentStep - 1) / (totalSteps - 1);
+    document.getElementById('progressLine').style.transform = `scaleX(${progress})`;
+
+    document.getElementById('prevBtn').style.display = currentStep === 1 ? 'none' : 'inline-flex';
+    document.getElementById('nextBtn').style.display = currentStep === totalSteps ? 'none' : 'inline-flex';
+    document.getElementById('submitBtn').style.display = currentStep === totalSteps ? 'inline-flex' : 'none';
+
+    triggerStepTransition();
+}
+
+function validateCurrentStep() {
+    switch (currentStep) {
+        case 1:
+            return validateNameStep();
+        case 2:
+            return validateDobStep() && validateIdentityStep();
+        case 3:
+            return validateFocusStep() && validateSupportStep();
+        case 4:
+            return validateAccountStep();
+        default:
+            return true;
+    }
+}
+
+function triggerStepTransition() {
+    const card = document.querySelector('.onboarding-card');
+    if (card) {
+        card.classList.remove('transitioning');
+        void card.offsetWidth; // restart animation
+        card.classList.add('transitioning');
+    }
+    focusCurrentStep();
+}
+
+function focusCurrentStep() {
+    const card = document.querySelector('.onboarding-card');
+    if (!card) {
+        return;
+    }
+
+    const rect = card.getBoundingClientRect();
+    const currentOffset = window.pageYOffset || document.documentElement.scrollTop;
+    const target = Math.max(rect.top + currentOffset - 40, 0);
+    const canScroll = document.body.scrollHeight > window.innerHeight;
+
+    if (canScroll && Math.abs(rect.top - 40) > 16) {
+        window.scrollTo({ top: target, behavior: 'smooth' });
+    }
+}
+
+function validateNameStep() {
+    const displayName = document.getElementById('display_name');
+    const feedback = document.getElementById('displayNameFeedback');
+    if (!displayName.value.trim()) {
+        showFeedback(feedback, 'Please tell us what to call you.', 'error');
+        displayName.classList.add('error');
+        return false;
+    }
+    if (displayName.value.trim().length < 2) {
+        showFeedback(feedback, 'Name should be at least 2 characters.', 'error');
+        displayName.classList.add('error');
+        return false;
+    }
+    displayName.classList.remove('error');
+    showFeedback(feedback, 'Nice to meet you.', 'success');
+    return true;
+}
+
+function validateDobStep() {
+    updateHiddenDob();
+    const hiddenDob = document.getElementById('date_of_birth');
+    const feedback = document.getElementById('ageFeedback');
+    if (!hiddenDob.value) {
+        showFeedback(feedback, 'Select your complete birthdate.', 'error');
+        return false;
+    }
+    return validateAge(hiddenDob.value);
+}
+
+function validateAge(isoDate) {
+    const feedback = document.getElementById('ageFeedback');
+
+    const dob = new Date(isoDate);
+    if (Number.isNaN(dob.getTime())) {
+        showFeedback(feedback, 'Invalid date selected.', 'error');
+        return false;
+    }
+
+    const today = new Date();
+    let age = today.getFullYear() - dob.getFullYear();
+    const monthDiff = today.getMonth() - dob.getMonth();
+    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < dob.getDate())) {
+        age -= 1;
+    }
+
+    if (age < 16) {
+        showFeedback(feedback, 'You must be at least 16 to create a MyBella account.', 'error');
+        return false;
+    }
+
+    if (age < 18) {
+        showFeedback(feedback, 'Teen Wellness Mode activated.', 'info');
+    } else {
+        showFeedback(feedback, 'Companion Mode unlocked.', 'success');
+    }
+
+    return true;
+}
+
+function validateIdentityStep() {
+    const selected = document.querySelector('input[name="gender"]:checked');
+    const feedback = document.getElementById('genderFeedback');
+    if (!selected) {
+        showFeedback(feedback, 'Choose how we should refer to you.', 'error');
+        return false;
+    }
+    showFeedback(feedback, 'Identity saved.', 'success');
+    return true;
+}
+
+function validateFocusStep() {
+    const selected = document.querySelector('input[name="support_focus"]:checked');
+    const feedback = document.getElementById('focusFeedback');
+    if (!selected) {
+        showFeedback(feedback, 'Select a starting focus so we can prepare the right guidance.', 'error');
+        return false;
+    }
+    showFeedback(feedback, 'Focus locked in.', 'success');
+    return true;
+}
+
+function validateSupportStep() {
+    const conversation = document.querySelector('input[name="conversation_style"]:checked');
+    const feedback = document.getElementById('supportStyleFeedback');
+    if (!conversation) {
+        showFeedback(feedback, 'Pick a conversation style.', 'error');
+        return false;
+    }
+    showFeedback(feedback, 'Support style saved.', 'success');
+    return true;
+}
+
+function validateAccountStep() {
+    const email = document.getElementById('email');
+    const password = document.getElementById('password');
+    const confirmPassword = document.getElementById('confirm_password');
+    const terms = document.getElementById('terms');
+    let valid = true;
+
+    if (!email.value.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value.trim())) {
+        showFeedback(document.getElementById('emailFeedback'), 'Enter a valid email address.', 'error');
+        valid = false;
+    } else {
+        showFeedback(document.getElementById('emailFeedback'), 'Looks good.', 'success');
+    }
+
+    if (password.value.length < 8) {
+        showFeedback(document.getElementById('passwordFeedback'), 'Password must be at least 8 characters.', 'error');
+        valid = false;
+    } else {
+        showFeedback(document.getElementById('passwordFeedback'), 'Strong password.', 'success');
+    }
+
+    if (confirmPassword.value !== password.value || !confirmPassword.value) {
+        showFeedback(document.getElementById('confirmPasswordFeedback'), 'Passwords should match.', 'error');
+        valid = false;
+    } else {
+        showFeedback(document.getElementById('confirmPasswordFeedback'), 'Passwords match.', 'success');
+    }
+
+    if (!terms.checked) {
+        showFeedback(document.getElementById('termsFeedback'), 'Please accept the terms to continue.', 'error');
+        valid = false;
+    } else {
+        showFeedback(document.getElementById('termsFeedback'), 'Thank you.', 'success');
+    }
+
+    return valid;
+}
+
+function showFeedback(element, message, status) {
+    if (!element) {
+        return;
+    }
+    element.textContent = message;
+    element.className = `inline-feedback ${status}`;
+    element.style.display = 'block';
+}
+
+function handleOptionActivation(input) {
+    const label = input.closest('label');
+    if (!label) {
+        return;
+    }
+
+    if (input.type === 'radio') {
+        document.querySelectorAll(`input[name="${input.name}"]`).forEach(el => {
+            const parent = el.closest('label');
+            if (parent) {
+                parent.classList.toggle('active', el.checked);
+            }
+        });
+    } else if (input.type === 'checkbox') {
+        label.classList.toggle('active', input.checked);
+    }
+}
+
+function initDateSelector() {
+    const daySelect = document.getElementById('birth_day');
+    const yearSelect = document.getElementById('birth_year');
+
+    const currentYear = new Date().getFullYear();
+    for (let year = currentYear; year >= currentYear - 100; year -= 1) {
+        const option = document.createElement('option');
+        option.value = year.toString();
+        option.textContent = year.toString();
+        yearSelect.appendChild(option);
+    }
+
+    populateDays();
+    document.getElementById('birth_month').addEventListener('change', populateDays);
+    document.getElementById('birth_year').addEventListener('change', populateDays);
+}
+
+function populateDays() {
+    const daySelect = document.getElementById('birth_day');
+    const month = document.getElementById('birth_month').value;
+    const year = document.getElementById('birth_year').value;
+    const prevValue = daySelect.value;
+
+    const daysInMonth = month ? new Date(year || 2000, month, 0).getDate() : 31;
+    daySelect.innerHTML = '<option value="">Day</option>';
+    for (let day = 1; day <= daysInMonth; day += 1) {
+        const option = document.createElement('option');
+        option.value = day.toString().padStart(2, '0');
+        option.textContent = day.toString();
+        daySelect.appendChild(option);
+    }
+    if (prevValue && parseInt(prevValue, 10) <= daysInMonth) {
+        daySelect.value = prevValue;
+    }
+    updateHiddenDob();
+}
+
+function updateHiddenDob() {
+    const month = document.getElementById('birth_month').value;
+    const day = document.getElementById('birth_day').value;
+    const year = document.getElementById('birth_year').value;
+    const hidden = document.getElementById('date_of_birth');
+
+    if (month && day && year) {
+        hidden.value = `${year}-${month}-${day}`;
+    } else {
+        hidden.value = '';
+    }
+}
+
+function syncNickname() {
+    const displayName = document.getElementById('display_name');
+    const nickname = document.getElementById('nickname');
+    if (!displayName || !nickname) {
+        return;
+    }
+    nickname.value = displayName.value.trim();
+}
+
+function prefillIntroName() {
+    const displayName = document.getElementById('display_name');
+    if (!displayName) {
+        return;
+    }
+    const params = new URLSearchParams(window.location.search);
+    const storedName = sessionStorage.getItem('mybella.display_name');
+    const queryName = params.get('display_name');
+    const initialName = storedName || queryName;
+    if (initialName) {
+        displayName.value = initialName;
+        displayName.dispatchEvent(new Event('input', { bubbles: true }));
+        displayName.dispatchEvent(new Event('blur', { bubbles: true }));
+    }
+}
+
+document.getElementById('registerForm').addEventListener('submit', function (event) {
+    event.preventDefault();
+    if (!validateAccountStep()) {
+        return;
+    }
+    const submitBtn = document.getElementById('submitBtn');
+    submitBtn.classList.add('loading');
+    submitBtn.disabled = true;
+    sessionStorage.removeItem('mybella.display_name');
+    setTimeout(() => this.submit(), 400);
+});
+</script>
+{% endblock %}

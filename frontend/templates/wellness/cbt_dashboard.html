@@ -1,0 +1,396 @@
+{% extends "base.html" %}
+
+{% block title %}CBT Sessions - MyBella{% endblock %}
+
+{% block extra_css %}
+<style>
+.cbt-dashboard {
+    padding: var(--spacing-2xl) 0;
+}
+
+.cbt-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--spacing-2xl);
+}
+
+.cbt-header h1 {
+    font-size: var(--font-size-3xl);
+    color: var(--text-primary);
+    margin: 0;
+}
+
+.btn-start-session {
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    color: white;
+    padding: var(--spacing-md) var(--spacing-xl);
+    border-radius: var(--radius-lg);
+    border: none;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.btn-start-session:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+}
+
+.progress-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: var(--spacing-lg);
+    margin-bottom: var(--spacing-2xl);
+}
+
+.progress-card {
+    background: var(--surface-color);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-xl);
+    text-align: center;
+}
+
+.progress-value {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--primary-color);
+    margin: var(--spacing-sm) 0;
+}
+
+.progress-label {
+    color: var(--text-secondary);
+    font-size: var(--font-size-sm);
+}
+
+.sessions-section {
+    background: var(--surface-color);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-xl);
+    padding: var(--spacing-2xl);
+}
+
+.sessions-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+}
+
+.session-card {
+    background: var(--background-color);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-lg);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: transform 0.2s ease;
+}
+
+.session-card:hover {
+    transform: translateX(4px);
+    border-color: var(--primary-color);
+}
+
+.session-info h3 {
+    margin: 0 0 var(--spacing-xs);
+    color: var(--text-primary);
+}
+
+.session-meta {
+    font-size: var(--font-size-sm);
+    color: var(--text-secondary);
+}
+
+.session-actions {
+    display: flex;
+    gap: var(--spacing-sm);
+}
+
+.btn-view {
+    padding: var(--spacing-sm) var(--spacing-lg);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--primary-color);
+    background: white;
+    color: var(--primary-color);
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-view:hover {
+    background: var(--primary-color);
+    color: white;
+}
+
+.empty-state {
+    text-align: center;
+    padding: var(--spacing-3xl) var(--spacing-xl);
+}
+
+.empty-state-icon {
+    font-size: 4rem;
+    margin-bottom: var(--spacing-lg);
+}
+
+.empty-state p {
+    color: var(--text-secondary);
+    margin-bottom: var(--spacing-xl);
+}
+
+.start-session-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+}
+
+.start-session-modal.active {
+    display: flex;
+}
+
+.modal-content {
+    background: var(--surface-color);
+    border-radius: var(--radius-xl);
+    padding: var(--spacing-2xl);
+    max-width: 500px;
+    width: 90%;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--spacing-xl);
+}
+
+.modal-close {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: var(--text-secondary);
+}
+
+.form-group {
+    margin-bottom: var(--spacing-lg);
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: var(--spacing-sm);
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: var(--spacing-md);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    font-family: inherit;
+}
+
+.form-group textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+
+.modal-actions {
+    display: flex;
+    gap: var(--spacing-md);
+    justify-content: flex-end;
+}
+
+.btn-cancel {
+    padding: var(--spacing-md) var(--spacing-xl);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-color);
+    background: white;
+    cursor: pointer;
+}
+
+.btn-submit {
+    padding: var(--spacing-md) var(--spacing-xl);
+    border-radius: var(--radius-md);
+    border: none;
+    background: var(--primary-color);
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+@media (max-width: 768px) {
+    .cbt-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--spacing-md);
+    }
+    
+    .progress-grid {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="cbt-dashboard">
+    <div class="container">
+        <div class="cbt-header">
+            <h1>CBT Sessions</h1>
+            <button class="btn-start-session" onclick="openStartModal()">
+                + Start New Session
+            </button>
+        </div>
+
+        {% if progress %}
+        <div class="progress-grid">
+            <div class="progress-card">
+                <div class="progress-label">Total Sessions</div>
+                <div class="progress-value">{{ progress.total_sessions or 0 }}</div>
+            </div>
+            
+            <div class="progress-card">
+                <div class="progress-label">Completed</div>
+                <div class="progress-value">{{ progress.completed_sessions or 0 }}</div>
+            </div>
+            
+            <div class="progress-card">
+                <div class="progress-label">Completion Rate</div>
+                <div class="progress-value">{{ (progress.completion_rate * 100)|round|int if progress.completion_rate else 0 }}%</div>
+            </div>
+            
+            <div class="progress-card">
+                <div class="progress-label">Avg Duration</div>
+                <div class="progress-value">{{ progress.average_duration|round|int if progress.average_duration else 0 }}<small>min</small></div>
+            </div>
+        </div>
+        {% endif %}
+
+        <div class="sessions-section">
+            <h2>Recent Sessions</h2>
+            
+            {% if progress and progress.recent_sessions %}
+            <div class="sessions-list">
+                {% for session in progress.recent_sessions %}
+                <div class="session-card">
+                    <div class="session-info">
+                        <h3>{{ session.session_type|title|replace('_', ' ') }}</h3>
+                        <div class="session-meta">
+                            {{ session.created_at }} • 
+                            {% if session.completed %} Completed{% else %}In Progress{% endif %}
+                        </div>
+                    </div>
+                    <div class="session-actions">
+                        <a href="{{ url_for('wellness.cbt_session_detail', session_id=session.id) }}" class="btn-view">
+                            View Details
+                        </a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="empty-state">
+                <div class="empty-state-icon"></div>
+                <p>No CBT sessions yet. Start your first session to begin your mental wellness journey!</p>
+                <button class="btn-start-session" onclick="openStartModal()">
+                    Start Your First Session
+                </button>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<!-- Start Session Modal -->
+<div class="start-session-modal" id="startModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>Start New CBT Session</h2>
+            <button class="modal-close" onclick="closeStartModal()">&times;</button>
+        </div>
+        
+        <form id="startSessionForm">
+            <div class="form-group">
+                <label for="sessionType">Session Type</label>
+                <select id="sessionType" name="session_type" required>
+                    <option value="thought_record">Thought Record</option>
+                    <option value="behavioral_activation">Behavioral Activation</option>
+                    <option value="cognitive_restructuring">Cognitive Restructuring</option>
+                    <option value="problem_solving">Problem Solving</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="triggerEvent">What triggered this session? (Optional)</label>
+                <textarea id="triggerEvent" name="trigger_event" placeholder="Describe the situation or thought that brought you here..."></textarea>
+            </div>
+            
+            <div class="modal-actions">
+                <button type="button" class="btn-cancel" onclick="closeStartModal()">Cancel</button>
+                <button type="submit" class="btn-submit">Start Session</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function openStartModal() {
+    document.getElementById('startModal').classList.add('active');
+}
+
+function closeStartModal() {
+    document.getElementById('startModal').classList.remove('active');
+}
+
+// Handle form submission
+document.getElementById('startSessionForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    const formData = {
+        session_type: document.getElementById('sessionType').value,
+        trigger_event: document.getElementById('triggerEvent').value
+    };
+    
+    try {
+        const response = await fetch('{{ url_for("wellness.start_cbt_session") }}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(formData)
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+            // Redirect to the new session
+            window.location.href = `/wellness/cbt/session/${result.session_id}`;
+        } else {
+            alert('Error starting session: ' + result.error);
+        }
+    } catch (error) {
+        alert('Error starting session. Please try again.');
+        console.error(error);
+    }
+});
+
+// Close modal when clicking outside
+document.getElementById('startModal').addEventListener('click', function(e) {
+    if (e.target === this) {
+        closeStartModal();
+    }
+});
+</script>
+{% endblock %}

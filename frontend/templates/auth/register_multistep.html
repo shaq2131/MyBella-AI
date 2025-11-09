@@ -1,0 +1,1096 @@
+{% extends "base.html" %}
+
+{% block title %}Join MyBella{% endblock %}
+
+{% block header %}
+<header class="auth-header-minimal">
+    <a href="{{ url_for('main.home') }}" class="auth-brand">MyBella</a>
+    <a href="{{ url_for('user_auth.login') }}" class="auth-support">Already a member?</a>
+</header>
+{% endblock %}
+
+{% block footer %}{% endblock %}
+
+{% block extra_css %}
+<style>
+:root {
+    --onboard-bg: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 45%, #ffffff 100%);
+    --onboard-panel: rgba(255, 255, 255, 0.95);
+    --onboard-border: rgba(99, 102, 241, 0.12);
+    --onboard-shadow: 0 25px 60px rgba(99, 102, 241, 0.08);
+    --onboard-radius: 24px;
+    --onboard-radius-sm: 16px;
+    --onboard-text: #1e293b;
+    --onboard-muted: rgba(30, 41, 59, 0.65);
+    --onboard-accent: #6366f1;
+    --onboard-accent-soft: #4f46e5;
+    --onboard-accent-light: #a5b4fc;
+    --onboard-secondary: #f472b6;
+    --onboard-success: #06d6a0;
+    --onboard-highlight: rgba(99, 102, 241, 0.08);
+    --onboard-transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+body {
+    background: var(--onboard-bg);
+    color: var(--onboard-text);
+    font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    line-height: 1.6;
+}
+
+.auth-header-minimal {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: clamp(1.8rem, 5vw, 2.6rem) clamp(2.4rem, 6vw, 3.6rem) 1.2rem;
+    background: transparent;
+}
+
+.auth-brand {
+    font-weight: 600;
+    font-size: 1.35rem;
+    letter-spacing: -0.02em;
+    color: var(--onboard-accent);
+    text-decoration: none;
+}
+
+.auth-support {
+    font-size: 0.92rem;
+    color: var(--onboard-muted);
+    text-decoration: none;
+    font-weight: 500;
+    transition: color var(--onboard-transition);
+}
+
+.auth-support:hover {
+    color: var(--onboard-accent);
+}
+
+.main {
+    min-height: calc(100vh - clamp(4.8rem, 12vw, 6.4rem));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: clamp(2.6rem, 6vw, 4rem);
+}
+
+.onboarding-shell {
+    width: min(1180px, 100%);
+    background: var(--onboard-panel);
+    border-radius: var(--onboard-radius);
+    border: 1px solid var(--onboard-border);
+    box-shadow: var(--onboard-shadow);
+    display: grid;
+    grid-template-columns: 1.05fr 0.95fr;
+    overflow: hidden;
+}
+
+.onboarding-hero {
+    padding: clamp(3rem, 5vw, 3.6rem);
+    display: grid;
+    gap: clamp(2rem, 4vw, 2.8rem);
+    background: radial-gradient(circle at 20% 20%, rgba(148, 163, 184, 0.15), transparent 60%), #f8fafc;
+}
+
+.hero-header {
+    display: grid;
+    gap: 1.2rem;
+}
+
+.hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.65rem;
+    padding: 0.6rem 1.1rem;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.8);
+    border: 1px solid var(--onboard-border);
+    font-weight: 600;
+    font-size: 0.84rem;
+    backdrop-filter: blur(20px);
+    width: fit-content;
+    color: var(--onboard-accent);
+}
+
+.hero-badge::before {
+    content: "";
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--onboard-success);
+}
+
+.hero-heading {
+    display: grid;
+    gap: 1rem;
+}
+
+.hero-heading h1 {
+    margin: 0;
+    font-size: clamp(2.5rem, 4vw, 3.2rem);
+    font-weight: 400;
+    letter-spacing: -0.035em;
+}
+
+.hero-heading p {
+    margin: 0;
+    font-size: 1.08rem;
+    line-height: 1.75;
+    color: var(--onboard-muted);
+    max-width: 30rem;
+}
+
+.hero-promise {
+    display: grid;
+    gap: 1.2rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.hero-promise li {
+    display: flex;
+    gap: 0.75rem;
+    align-items: flex-start;
+    color: var(--onboard-muted);
+    font-size: 0.98rem;
+    line-height: 1.65;
+}
+
+.hero-promise li::before {
+    content: "";
+    flex-shrink: 0;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--onboard-success);
+    margin-top: 0.45rem;
+}
+
+.hero-footer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    font-size: 0.88rem;
+    color: var(--onboard-muted);
+}
+
+.hero-footer span {
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+}
+
+.hero-footer span::before {
+    content: "";
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--onboard-accent);
+}
+
+.wizard-panel {
+    padding: clamp(3rem, 5vw, 4rem);
+    display: grid;
+    gap: clamp(2rem, 4vw, 2.6rem);
+}
+
+.wizard-header {
+    display: grid;
+    gap: 1.3rem;
+}
+
+.progress-track {
+    display: grid;
+    gap: 0.75rem;
+}
+
+.progress-labels {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.85rem;
+    color: var(--onboard-muted);
+}
+
+.progress-meter {
+    height: 6px;
+    border-radius: 999px;
+    background: rgba(15, 23, 42, 0.08);
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    width: 25%;
+    background: linear-gradient(135deg, var(--onboard-accent), var(--onboard-accent-soft));
+    border-radius: inherit;
+    transition: width 0.4s ease;
+    box-shadow: 0 0 20px rgba(99, 102, 241, 0.2);
+}
+
+.step-context {
+    display: grid;
+    gap: 0.35rem;
+}
+
+.step-context span {
+    font-size: 0.78rem;
+    letter-spacing: 0.15em;
+    color: var(--onboard-accent);
+    text-transform: uppercase;
+    font-weight: 600;
+}
+
+.step-context h2 {
+    margin: 0;
+    font-size: clamp(1.8rem, 3vw, 2.1rem);
+    font-weight: 460;
+    letter-spacing: -0.02em;
+}
+
+.wizard-body {
+    display: grid;
+    gap: clamp(2rem, 4vw, 2.6rem);
+}
+
+.step-panel {
+    display: none;
+    animation: fadeSlide var(--onboard-transition) ease;
+}
+
+.step-panel.active {
+    display: grid;
+    gap: clamp(1.6rem, 3vw, 2.1rem);
+}
+
+.step-heading {
+    display: grid;
+    gap: 0.65rem;
+}
+
+.step-heading h3 {
+    margin: 0;
+    font-size: clamp(1.55rem, 2.8vw, 1.9rem);
+    font-weight: 500;
+}
+
+.step-heading p {
+    margin: 0;
+    color: var(--onboard-muted);
+    line-height: 1.6;
+    max-width: 28rem;
+}
+
+.form-grid {
+    display: grid;
+    gap: clamp(1.4rem, 3vw, 1.8rem);
+}
+
+.form-grid.double {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(1.3rem, 3vw, 1.7rem);
+}
+
+.form-group {
+    display: grid;
+    gap: 0.65rem;
+}
+
+.form-group label {
+    font-weight: 600;
+    font-size: 0.95rem;
+}
+
+.required {
+    color: var(--onboard-muted);
+    margin-left: 0.3rem;
+}
+
+.input-field,
+select {
+    width: 100%;
+    padding: 0.9rem 1rem;
+    border-radius: 14px;
+    border: 1px solid rgba(15, 23, 42, 0.12);
+    background: rgba(255, 255, 255, 0.92);
+    font-size: 1rem;
+    transition: border-color var(--onboard-transition), box-shadow var(--onboard-transition);
+}
+
+.input-field:focus,
+select:focus {
+    border-color: var(--onboard-accent);
+    box-shadow: 0 0 0 3px var(--onboard-highlight);
+    outline: none;
+}
+
+.dob-selectors {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.8rem;
+}
+
+.option-row,
+.option-grid,
+.chip-group {
+    display: grid;
+    gap: 0.85rem;
+}
+
+.option-row {
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+}
+
+.option-grid {
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+}
+
+.chip,
+.option-chip {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.85rem 1.05rem;
+    border-radius: 14px;
+    border: 1px solid rgba(15, 23, 42, 0.12);
+    background: rgba(255, 255, 255, 0.9);
+    font-weight: 500;
+    cursor: pointer;
+    transition: border-color var(--onboard-transition), background var(--onboard-transition), color var(--onboard-transition), box-shadow var(--onboard-transition);
+    text-align: center;
+}
+
+.chip input,
+.option-chip input {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.chip span,
+.option-chip span {
+    pointer-events: none;
+}
+
+.chip.selected,
+.option-chip.selected {
+    border-color: var(--onboard-accent);
+    background: var(--onboard-highlight);
+    box-shadow: 0 10px 20px rgba(99, 102, 241, 0.15);
+    color: var(--onboard-accent);
+}
+
+.inline-feedback {
+    min-height: 1.25rem;
+    font-size: 0.82rem;
+    color: #b91c1c;
+}
+
+.checkbox-label {
+    display: inline-flex;
+    gap: 0.7rem;
+    align-items: center;
+    font-size: 0.9rem;
+    color: var(--onboard-muted);
+}
+
+.wizard-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    border-top: 1px solid rgba(15, 23, 42, 0.08);
+    padding-top: 1.8rem;
+}
+
+.nav-buttons {
+    display: flex;
+    gap: 0.8rem;
+}
+
+button {
+    font-family: inherit;
+}
+
+.btn-ghost,
+.btn-primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.9rem 1.4rem;
+    border-radius: 14px;
+    font-weight: 600;
+    border: 1px solid transparent;
+    cursor: pointer;
+    transition: transform var(--onboard-transition), box-shadow var(--onboard-transition), border-color var(--onboard-transition), color var(--onboard-transition);
+}
+
+.btn-ghost {
+    background: rgba(255, 255, 255, 0.7);
+    border-color: rgba(15, 23, 42, 0.12);
+    color: var(--onboard-accent);
+}
+
+.btn-ghost:disabled {
+    opacity: 0.3;
+    cursor: default;
+}
+
+.btn-ghost:not(:disabled):hover {
+    border-color: rgba(15, 23, 42, 0.35);
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, var(--onboard-accent), var(--onboard-accent-soft));
+    color: #ffffff;
+    box-shadow: 0 22px 34px rgba(99, 102, 241, 0.2);
+}
+
+.btn-primary:disabled {
+    opacity: 0.45;
+    cursor: default;
+    box-shadow: none;
+}
+
+.btn-primary:not(:disabled):hover {
+    transform: translateY(-2px);
+    box-shadow: 0 30px 40px rgba(99, 102, 241, 0.25);
+}
+
+.existing-account {
+    font-size: 0.9rem;
+    color: var(--onboard-muted);
+    margin: 0;
+}
+
+.existing-account a {
+    color: var(--onboard-accent);
+    font-weight: 600;
+    text-decoration: none;
+}
+
+@keyframes fadeSlide {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (max-width: 1080px) {
+    .onboarding-shell {
+        grid-template-columns: 1fr;
+    }
+
+    .onboarding-hero {
+        order: 1;
+        text-align: center;
+    }
+
+    .hero-badge {
+        margin-inline: auto;
+    }
+
+    .hero-heading p,
+    .hero-promise li,
+    .hero-footer {
+        margin-inline: auto;
+    }
+
+    .wizard-panel {
+        order: 2;
+        padding: clamp(2.4rem, 8vw, 3.1rem);
+    }
+
+    .form-grid.double {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 640px) {
+    .auth-header-minimal {
+        padding-inline: clamp(1.4rem, 8vw, 2rem);
+    }
+
+    .main {
+        padding: clamp(1.6rem, 8vw, 2.4rem);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="onboarding-shell">
+    <aside class="onboarding-hero">
+        <div class="hero-header">
+            <span class="hero-badge">Quietly personal</span>
+            <div class="hero-heading">
+                <h1>Let’s prepare a companion that feels intentional.</h1>
+                <p>Every answer sharpens MyBella’s presence—just enough context to deliver grounded calm, accountability, and memory you can trust.</p>
+            </div>
+        </div>
+        <ul class="hero-promise">
+            <li>Thoughtful setup in under two minutes. We only ask what guides your conversations.</li>
+            <li>Your preferences stay encrypted and in your control. MyBella never resells or trains on your reflections.</li>
+            <li>Switch personas without losing context. Each brings its own cadence while honoring your rituals.</li>
+        </ul>
+        <div class="hero-footer">
+            <span>Private by design</span>
+            <span>Rooted in CBT and mindful coaching</span>
+            <span>Designed for evening resets</span>
+        </div>
+    </aside>
+
+    <section class="wizard-panel">
+        <div class="wizard-header">
+            <div class="progress-track">
+                <div class="progress-labels">
+                    <span id="progressLabel">Step 1 of 4</span>
+                    <span id="progressHint">Start with your name</span>
+                </div>
+                <div class="progress-meter" role="presentation" aria-hidden="true">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+            </div>
+            <div class="step-context">
+                <span id="stepTag">Identity</span>
+                <h2 id="stepTitle">Start with your name</h2>
+            </div>
+        </div>
+
+        <form method="POST" action="{{ url_for('user_auth.register') }}" id="onboardingForm" class="wizard-body" novalidate>
+            {{ form.csrf_token() if form is defined and form.csrf_token is defined }}
+
+            <section class="step-panel active" data-step="1">
+                <div class="step-heading">
+                    <h3>Start with your name</h3>
+                    <p>We’ll use this in every conversation so it always feels personal.</p>
+                </div>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="display_name">Display name<span class="required">*</span></label>
+                        <input type="text" id="display_name" name="display_name" class="input-field" placeholder="Enter your name" autocomplete="name" required>
+                        <input type="hidden" id="nickname" name="nickname" value="">
+                        <div class="inline-feedback" id="displayNameFeedback"></div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="step-panel" data-step="2">
+                <div class="step-heading">
+                    <h3>Share your essentials</h3>
+                    <p>A little structure helps the conversations land just right.</p>
+                </div>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Date of birth<span class="required">*</span></label>
+                        <div class="dob-selectors">
+                            <select id="birth_month" class="input-field" required>
+                                <option value="">Month</option>
+                                {% for value, label in [("01","January"),("02","February"),("03","March"),("04","April"),("05","May"),("06","June"),("07","July"),("08","August"),("09","September"),("10","October"),("11","November"),("12","December")] %}
+                                <option value="{{ value }}">{{ label }}</option>
+                                {% endfor %}
+                            </select>
+                            <select id="birth_day" class="input-field" required>
+                                <option value="">Day</option>
+                                {% for day in range(1, 32) %}
+                                <option value="{{ "%02d"|format(day) }}">{{ day }}</option>
+                                {% endfor %}
+                            </select>
+                            <select id="birth_year" class="input-field" required>
+                                <option value="">Year</option>
+                                {% for year in range(1925, 2026) | reverse %}
+                                <option value="{{ year }}">{{ year }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <input type="hidden" id="date_of_birth" name="date_of_birth" required>
+                        <div class="inline-feedback" id="ageFeedback"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>How should we refer to you?<span class="required">*</span></label>
+                        <div class="option-row" id="genderGroup">
+                            <label class="option-chip" data-label="Female">
+                                <input type="radio" name="gender" value="female" required>
+                                <span>Female</span>
+                            </label>
+                            <label class="option-chip" data-label="Male">
+                                <input type="radio" name="gender" value="male">
+                                <span>Male</span>
+                            </label>
+                            <label class="option-chip" data-label="Non-binary / Other">
+                                <input type="radio" name="gender" value="other">
+                                <span>Non-binary / Other</span>
+                            </label>
+                            <label class="option-chip" data-label="Prefer not to say">
+                                <input type="radio" name="gender" value="prefer_not_to_say">
+                                <span>Prefer not to say</span>
+                            </label>
+                        </div>
+                        <div class="inline-feedback" id="genderFeedback"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="pronouns">Pronouns</label>
+                        <select id="pronouns" name="pronouns" class="input-field">
+                            <option value="">Select pronouns</option>
+                            <option value="she/her">She / Her</option>
+                            <option value="he/him">He / Him</option>
+                            <option value="they/them">They / Them</option>
+                            <option value="he/they">He / They</option>
+                            <option value="she/they">She / They</option>
+                            <option value="custom">I'll share in chat</option>
+                        </select>
+                    </div>
+                </div>
+            </section>
+
+            <section class="step-panel" data-step="3">
+                <div class="step-heading">
+                    <h3>Shape your support</h3>
+                    <p>Pick the focus and cadence that feels right today.</p>
+                </div>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Primary focus<span class="required">*</span></label>
+                        <div class="option-grid" id="focusGroup">
+                            <label class="option-chip" data-label="Emotional support">
+                                <input type="radio" name="support_focus" value="emotional_support" required>
+                                <span>Steady emotional support</span>
+                            </label>
+                            <label class="option-chip" data-label="Motivation">
+                                <input type="radio" name="support_focus" value="motivation">
+                                <span>Motivation &amp; progress</span>
+                            </label>
+                            <label class="option-chip" data-label="Calm">
+                                <input type="radio" name="support_focus" value="calm">
+                                <span>Calm &amp; mindfulness</span>
+                            </label>
+                            <label class="option-chip" data-label="Productivity">
+                                <input type="radio" name="support_focus" value="productivity">
+                                <span>Focus &amp; productivity</span>
+                            </label>
+                        </div>
+                        <div class="inline-feedback" id="focusFeedback"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Extra topics (optional)</label>
+                        <div class="chip-group" id="supportTopics">
+                            {% for value, label in [
+                                ("stress_relief", "Stress relief"),
+                                ("confidence", "Confidence"),
+                                ("habits", "Habits"),
+                                ("relationships", "Relationships"),
+                                ("focus", "Focus"),
+                                ("mood", "Mood tracking")
+                            ] %}
+                            <label class="chip" data-label="{{ label }}">
+                                <input type="checkbox" name="support_topics[]" value="{{ value }}">
+                                <span>{{ label }}</span>
+                            </label>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Conversation tone<span class="required">*</span></label>
+                        <div class="chip-group" id="conversationStyleGroup">
+                            <label class="chip" data-label="Gentle &amp; grounding">
+                                <input type="radio" name="conversation_style" value="gentle" required>
+                                <span>Gentle &amp; grounding</span>
+                            </label>
+                            <label class="chip" data-label="Cheerleader energy">
+                                <input type="radio" name="conversation_style" value="cheerleader">
+                                <span>Cheerleader energy</span>
+                            </label>
+                            <label class="chip" data-label="Direct &amp; practical">
+                                <input type="radio" name="conversation_style" value="direct">
+                                <span>Direct &amp; practical</span>
+                            </label>
+                        </div>
+                        <div class="inline-feedback" id="supportStyleFeedback"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Check-in rhythm</label>
+                        <div class="chip-group" id="checkInGroup">
+                            <label class="chip" data-label="Daily pulse">
+                                <input type="radio" name="check_in_preference" value="daily">
+                                <span>Daily pulse</span>
+                            </label>
+                            <label class="chip" data-label="Weekly planning">
+                                <input type="radio" name="check_in_preference" value="weekly">
+                                <span>Weekly planning</span>
+                            </label>
+                            <label class="chip" data-label="Only when I ask">
+                                <input type="radio" name="check_in_preference" value="as_needed">
+                                <span>Only when I ask</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="step-panel" data-step="4">
+                <div class="step-heading">
+                    <h3>Create your account</h3>
+                    <p>Everything you share is encrypted. This is the final step.</p>
+                </div>
+                <div class="form-grid double">
+                    <div class="form-group">
+                        <label for="email">Email address<span class="required">*</span></label>
+                        <input type="email" id="email" name="email" class="input-field" placeholder="you@example.com" autocomplete="email" required>
+                        <div class="inline-feedback" id="emailFeedback"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password<span class="required">*</span></label>
+                        <input type="password" id="password" name="password" class="input-field" placeholder="Create a strong password" autocomplete="new-password" required>
+                        <div class="inline-feedback" id="passwordFeedback"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="confirm_password">Confirm password<span class="required">*</span></label>
+                        <input type="password" id="confirm_password" name="confirm_password" class="input-field" placeholder="Repeat your password" autocomplete="new-password" required>
+                        <div class="inline-feedback" id="confirmPasswordFeedback"></div>
+                    </div>
+                    <div class="form-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="terms" name="terms" required>
+                            I agree to the <a href="/terms" target="_blank">Terms of Service</a> and <a href="/privacy" target="_blank">Privacy Policy</a>.
+                        </label>
+                        <div class="inline-feedback" id="termsFeedback"></div>
+                    </div>
+                </div>
+            </section>
+
+            <div class="wizard-footer">
+                <p class="existing-account">Already have an account? <a href="{{ url_for('user_auth.login') }}">Sign in</a></p>
+                <div class="nav-buttons">
+                    <button type="button" class="btn-ghost" id="backButton" disabled>Back</button>
+                    <button type="button" class="btn-primary" id="nextButton">Continue</button>
+                    <button type="submit" class="btn-primary" id="submitButton" hidden>Create account</button>
+                </div>
+            </div>
+        </form>
+    </section>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+(function () {
+    const form = document.getElementById('onboardingForm');
+    if (!form) { return; }
+
+    const stepPanels = Array.from(form.querySelectorAll('.step-panel'));
+    const totalSteps = stepPanels.length;
+    let currentStep = 0;
+
+    const stepMetadata = [
+        { tag: 'Identity', title: 'Start with your name', hint: 'Start with your name' },
+        { tag: 'Essentials', title: 'Share your essentials', hint: 'Basics that guide tone' },
+        { tag: 'Support', title: 'Shape your support', hint: 'Preferences define your flow' },
+        { tag: 'Security', title: 'Create your account', hint: 'One final detail' }
+    ];
+
+    const progressFill = document.getElementById('progressFill');
+    const progressLabel = document.getElementById('progressLabel');
+    const progressHint = document.getElementById('progressHint');
+    const stepTag = document.getElementById('stepTag');
+    const stepTitle = document.getElementById('stepTitle');
+    const backButton = document.getElementById('backButton');
+    const nextButton = document.getElementById('nextButton');
+    const submitButton = document.getElementById('submitButton');
+
+    const displayNameInput = document.getElementById('display_name');
+    const nicknameInput = document.getElementById('nickname');
+    const birthMonth = document.getElementById('birth_month');
+    const birthDay = document.getElementById('birth_day');
+    const birthYear = document.getElementById('birth_year');
+    const dobHidden = document.getElementById('date_of_birth');
+    const termsCheckbox = document.getElementById('terms');
+    const emailInput = document.getElementById('email');
+    const passwordInput = document.getElementById('password');
+    const confirmPasswordInput = document.getElementById('confirm_password');
+
+    function setFeedback(targetId, message) {
+        const el = document.getElementById(targetId);
+        if (el) {
+            el.textContent = message || '';
+        }
+    }
+
+    function calculateAge(year, month, day) {
+        const dob = new Date(`${year}-${month}-${day}T00:00:00Z`);
+        const today = new Date();
+        if (Number.isNaN(dob.getTime())) {
+            return 0;
+        }
+        let age = today.getUTCFullYear() - dob.getUTCFullYear();
+        const monthDiff = (today.getUTCMonth() + 1) - parseInt(month, 10);
+        const dayDiff = today.getUTCDate() - parseInt(day, 10);
+        if (monthDiff < 0 || (monthDiff === 0 && dayDiff < 0)) {
+            age -= 1;
+        }
+        return age;
+    }
+
+    function updateSelectedStates() {
+        form.querySelectorAll('.chip input, .option-chip input').forEach((input) => {
+            const label = input.closest('.chip, .option-chip');
+            if (label) {
+                label.classList.toggle('selected', input.checked);
+            }
+        });
+    }
+
+    form.querySelectorAll('.chip input, .option-chip input').forEach((input) => {
+        input.addEventListener('change', () => {
+            if (input.type === 'radio') {
+                form.querySelectorAll(`input[name="${input.name}"]`).forEach((peer) => {
+                    const label = peer.closest('.chip, .option-chip');
+                    if (label) {
+                        label.classList.toggle('selected', peer.checked);
+                    }
+                });
+            } else {
+                const label = input.closest('.chip, .option-chip');
+                if (label) {
+                    label.classList.toggle('selected', input.checked);
+                }
+            }
+        });
+    });
+
+    function updateUI() {
+        stepPanels.forEach((panel, index) => {
+            panel.classList.toggle('active', index === currentStep);
+        });
+        const percent = ((currentStep + 1) / totalSteps) * 100;
+        if (progressFill) {
+            progressFill.style.width = `${percent}%`;
+        }
+        if (progressLabel) {
+            progressLabel.textContent = `Step ${currentStep + 1} of ${totalSteps}`;
+        }
+        const meta = stepMetadata[currentStep];
+        if (meta) {
+            if (progressHint) { progressHint.textContent = meta.hint; }
+            if (stepTag) { stepTag.textContent = meta.tag; }
+            if (stepTitle) { stepTitle.textContent = meta.title; }
+        }
+        if (backButton) {
+            backButton.disabled = currentStep === 0;
+        }
+        if (nextButton) {
+            nextButton.hidden = currentStep === totalSteps - 1;
+        }
+        if (submitButton) {
+            submitButton.hidden = currentStep !== totalSteps - 1;
+        }
+        window.requestAnimationFrame(() => focusCurrentStep());
+    }
+
+    function focusCurrentStep() {
+        const panel = stepPanels[currentStep];
+        if (!panel) { return; }
+        const target = panel.querySelector('input:not([type="hidden"]), select, textarea');
+        if (target) {
+            target.focus({ preventScroll: true });
+        }
+    }
+
+    function validateStep(index) {
+        let valid = true;
+        switch (index) {
+            case 0: {
+                const nameVal = displayNameInput ? displayNameInput.value.trim() : '';
+                if (!nameVal || nameVal.length < 2) {
+                    setFeedback('displayNameFeedback', 'Please share a name so MyBella can greet you properly.');
+                    valid = false;
+                } else {
+                    setFeedback('displayNameFeedback', '');
+                    const nickname = nameVal.split(' ')[0] || nameVal;
+                    if (nicknameInput) { nicknameInput.value = nickname; }
+                    if (window.sessionStorage) {
+                        window.sessionStorage.setItem('mybella_display_name', nameVal);
+                    }
+                }
+                break;
+            }
+            case 1: {
+                setFeedback('ageFeedback', '');
+                setFeedback('genderFeedback', '');
+                const month = birthMonth ? birthMonth.value : '';
+                const day = birthDay ? birthDay.value : '';
+                const year = birthYear ? birthYear.value : '';
+                if (!month || !day || !year) {
+                    setFeedback('ageFeedback', 'Thanks for sharing your birth date. It helps us confirm eligibility.');
+                    valid = false;
+                } else {
+                    const age = calculateAge(year, month, day);
+                    if (age < 18) {
+                        setFeedback('ageFeedback', 'MyBella is currently designed for members aged 18 and above.');
+                        valid = false;
+                    } else if (dobHidden) {
+                        dobHidden.value = `${year}-${month}-${day}`;
+                    }
+                }
+                const genderSelected = form.querySelector('input[name="gender"]:checked');
+                if (!genderSelected) {
+                    setFeedback('genderFeedback', 'Pick the greeting that feels right for you.');
+                    valid = false;
+                }
+                break;
+            }
+            case 2: {
+                setFeedback('focusFeedback', '');
+                setFeedback('supportStyleFeedback', '');
+                const focusSelected = form.querySelector('input[name="support_focus"]:checked');
+                if (!focusSelected) {
+                    setFeedback('focusFeedback', 'Select the focus that aligns with what you need today.');
+                    valid = false;
+                }
+                const styleSelected = form.querySelector('input[name="conversation_style"]:checked');
+                if (!styleSelected) {
+                    setFeedback('supportStyleFeedback', 'Choose the tone that feels most natural for your conversations.');
+                    valid = false;
+                }
+                break;
+            }
+            case 3: {
+                const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                const emailVal = emailInput ? emailInput.value.trim() : '';
+                const passwordVal = passwordInput ? passwordInput.value : '';
+                const confirmVal = confirmPasswordInput ? confirmPasswordInput.value : '';
+                setFeedback('emailFeedback', '');
+                setFeedback('passwordFeedback', '');
+                setFeedback('confirmPasswordFeedback', '');
+                setFeedback('termsFeedback', '');
+                if (!emailPattern.test(emailVal)) {
+                    setFeedback('emailFeedback', 'Please add a valid email so we can keep you updated.');
+                    valid = false;
+                }
+                if (!passwordVal || passwordVal.length < 8) {
+                    setFeedback('passwordFeedback', 'Use at least eight characters for your password.');
+                    valid = false;
+                }
+                if (passwordVal && confirmVal && passwordVal !== confirmVal) {
+                    setFeedback('confirmPasswordFeedback', 'Passwords must match before we continue.');
+                    valid = false;
+                }
+                if (termsCheckbox && !termsCheckbox.checked) {
+                    setFeedback('termsFeedback', 'Please agree to the terms so we can safely move forward.');
+                    valid = false;
+                }
+                break;
+            }
+            default:
+                break;
+        }
+        return valid;
+    }
+
+    if (displayNameInput) {
+        const storedName = window.sessionStorage ? window.sessionStorage.getItem('mybella_display_name') : '';
+        if (storedName) {
+            displayNameInput.value = storedName;
+            if (nicknameInput) {
+                nicknameInput.value = storedName.split(' ')[0] || storedName;
+            }
+        }
+        displayNameInput.addEventListener('input', () => {
+            const value = displayNameInput.value.trim();
+            if (value.length >= 2) {
+                if (window.sessionStorage) {
+                    window.sessionStorage.setItem('mybella_display_name', value);
+                }
+                if (nicknameInput) {
+                    nicknameInput.value = value.split(' ')[0] || value;
+                }
+            } else if (window.sessionStorage) {
+                window.sessionStorage.removeItem('mybella_display_name');
+                if (nicknameInput) { nicknameInput.value = ''; }
+            }
+        });
+    }
+
+    [birthMonth, birthDay, birthYear].forEach((select) => {
+        if (!select) { return; }
+        select.addEventListener('change', () => setFeedback('ageFeedback', ''));
+    });
+
+    form.querySelectorAll('input[name="gender"]').forEach((input) => {
+        input.addEventListener('change', () => setFeedback('genderFeedback', ''));
+    });
+
+    form.querySelectorAll('input[name="support_focus"]').forEach((input) => {
+        input.addEventListener('change', () => setFeedback('focusFeedback', ''));
+    });
+
+    form.querySelectorAll('input[name="conversation_style"]').forEach((input) => {
+        input.addEventListener('change', () => setFeedback('supportStyleFeedback', ''));
+    });
+
+    if (termsCheckbox) {
+        termsCheckbox.addEventListener('change', () => setFeedback('termsFeedback', ''));
+    }
+
+    if (backButton) {
+        backButton.addEventListener('click', () => {
+            if (currentStep === 0) { return; }
+            currentStep -= 1;
+            updateUI();
+        });
+    }
+
+    if (nextButton) {
+        nextButton.addEventListener('click', () => {
+            if (!validateStep(currentStep)) { return; }
+            if (currentStep < totalSteps - 1) {
+                currentStep += 1;
+                updateUI();
+            }
+        });
+    }
+
+    form.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter' && currentStep !== totalSteps - 1) {
+            event.preventDefault();
+            if (nextButton) {
+                nextButton.click();
+            }
+        }
+    });
+
+    form.addEventListener('submit', (event) => {
+        if (!validateStep(totalSteps - 1)) {
+            event.preventDefault();
+            return;
+        }
+        if (window.sessionStorage) {
+            window.sessionStorage.removeItem('mybella_display_name');
+        }
+        updateSelectedStates();
+    });
+
+    updateSelectedStates();
+    updateUI();
+})();
+</script>
+{% endblock %}

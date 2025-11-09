@@ -1,0 +1,679 @@
+{% extends "base.html" %}
+
+{% block title %}Daily Notes - MyBella{% endblock %}
+
+{% block content %}
+<div class="daily-notes-container">
+    <div class="notes-header">
+        <h1> Daily Notes</h1>
+        <p class="subtitle">Reflect, process, and grow with guided journaling</p>
+        <button id="new-note-btn" class="btn-primary">+ New Note</button>
+    </div>
+
+    <!-- Notes List -->
+    <div id="notes-list" class="notes-list">
+        <div class="loading" id="loading">Loading your notes...</div>
+    </div>
+
+    <!-- New/Edit Note Modal -->
+    <div id="note-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modal-title">New Daily Note</h2>
+                <button class="close-btn" id="close-modal">&times;</button>
+            </div>
+
+            <div class="modal-body">
+                <div class="prompt-section" id="prompt-section">
+                    <h3> Today's CBT Prompt</h3>
+                    <div id="cbt-prompt" class="cbt-prompt-text"></div>
+                    <button id="refresh-prompt-btn" class="btn-small"> New Prompt</button>
+                </div>
+
+                <div class="note-form">
+                    <div class="form-group">
+                        <label for="note-title">Title (optional)</label>
+                        <input type="text" id="note-title" class="form-input" placeholder="Give your note a title...">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="note-type">Note Type</label>
+                        <select id="note-type" class="form-select">
+                            <option value="general">General Reflection</option>
+                            <option value="gratitude">Gratitude</option>
+                            <option value="challenge">Challenge Processing</option>
+                            <option value="goal">Goal Setting</option>
+                            <option value="emotion">Emotion Processing</option>
+                            <option value="affirmation">Affirmations</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="note-content">Your Thoughts</label>
+                        <textarea 
+                            id="note-content" 
+                            class="form-textarea" 
+                            rows="10"
+                            placeholder="Start writing..."></textarea>
+                        <div class="word-count">
+                            <span id="word-count">0</span> words
+                        </div>
+                    </div>
+
+                    <div class="mood-section">
+                        <div class="mood-group">
+                            <label>Mood Before Writing</label>
+                            <div class="mood-selector" id="mood-before"></div>
+                        </div>
+                        <div class="mood-group">
+                            <label>Mood After Writing</label>
+                            <div class="mood-selector" id="mood-after"></div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="note-tags">Tags (comma-separated)</label>
+                        <input type="text" id="note-tags" class="form-input" placeholder="anxiety, growth, work, relationships...">
+                    </div>
+
+                    <div class="form-group checkbox-group">
+                        <label>
+                            <input type="checkbox" id="is-private">
+                            <span>Keep this note private</span>
+                        </label>
+                    </div>
+
+                    <div class="button-group">
+                        <button id="save-note-btn" class="btn-primary">Save Note</button>
+                        <button id="get-ai-response-btn" class="btn-secondary">Get AI Insight</button>
+                    </div>
+
+                    <div id="ai-response-section" class="ai-response-section" style="display: none;">
+                        <h3> AI Response</h3>
+                        <div id="ai-response-text" class="ai-response-text"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.daily-notes-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+.notes-header {
+    text-align: center;
+    margin-bottom: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.notes-header h1 {
+    font-size: 2.5rem;
+    color: var(--primary-color, #6C63FF);
+    margin-bottom: 0.5rem;
+}
+
+.subtitle {
+    color: #666;
+    font-size: 1.1rem;
+    margin-bottom: 1.5rem;
+}
+
+.notes-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 1.5rem;
+    margin-top: 2rem;
+}
+
+.note-card {
+    background: white;
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    cursor: pointer;
+    transition: all 0.3s;
+    position: relative;
+}
+
+.note-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.note-card.pinned {
+    border-left: 4px solid #ffc107;
+}
+
+.note-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: start;
+    margin-bottom: 1rem;
+}
+
+.note-title {
+    font-weight: 600;
+    font-size: 1.2rem;
+    color: #333;
+    margin-bottom: 0.5rem;
+}
+
+.note-date {
+    font-size: 0.85rem;
+    color: #999;
+}
+
+.note-type-badge {
+    display: inline-block;
+    padding: 0.3rem 0.8rem;
+    background: #e3f2fd;
+    color: #1976d2;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+.note-preview {
+    color: #666;
+    line-height: 1.6;
+    margin: 1rem 0;
+    max-height: 100px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.note-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid #f0f0f0;
+}
+
+.note-tags {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.tag {
+    padding: 0.2rem 0.6rem;
+    background: #f8f9fa;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    color: #666;
+}
+
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+}
+
+.modal-content {
+    background: white;
+    border-radius: 15px;
+    max-width: 800px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem 2rem;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.modal-header h2 {
+    color: var(--primary-color, #6C63FF);
+    margin: 0;
+}
+
+.close-btn {
+    background: none;
+    border: none;
+    font-size: 2rem;
+    cursor: pointer;
+    color: #999;
+}
+
+.close-btn:hover {
+    color: #333;
+}
+
+.modal-body {
+    padding: 2rem;
+}
+
+.prompt-section {
+    background: #f8f9fa;
+    padding: 1.5rem;
+    border-radius: 10px;
+    margin-bottom: 2rem;
+}
+
+.prompt-section h3 {
+    color: var(--primary-color, #6C63FF);
+    margin-bottom: 1rem;
+}
+
+.cbt-prompt-text {
+    line-height: 1.8;
+    color: #333;
+    margin-bottom: 1rem;
+}
+
+.btn-small {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.btn-small:hover {
+    background: #f0f0f0;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 0.5rem;
+}
+
+.form-input, .form-select, .form-textarea {
+    width: 100%;
+    padding: 0.8rem;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-family: inherit;
+    transition: border-color 0.3s;
+}
+
+.form-input:focus, .form-select:focus, .form-textarea:focus {
+    outline: none;
+    border-color: var(--primary-color, #6C63FF);
+}
+
+.form-textarea {
+    resize: vertical;
+    min-height: 150px;
+}
+
+.word-count {
+    text-align: right;
+    font-size: 0.85rem;
+    color: #999;
+    margin-top: 0.5rem;
+}
+
+.mood-section {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin: 1.5rem 0;
+}
+
+.mood-group label {
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 0.5rem;
+    display: block;
+}
+
+.mood-selector {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.mood-btn {
+    width: 40px;
+    height: 40px;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    background: white;
+    cursor: pointer;
+    font-size: 1.5rem;
+    transition: all 0.3s;
+}
+
+.mood-btn:hover {
+    transform: scale(1.1);
+}
+
+.mood-btn.selected {
+    border-color: var(--primary-color, #6C63FF);
+    background: #f0edff;
+}
+
+.checkbox-group label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+}
+
+.checkbox-group input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+}
+
+.button-group {
+    display: flex;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+.btn-primary, .btn-secondary {
+    padding: 1rem 2rem;
+    font-size: 1rem;
+    font-weight: 600;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s;
+    flex: 1;
+}
+
+.btn-primary {
+    background: var(--primary-color, #6C63FF);
+    color: white;
+}
+
+.btn-primary:hover {
+    background: #5a52d5;
+}
+
+.btn-secondary {
+    background: #e0e0e0;
+    color: #333;
+}
+
+.btn-secondary:hover {
+    background: #d0d0d0;
+}
+
+.ai-response-section {
+    margin-top: 2rem;
+    padding: 1.5rem;
+    background: #e8f5e9;
+    border-radius: 10px;
+}
+
+.ai-response-section h3 {
+    color: #2e7d32;
+    margin-bottom: 1rem;
+}
+
+.ai-response-text {
+    line-height: 1.8;
+    color: #333;
+}
+
+.loading {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 3rem;
+    color: #999;
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const modal = document.getElementById('note-modal');
+    const notesList = document.getElementById('notes-list');
+    const newNoteBtn = document.getElementById('new-note-btn');
+    const closeModalBtn = document.getElementById('close-modal');
+    const saveNoteBtn = document.getElementById('save-note-btn');
+    const refreshPromptBtn = document.getElementById('refresh-prompt-btn');
+    const getAIResponseBtn = document.getElementById('get-ai-response-btn');
+    const noteContent = document.getElementById('note-content');
+    const wordCount = document.getElementById('word-count');
+
+    const moods = [
+        { value: 1, emoji: '' },
+        { value: 3, emoji: '' },
+        { value: 5, emoji: '' },
+        { value: 7, emoji: '' },
+        { value: 9, emoji: '' }
+    ];
+
+    let currentNoteId = null;
+    let currentPrompt = null;
+
+    // Initialize mood selectors
+    ['mood-before', 'mood-after'].forEach(id => {
+        const container = document.getElementById(id);
+        moods.forEach(mood => {
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            btn.className = 'mood-btn';
+            btn.textContent = mood.emoji;
+            btn.dataset.value = mood.value;
+            btn.addEventListener('click', function() {
+                container.querySelectorAll('.mood-btn').forEach(b => b.classList.remove('selected'));
+                this.classList.add('selected');
+            });
+            container.appendChild(btn);
+        });
+    });
+
+    // Word counter
+    noteContent.addEventListener('input', function() {
+        const words = this.value.trim().split(/\s+/).filter(w => w.length > 0).length;
+        wordCount.textContent = words;
+    });
+
+    // Open modal
+    newNoteBtn.addEventListener('click', function() {
+        openModal();
+    });
+
+    closeModalBtn.addEventListener('click', closeModal);
+
+    modal.addEventListener('click', function(e) {
+        if (e.target === modal) closeModal();
+    });
+
+    async function openModal(noteId = null) {
+        currentNoteId = noteId;
+        
+        if (!noteId) {
+            // New note
+            await loadPrompt();
+            clearForm();
+        }
+        
+        modal.style.display = 'flex';
+    }
+
+    function closeModal() {
+        modal.style.display = 'none';
+        currentNoteId = null;
+    }
+
+    function clearForm() {
+        document.getElementById('note-title').value = '';
+        document.getElementById('note-type').value = 'general';
+        document.getElementById('note-content').value = '';
+        document.getElementById('note-tags').value = '';
+        document.getElementById('is-private').checked = false;
+        document.querySelectorAll('.mood-btn').forEach(btn => btn.classList.remove('selected'));
+        document.getElementById('ai-response-section').style.display = 'none';
+        wordCount.textContent = '0';
+    }
+
+    // Load CBT prompt
+    refreshPromptBtn.addEventListener('click', loadPrompt);
+
+    async function loadPrompt() {
+        try {
+            const response = await fetch('/wellness/games/notes/prompt');
+            if (!response.ok) throw new Error('Failed to load prompt');
+            
+            const data = await response.json();
+            currentPrompt = data.prompt;
+            document.getElementById('cbt-prompt').textContent = data.prompt;
+        } catch (error) {
+            console.error('Error loading prompt:', error);
+        }
+    }
+
+    // Save note
+    saveNoteBtn.addEventListener('click', async function() {
+        const content = noteContent.value.trim();
+        if (!content) {
+            alert('Please write something before saving.');
+            return;
+        }
+
+        const moodBefore = document.querySelector('#mood-before .mood-btn.selected')?.dataset.value;
+        const moodAfter = document.querySelector('#mood-after .mood-btn.selected')?.dataset.value;
+
+        const noteData = {
+            title: document.getElementById('note-title').value,
+            note_type: document.getElementById('note-type').value,
+            content: content,
+            prompt_used: currentPrompt,
+            mood_before: moodBefore ? parseInt(moodBefore) : null,
+            mood_after: moodAfter ? parseInt(moodAfter) : null,
+            tags: document.getElementById('note-tags').value,
+            is_private: document.getElementById('is-private').checked
+        };
+
+        try {
+            const response = await fetch('/wellness/games/notes/create', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(noteData)
+            });
+
+            if (!response.ok) throw new Error('Failed to save note');
+
+            await loadNotes();
+            closeModal();
+        } catch (error) {
+            console.error('Error saving note:', error);
+            alert('Failed to save note. Please try again.');
+        }
+    });
+
+    // Get AI response
+    getAIResponseBtn.addEventListener('click', async function() {
+        const content = noteContent.value.trim();
+        if (!content) {
+            alert('Please write something first.');
+            return;
+        }
+
+        this.disabled = true;
+        this.textContent = 'Getting insight...';
+
+        try {
+            const response = await fetch('/wellness/games/notes/ai-response', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ content: content })
+            });
+
+            if (!response.ok) throw new Error('Failed to get AI response');
+
+            const data = await response.json();
+            document.getElementById('ai-response-text').textContent = data.response;
+            document.getElementById('ai-response-section').style.display = 'block';
+        } catch (error) {
+            console.error('Error getting AI response:', error);
+            alert('Failed to get AI insight. Please try again.');
+        } finally {
+            this.disabled = false;
+            this.textContent = 'Get AI Insight';
+        }
+    });
+
+    // Load notes list
+    async function loadNotes() {
+        try {
+            const response = await fetch('/wellness/games/notes/list');
+            if (!response.ok) throw new Error('Failed to load notes');
+
+            const data = await response.json();
+            renderNotes(data.notes);
+        } catch (error) {
+            console.error('Error loading notes:', error);
+            notesList.innerHTML = '<div class="loading">Failed to load notes.</div>';
+        }
+    }
+
+    function renderNotes(notes) {
+        notesList.innerHTML = '';
+        
+        if (notes.length === 0) {
+            notesList.innerHTML = '<div class="loading">No notes yet. Create your first one!</div>';
+            return;
+        }
+
+        notes.forEach(note => {
+            const card = document.createElement('div');
+            card.className = 'note-card';
+            if (note.is_pinned) card.classList.add('pinned');
+
+            const tags = note.tags ? note.tags.split(',').map(t => 
+                `<span class="tag">${t.trim()}</span>`
+            ).join('') : '';
+
+            card.innerHTML = `
+                <div class="note-header">
+                    <div>
+                        <div class="note-title">${note.title || 'Untitled'}</div>
+                        <div class="note-date">${new Date(note.note_date).toLocaleDateString()}</div>
+                    </div>
+                    <span class="note-type-badge">${note.note_type}</span>
+                </div>
+                <div class="note-preview">${note.content}</div>
+                <div class="note-footer">
+                    <div class="note-tags">${tags}</div>
+                </div>
+            `;
+
+            card.addEventListener('click', () => viewNote(note));
+            notesList.appendChild(card);
+        });
+    }
+
+    function viewNote(note) {
+        // Future: Open modal with note details for viewing/editing
+        console.log('View note:', note);
+    }
+
+    // Initial load
+    loadNotes();
+});
+</script>
+{% endblock %}

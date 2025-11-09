@@ -1,0 +1,248 @@
+{% extends "base.html" %}
+
+{% block title %}Analytics • MyBella{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="analytics-page">
+        <div class="page-header">
+            <h1> Analytics Dashboard</h1>
+            <p class="text-muted">Insights into your MyBella experience</p>
+        </div>
+
+        <div class="analytics-grid">
+            <!-- Usage Statistics -->
+            <div class="card analytics-card">
+                <div class="card-header">
+                    <h3> Chat Statistics</h3>
+                </div>
+                <div class="card-content">
+                    <div class="stat-item">
+                        <span class="stat-label">Total Conversations</span>
+                        <span class="stat-value">{{ analytics.total_chats }}</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Messages Exchanged</span>
+                        <span class="stat-value">{{ analytics.total_messages }}</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Active Days</span>
+                        <span class="stat-value">{{ analytics.active_days }}</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Favorite Persona -->
+            <div class="card analytics-card">
+                <div class="card-header">
+                    <h3> Favorite Companion</h3>
+                </div>
+                <div class="card-content">
+                    <div class="favorite-persona">
+                        <div class="persona-avatar">{{ analytics.favorite_persona[0] }}</div>
+                        <div class="persona-info">
+                            <h4>{{ analytics.favorite_persona }}</h4>
+                            <p class="text-muted">Most interacted companion</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Usage Time -->
+            <div class="card analytics-card">
+                <div class="card-header">
+                    <h3> Time Spent</h3>
+                </div>
+                <div class="card-content">
+                    <div class="usage-time">
+                        <span class="time-value">{{ analytics.usage_time }}</span>
+                        <p class="text-muted">Total conversation time</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Growth Insights -->
+            <div class="card analytics-card full-width">
+                <div class="card-header">
+                    <h3> Growth Insights</h3>
+                </div>
+                <div class="card-content">
+                    <div class="insights-grid">
+                        <div class="insight-item">
+                            <div class="insight-icon"></div>
+                            <h4>Conversation Quality</h4>
+                            <p>Your conversations are becoming more engaging over time</p>
+                        </div>
+                        <div class="insight-item">
+                            <div class="insight-icon"></div>
+                            <h4>Personal Growth</h4>
+                            <p>Regular interaction patterns show consistent engagement</p>
+                        </div>
+                        <div class="insight-item">
+                            <div class="insight-icon"></div>
+                            <h4>Learning Adaptation</h4>
+                            <p>AI companions are adapting to your communication style</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Note for mobile users -->
+        <div class="mobile-note show-mobile">
+            <div class="alert alert-info">
+                <strong> Pro Tip:</strong> For the best analytics experience, view this page on a larger screen.
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.analytics-page {
+    padding: 2rem 0;
+}
+
+.page-header {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.page-header h1 {
+    margin-bottom: 0.5rem;
+}
+
+.analytics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+.analytics-card {
+    padding: 1.5rem;
+}
+
+.analytics-card.full-width {
+    grid-column: 1 / -1;
+}
+
+.card-header {
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.card-header h3 {
+    margin: 0;
+    color: var(--primary);
+}
+
+.stat-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.stat-item:last-child {
+    border-bottom: none;
+}
+
+.stat-label {
+    color: var(--text-secondary);
+}
+
+.stat-value {
+    font-weight: 600;
+    font-size: 1.25rem;
+    color: var(--primary);
+}
+
+.favorite-persona {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.persona-avatar {
+    width: 4rem;
+    height: 4rem;
+    border-radius: 50%;
+    background: var(--primary);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+.persona-info h4 {
+    margin: 0;
+    margin-bottom: 0.25rem;
+}
+
+.usage-time {
+    text-align: center;
+}
+
+.time-value {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--primary);
+    display: block;
+}
+
+.insights-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+}
+
+.insight-item {
+    text-align: center;
+    padding: 1rem;
+    border-radius: var(--radius-lg);
+    background: var(--background-color);
+}
+
+.insight-icon {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+}
+
+.insight-item h4 {
+    margin: 0.5rem 0;
+    color: var(--primary);
+}
+
+.insight-item p {
+    margin: 0;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
+
+.mobile-note {
+    margin-top: 2rem;
+}
+
+@media (max-width: 767px) {
+    .analytics-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    
+    .insights-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    
+    .stat-item {
+        flex-direction: column;
+        text-align: center;
+        gap: 0.5rem;
+    }
+}
+</style>
+{% endblock %}
